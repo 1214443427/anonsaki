@@ -13,7 +13,7 @@ const IMG_OFFSET = 3;
 const ANIMAION_DURATION = 3000;
 const DANMAKU = [
   {text: "爱祥99", speed: 0.85, yPos: 10, color: "#FF6B6B", delay: 0},
-  {text: "祥爱99", speed: 0.8, yPos: 20, color: "#C7B8FF", delay: 0.3},
+  {text: "爱祥99", speed: 0.8, yPos: 20, color: "#C7B8FF", delay: 0.3},
   {text: "哦不，推推的开", speed: 0.4, yPos: 20, color: "#96CEB4", delay: 0.3},
   {text: "哦耶，爱爱的祥", speed: 0.75, yPos: 20, color: "#96CEB4", delay: 0.3},
   {text: "呃啊感性感性", speed: 0.8, yPos: 20, color: "#45B7D1", delay: 0.3},
