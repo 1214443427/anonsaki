@@ -1,0 +1,59 @@
+.music-player{
+    position: fixed;
+    /* z-index: 99; */
+}
+
+.music-player-minimized{
+    position: relative;
+    height: 120%;
+    aspect-ratio: 1;
+    background-color: rgba(var(--saki-color), 0.5);
+    border-radius: 10px;
+    right: 0;
+    bottom: 0;
+    cursor: pointer;
+    border: 1px solid rgba(var(--combined-color));
+
+    color: rgba(var(--anon-color), 0.7);
+}
+
+.music-player-minimized:hover{
+    color: rgb(var(--anon-color))
+}
+
+.vinyl{
+    position: absolute;
+    height: 80%;
+    bottom: 5%;
+    left: 5%;
+}
+
+.vinyl-arm{
+    position: absolute;
+    top: 0%;
+    right: 0%;
+    height: 80%;
+}
+
+
+.play-pause-icon{
+    position: absolute;
+    height: 30%;
+    bottom: 0%;
+    right: 0%;
+}
+
+/* .play-pause-button{
+    color: rgba(var(--anon-color), 0.7);
+}
+
+.play-pause-button:hover{
+    color: rgb(var(--anon-color))
+} */
+
+
+@media screen and (max-width: 768px){
+    .music-player-minimized{
+        height: 100px;
+    }
+}
