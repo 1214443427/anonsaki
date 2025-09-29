@@ -27,6 +27,30 @@ function App() {
   // }
 
   // setL2DModel("anon")
+  
+  // const [scriptLoading, setScriptLoading] = useState(false);
+  // function loadScript(src) {
+  //   return new Promise((resolve) => {
+  //     const script = document.createElement("script");
+  //     script.src = `/Cubeism2SDK/${src}.js`;
+  //     script.onload = resolve;
+  //     document.body.appendChild(script);
+  //   });
+  // }
+
+  // async function loadAllScripts() {
+  //   setScriptLoading(true)
+  //   await  loadScript("lib/live2d.min")
+  //   await  loadScript("framework/Live2DFramework")
+  //   await  loadScript("live2d//utils/MatrixStack")
+  //   await  loadScript("live2d//utils/getWegGLContext")
+  //   await  loadScript("live2d//utils/ModelSettingJson")
+  //   await  loadScript("live2d//PlatformManager")
+  //   await  loadScript("live2d//LAppDefine")
+  //   await  loadScript("live2d//LAppModel")
+  //   await  loadScript("live2d/LAppLive2DManager")
+  //   setScriptLoading(false)
+  // }
 
   const [currentRoute, setCurrentRoute] = useState('landing');
   const [currentRelayId, setCurrentRelayId] = useState(null); //to be implemented as record.
@@ -63,9 +87,10 @@ function App() {
   }
 
   useEffect(()=>{
+      // loadAllScripts();
       handleRouteChange();
-    addEventListener('hashchange', handleRouteChange)
-    return ()=>{removeEventListener('hashchange', handleRouteChange);}
+      addEventListener('hashchange', handleRouteChange)
+      return ()=>{removeEventListener('hashchange', handleRouteChange);}
   },[])
 
 

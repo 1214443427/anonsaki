@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState, useImperativeHandle } from 'react'
 import gsap from "gsap"
 import ScrollTrigger from 'gsap/ScrollTrigger'
-import mimeTypes from 'nodemailer/lib/mime-funcs/mime-types';
 import { ScrollSmoother } from 'gsap/ScrollSmoother';
 import { useGSAP } from '@gsap/react';
 import ScrollIndicator from '../components/ScrollIndicator';
