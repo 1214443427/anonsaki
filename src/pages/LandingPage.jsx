@@ -157,6 +157,7 @@ function LandingPage({navigateTo}) {
     }
 
     const handleTouchStart = (imageNumber, e) => {
+        e.preventDefault()
         const touch = e.touches[0];
         handleDragStart(imageNumber, touch.clientX, touch.clientY)
     }
