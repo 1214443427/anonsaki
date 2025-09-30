@@ -181,7 +181,7 @@ function LandingPage({navigateTo}) {
     };
     
     const handleTouchMove = (e) => {
-        // e.preventDefault(); not needed because passive
+        e.preventDefault(); 
         if (!anonOcto.isDragging && !sakiOcto.isDragging || isFinished) return;
         const touch = e.touches[0];
         const x = touch.clientX - dragState.offsetX;

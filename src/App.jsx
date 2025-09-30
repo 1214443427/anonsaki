@@ -95,7 +95,7 @@ function App() {
 
 
   return (
-    <div onClick={()=>setIsMenuOpen(false)}>
+    <div onClick={()=>setIsMenuOpen(false)} className='layout'>
       <MenuBar navigateTo={navigateTo} isOpen={isMenuOpen} setIsOpen={setIsMenuOpen}/>
       {(()=>{ 
         switch(currentRoute){

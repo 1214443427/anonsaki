@@ -74,6 +74,7 @@ h1, h2, h3, h4, h5, h6 {
   justify-content: center;
   width: 100vw;
   overflow: scroll;
+  overscroll-behavior: none;
 }
 
 .non-select{
@@ -86,6 +87,7 @@ h1, h2, h3, h4, h5, h6 {
 .menu-bar{
   position: fixed;
   justify-content: space-between;
+  overflow: scroll;
   align-items: center;
   left: 5%;
   top: 1%;
@@ -874,6 +876,10 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Phone design */
 @media screen and (max-width: 768px){
+  .page{
+    height: 100dvh;
+  }
+
   .menu-bar{
     left: auto;
     right: 10px;

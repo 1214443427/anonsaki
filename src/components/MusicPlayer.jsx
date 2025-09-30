@@ -46,9 +46,9 @@ function MusicPlayer() {
         audio.addEventListener("pause", handlePause);
 
         const play = ()=> {audio.play()}
-        audio.play().catch(() => {
-            document.addEventListener('click', play, {once: true})
-        })
+        // audio.play().catch(() => {
+        //     document.addEventListener('click', play, {once: true})
+        // })
         return(()=>{
             audio.removeEventListener("play", handlePlay);
             audio.removeEventListener("pause", handlePause);
