@@ -15,11 +15,12 @@
   }
 }
 
-body {
+html, body {
   /* 4. Add accessible line-height */
   line-height: 1.5;
   /* 5. Improve text rendering */
   -webkit-font-smoothing: antialiased;
+  min-height: 100dvh;  
 }
 
 /* 6. Improve media defaults */
@@ -875,8 +876,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Phone design */
-@media screen and (max-width: 768px){
-  .home-page{
+@media screen and (max-width: 768px) and (orientation: portrait){
+  .landing-page{
     height: 100dvh;
   }
 
@@ -988,8 +989,48 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   .relay-grid{
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+    overflow-x: hidden;
   }
+
+  .polaroid-container{
+    height: 210px;
+    width: 175px;
+    border: 1px solid darkgrey;
+    background-color: white;
+    padding: 7px 7px 30px 7px;
+    box-shadow: 5px 10px 10px darkgrey;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    font-size: 0.5rem;
+  }
+
+  .tape{
+    position: absolute;
+    z-index: 1;
+    background-color: rgba(241, 215, 97, 0.85);
+    width: 100px;
+    height: 20px;
+    top: -10px;
+    --m:
+      conic-gradient(from   45deg at left,  #0000,#000 1deg 89deg,#0000 90deg) left /51% 10px repeat-y,
+      conic-gradient(from -135deg at right, #0000,#000 1deg 89deg,#0000 90deg) right/51% 10px repeat-y;
+    -webkit-mask: var(--m);
+            mask: var(--m);
+  }
+
+  .polaroid-container img{
+    width: 157.5px;
+    height: 175px;
+    border: 1px solid rgba(169, 169, 169, 0.5);
+    object-fit: cover;
+    flex-shrink: 0;
+    pointer-events: none; 
+  }
+
 
   .qr-code-container{
     width: 75%;

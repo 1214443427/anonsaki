@@ -52,7 +52,7 @@ function RelayPage({navigateTo}) {
     const detailsRef = useRef();
     const isAnimating = useRef(false);
     
-    const [screenWidth, setScreenWidth] = useState(0);
+    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
     const randomStyleRef = useRef()
 
@@ -97,6 +97,13 @@ function RelayPage({navigateTo}) {
         const tl = gsap.timeline();
         tl.to('.relays-page', { autoAlpha: 1, duration: 0.2})
         tl.from('.relay-grid', {autoAlpha: 0, scale:2, yPercent:20, xPercent:30, stagger: 0.04});
+        if (screenWidth < 768) {
+            relayRefs.current.map((ref, i)=>{
+                if(i%2){
+                    gsap.set(ref, {y: 90})
+                }
+            })
+        }
     }, [loading])
 
     const { contextSafe } = useGSAP()
@@ -115,7 +122,7 @@ function RelayPage({navigateTo}) {
             left: "50%",
             xPercent: -50,
             yPercent: -50,
-            scale: screenWidth > 768? 1.5 : 1.1,
+            scale: screenWidth > 768? 1.5 : 2,
             visibility: "visible"});
         gsap.set(relayRefs.current[index], {visibility: "hidden"})
 
