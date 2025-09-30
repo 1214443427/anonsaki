@@ -127,7 +127,7 @@ function LandingPage({navigateTo}) {
 
     const isIdle = useIdle(10000);
 
-    const handleDragStart = (imageNumber) => (e) => {
+    const handleDragStart = (imageNumber, clientX, clientY) => {
         // e.preventDefault(); not needed because passive
         if (isAnimationPlaying) return;
         if(imageNumber == 1){
@@ -137,8 +137,8 @@ function LandingPage({navigateTo}) {
                 isDragging: true
             }))
             setDragState({
-                offsetX: e.clientX - anonOcto.xCord,
-                offsetY: e.clientY - anonOcto.yCord
+                offsetX: clientX - anonOcto.xCord,
+                offsetY: clientY - anonOcto.yCord
             })
         }else{
             setSakiOcto(prev=>({
@@ -146,10 +146,19 @@ function LandingPage({navigateTo}) {
                 isDragging: true
             }))
             setDragState({
-                offsetX: e.clientX - sakiOcto.xCord,
-                offsetY: e.clientY - sakiOcto.yCord
+                offsetX: clientX - sakiOcto.xCord,
+                offsetY: clientY - sakiOcto.yCord
             })
         }
+    }
+
+    const handleClickStart = (imageNumber, e) => {
+        handleDragStart(imageNumber, e.clientX, e.clientY)
+    }
+
+    const handleTouchStart = (imageNumber, e) => {
+        const touch = e.touches[0];
+        handleDragStart(imageNumber, touch.clientX, touch.clientY)
     }
 
     const handleMouseMove = (e) => {
@@ -431,8 +440,8 @@ function LandingPage({navigateTo}) {
                     top: `${anonOcto.yCord}px`,
                     transform: anonOcto.flipHorizontal? "scaleX(-1)":""
                 }}
-                onMouseDown={handleDragStart(1)}
-                onTouchStart={handleDragStart(1)}
+                onMouseDown={(e)=>handleClickStart(1, e)}
+                onTouchStart={(e)=>handleTouchStart(1, e)}
                 ref={anonRef}
             >
                 <p className={`drag-me-message dmm--a1`}>拖动我</p>
@@ -457,8 +466,8 @@ function LandingPage({navigateTo}) {
                     // transition: `transform 0.5s ease-out`,
                     "--sx": sakiOcto.flipHorizontal ? -1 : 1
                 }}
-                onMouseDown={handleDragStart(2)}
-                onTouchStart={handleDragStart(2)}
+                onMouseDown={(e)=> handleClickStart(2, e)}
+                onTouchStart={(e)=> handleTouchStart(2, e)}
                 ref={sakiRef}
                 >
                 <p className={`drag-me-message dmm--s1 ${sakiOcto.flipHorizontal?"mirror-horizontal":""}`}>拖动我</p>

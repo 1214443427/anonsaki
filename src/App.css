@@ -132,6 +132,7 @@ h1, h2, h3, h4, h5, h6 {
 /* Landing Page */
 
 .landing-page{
+  overflow: hidden;
   position: relative;
   background-color: rgba(var(--saki-color), 0.4);
   height: 100vh;
