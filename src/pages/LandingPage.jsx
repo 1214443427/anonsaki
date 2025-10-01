@@ -256,15 +256,15 @@ function LandingPage({navigateTo}) {
     // Add event listeners
     useEffect(() => {
         if (anonOcto.isDragging||sakiOcto.isDragging) {
-            window.addEventListener('touchmove', handleTouchMove);
-            window.addEventListener('touchend', handleDragEnd);
             window.addEventListener('mousemove', handleMouseMove);
             window.addEventListener('mouseup', handleDragEnd);
+            window.addEventListener('touchmove', handleTouchMove, { passive: false });
+            window.addEventListener('touchend', handleDragEnd);
         }
         return () => {
             window.removeEventListener('mousemove', handleMouseMove);
             window.removeEventListener('mouseup', handleDragEnd);
-            window.removeEventListener('touchmove', handleTouchMove);
+            window.removeEventListener('touchmove', handleTouchMove, { passive: false });
             window.removeEventListener('touchend', handleDragEnd);
         }
     }, [sakiOcto.isDragging, anonOcto.isDragging]);
