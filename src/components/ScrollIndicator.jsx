@@ -3,10 +3,10 @@ import { useIdle } from '../hooks/useIdle'
 
 function ScrollIndicator() {
 
-    const isIdle = useIdle()
-    
+    const {isIdle, isBottom} = useIdle()
+
     return (
-        <div className={`scroll-indicator-mini ${isIdle? "show" : ""}`}>
+        <div className={`scroll-indicator-mini ${isIdle && !isBottom ? "show" : ""}`}>
             下滑阅览   ⬇️
         </div>
     )

@@ -4,6 +4,7 @@ export function useIdle(timeout = 10000){
     const [isIdle, setIsIdle] = useState(false)
     const timeOutRef = useRef()
     const isDragging = useRef()
+    const [isBottom, setIsBottom] = useState()
 
     const resetTimer = useCallback(() => {
         setIsIdle(false);
@@ -18,6 +19,8 @@ export function useIdle(timeout = 10000){
     useEffect(()=>{
         resetTimer()
         const handleScroll = () => {
+            const isAtBottom = document.documentElement.scrollHeight <= window.scrollY + document.documentElement.clientHeight * 1.5
+            setIsBottom(isAtBottom)
             resetTimer()
         }
 
@@ -63,7 +66,7 @@ export function useIdle(timeout = 10000){
     }, [resetTimer])
 
     return(
-        isIdle
+        {isIdle, isBottom}
     )
 
 }

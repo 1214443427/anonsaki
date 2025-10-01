@@ -494,9 +494,9 @@ function CharacterPage({navigateTo}) {
             霍格沃茨魔法学校，拉文克劳学院学生
             </p>
         </div>
+      <button id='explore-button' onClick={()=>navigateTo("/relays")}>探索接力</button>
       </section>
 
-      <button id='explore-button' onClick={()=>navigateTo("/relays")}>探索接力</button>
       <ScrollIndicator />
     </div>
   )

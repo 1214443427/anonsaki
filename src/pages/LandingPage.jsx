@@ -125,7 +125,7 @@ function LandingPage({navigateTo}) {
     const curtainRef = useRef(null);
     const blushRef = useRef(null);    
 
-    const isIdle = useIdle(10000);
+    const {isIdle} = useIdle(10000);
 
     const handleDragStart = (imageNumber, clientX, clientY) => {
         // e.preventDefault(); not needed because passive
