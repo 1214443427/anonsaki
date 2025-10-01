@@ -1,11 +1,10 @@
 import { useEffect, useRef, useState, useImperativeHandle } from 'react'
 import gsap from "gsap"
 import ScrollTrigger from 'gsap/ScrollTrigger'
-import { ScrollSmoother } from 'gsap/ScrollSmoother';
 import { useGSAP } from '@gsap/react';
 import ScrollIndicator from '../components/ScrollIndicator';
 
-gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
+gsap.registerPlugin(ScrollTrigger);
 
 const TOTAL_FRAMES = 180;
 const IMG_OFFSET = 3;
@@ -301,6 +300,7 @@ function DanmakuContainer(){
         start: "top top",
         end: "bottom top",
         scrub: 0.3,
+        // markers: true,
         onUpdate: (self) => {
           const progress = self.progress;
           // console.log("timelinesRef.current", timelinesRef.current)
@@ -456,7 +456,7 @@ function CharacterPage({navigateTo}) {
 
 
   return (
-    <div className='flex flex-col page main-page'>
+    <div className='page character-page'>
       <div className='character-curtain curtain'></div>
       <L2dCanvas character={character} offsetBottom={offsetBottom}/> 
       <section className='character-section saki-section'>
@@ -470,7 +470,7 @@ function CharacterPage({navigateTo}) {
         </div>
       </section>
 
-      <div className='animation-container'>
+      <div className='animation-container' style={{height: `${ANIMAION_DURATION}px`}}>
         <DanmakuContainer />
         <canvas
           ref={canvasRef}
@@ -478,10 +478,10 @@ function CharacterPage({navigateTo}) {
           />
 
 
-        <div className="card" style={{position:"relative",zIndex:2}}>
+        {/* <div className="card" style={{position:"relative",zIndex:2}}>
           <div style={{height: `${ANIMAION_DURATION}px`}}>
           </div>
-        </div>
+        </div> */}
         
       </div>
 

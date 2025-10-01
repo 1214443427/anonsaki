@@ -20,6 +20,7 @@ html, body {
   line-height: 1.5;
   /* 5. Improve text rendering */
   -webkit-font-smoothing: antialiased;
+  height: 100%;
   min-height: 100dvh;  
 }
 
@@ -74,7 +75,6 @@ h1, h2, h3, h4, h5, h6 {
 .page{
   justify-content: center;
   width: 100vw;
-  overflow: scroll;
   overscroll-behavior: none;
 }
 
@@ -88,7 +88,6 @@ h1, h2, h3, h4, h5, h6 {
 .menu-bar{
   position: fixed;
   justify-content: space-between;
-  overflow: scroll;
   align-items: center;
   left: 5%;
   top: 1%;
@@ -138,7 +137,7 @@ h1, h2, h3, h4, h5, h6 {
   overflow: hidden;
   position: relative;
   background-color: rgba(var(--saki-color), 0.4);
-  height: 100vh;
+  height: 100dvh;
   place-items: center;
 }
 
@@ -326,8 +325,10 @@ h1, h2, h3, h4, h5, h6 {
 
 /* MainPage */
 
-.main-page{
+.character-page{
   position: relative;
+  height: 100dvh;
+  /* overflow: scroll; */
 }
 
 .character-curtain{
@@ -338,7 +339,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .character-section{
   display: flex;
-  height: 100vh;
+  height: 100dvh;
   justify-content: center;
   align-items: center;
 }
@@ -491,7 +492,7 @@ h1, h2, h3, h4, h5, h6 {
 .relays-page{
   height: auto;
   overflow: scroll;
-  height: 100vh;
+  height: 100dvh;
   width: 100vw;
   justify-items: center;
   background-color: rgba(var(--combined-color), 0.5);
@@ -502,7 +503,7 @@ h1, h2, h3, h4, h5, h6 {
 .relay-grid{
   overflow: scroll;
   width: 100vw;
-  min-height: 100vh;
+  min-height: 100dvh;
   padding: 12% 2.5% 2% 2.5% ;
   gap: 30px;
   display: grid;
@@ -605,7 +606,7 @@ h1, h2, h3, h4, h5, h6 {
   position: fixed;
   pointer-events: auto;
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
   top: 0;
   left: 0;
 }
@@ -670,14 +671,14 @@ h1, h2, h3, h4, h5, h6 {
 
 /* -------- Invitation page ------- */
 .invitation-page{
-  background-color: rgba(var(--anon-color), 0.6);
-  height: 26000px;
+  height: 100dvh;
   width: 100vw;
 }
 
 
 .text-scroll-container{
   height: 26000px;
+  background-color: rgba(var(--anon-color), 0.6);
 }
 
 .arrow {
@@ -882,6 +883,7 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   .menu-bar{
+    overflow: scroll;
     left: auto;
     right: 10px;
     flex-direction: column;
