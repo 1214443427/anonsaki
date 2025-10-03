@@ -29,6 +29,20 @@ const URL = "https://qun.qq.com/universal-share/share?ac=1&authKey=7u24yaIUOdM%2
 const INC = 100     //gap between words
 const PADDING = 1000 //transition scroll distance
 const DISPLAY_DURATION = 2000
+const OFFSET = [
+  0,
+  20,
+  36,
+  60,
+  85,
+  110,
+  137,
+  175,
+  213,
+  232,
+  244,
+  249
+]
 
 gsap.registerPlugin(SplitText);
 gsap.registerPlugin(ScrollTrigger)
@@ -116,6 +130,16 @@ const ScrollText = ({as: Component = "h2", text, effect, className, offset, isOd
 
 
 function InvitationPage() {
+
+    function accumulatedCharCounts(strings) {
+    let total = 0;
+    return strings.map(str => {
+        total += str.length;
+        return total;
+    });
+    }
+
+    console.log(accumulatedCharCounts(TEXT))
 
     const sakiOctoRef = useRef()
     const anonOctoRef = useRef()
