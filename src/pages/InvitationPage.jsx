@@ -128,10 +128,12 @@ const ScrollText = ({as: Component = "h2", text, effect, className, offset, inde
             <h2 ref={ref} className={`scroll-text non-select ${className}`}>
                     信徒敬启,
                     日
+                    <span className='img-span'>
                     <img 
                         className='moon-final' 
                         src='/assets/moon.webp' 
                         ref={moonRef}/>
+                    </span>
                     的相恋乃是禁忌。
             </h2>
         )
@@ -150,10 +152,9 @@ function InvitationPage() {
     const moonInitialRef = useRef()
 
     useGSAP(()=>{
-        window.scrollTo(0,0)
 
         Flip.fit(moonInitialRef.current, moonRef.current)
-        const state = Flip.getState(moonInitialRef.current, {scale:true});
+        const state = Flip.getState(moonInitialRef.current);
         
 
         gsap.set(moonInitialRef.current, {clearProps: true});
