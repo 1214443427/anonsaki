@@ -68,7 +68,7 @@ function RelayPage({navigateTo}) {
                         direction: Math.random() > 0.5 ? 1 : -1,
                     },
                     }));
-                setTimeout(()=>setLoading(false), 500)
+                setLoading(false)
 
                 setRelays(withStyle)
             }

@@ -1,5 +1,6 @@
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
+import { Flip } from 'gsap/Flip';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
 import React, { useRef, useState } from 'react'
@@ -7,7 +8,7 @@ import React, { useRef, useState } from 'react'
 const TEXT = [
 `Epistula Invitatoria`,
 `信徒敬启,
-日月的相恋乃是禁忌。`,
+日🌙的相恋乃是禁忌。`,
 `两人的恋情一旦被人知晓,
 那么毁灭之时便会来临。`,
 `
@@ -44,22 +45,20 @@ const OFFSET = [
   249
 ]
 
-gsap.registerPlugin(SplitText);
-gsap.registerPlugin(ScrollTrigger)
+gsap.registerPlugin(SplitText, ScrollTrigger, Flip);
 
 const segmenter = new Intl.Segmenter("zh", { granularity: "word" });
 
-const ScrollText = ({as: Component = "h2", text, effect, className, offset, isOdd}) => {
+const ScrollText = ({as: Component = "h2", text, effect, className, offset, index, moonRef}) => {
 
     const ref = useRef(null);
-    //CURRENTLY CHANGING OPACITY OF THE WRONG ELEMENT!
     useGSAP((context, contextSafe)=>{
         let split;
-        // if(ref.current.children.length > 0) return
         document.fonts.ready.then(()=>{
             split = SplitText.create(ref.current, {
                 type: "words",
-                wordsClass: "word", // not yet created
+                wordsClass: "word", 
+                // ignore: ".moon",
                 prepareText: (text, el) => {
                     const segmented = [...segmenter.segment(text)].map(s => s.segment)
                     const joined = []
@@ -86,7 +85,7 @@ const ScrollText = ({as: Component = "h2", text, effect, className, offset, isOd
                             trigger: ".text-scroll-container",
                             scrub: true,
                             start: ()=> initialPosition,
-                            end: ()=> initialPosition + PADDING + DISPLAY_DURATION,
+                            end: ()=> initialPosition + DISPLAY_DURATION,
                             onEnter: () => {
                             console.log(word);
                             console.log("parent?", word.parentElement);
@@ -123,6 +122,20 @@ const ScrollText = ({as: Component = "h2", text, effect, className, offset, isOd
         }
     }, { scope: ref, dependencies:[] }
     )
+
+    if(index == 1){
+        return (
+            <h2 ref={ref} className={`scroll-text non-select ${className}`}>
+                    信徒敬启,
+                    日
+                    <img 
+                        className='moon-final' 
+                        src='/assets/moon.webp' 
+                        ref={moonRef}/>
+                    的相恋乃是禁忌。
+            </h2>
+        )
+    }
     return(
         <h2 ref={ref} className={`scroll-text non-select ${className}`}>{text}</h2>
     )
@@ -131,42 +144,87 @@ const ScrollText = ({as: Component = "h2", text, effect, className, offset, isOd
 
 function InvitationPage() {
 
-    function accumulatedCharCounts(strings) {
-    let total = 0;
-    return strings.map(str => {
-        total += str.length;
-        return total;
-    });
-    }
-
-    console.log(accumulatedCharCounts(TEXT))
-
     const sakiOctoRef = useRef()
     const anonOctoRef = useRef()
+    const moonRef = useRef()
+    const moonInitialRef = useRef()
 
     useGSAP(()=>{
         window.scrollTo(0,0)
 
-        gsap.set(sakiOctoRef.current,{
-            right: "10%",
+        Flip.fit(moonInitialRef.current, moonRef.current)
+        const state = Flip.getState(moonInitialRef.current, {scale:true});
+        
+
+        gsap.set(moonInitialRef.current, {clearProps: true});
+        gsap.set(moonInitialRef.current, {
+            left: "50%",
+            top: "50%",
+            width: "25%",
+            aspectRatio: 1,
+            opacity: 1,
+        });
+
+        gsap.from(moonInitialRef.current,{
+            scrollTrigger: {
+                trigger: ".text-scroll-container",
+                scrub: true,
+                start: 500,
+                end: 1000,
+            },
+            opacity: 0
+        })
+
+
+        Flip.to(state, {
+            scrollTrigger:{
+                trigger: ".text-scroll-container",
+                scrub: true,
+                start: 3000,
+                end: 3400,
+                // markers: true
+            },
+            ease:"power2.inOut",
+        })    
+            
+        gsap.to(moonInitialRef.current,{
+            scrollTrigger: {
+                trigger: ".text-scroll-container",
+                scrub: true,
+                start: 4900,
+                end: 5300,
+                // markers: true
+            },
+            opacity: 0,
+            immediateRender: false
         })
 
         gsap.to(sakiOctoRef.current, {
             scrollTrigger: {
                 trigger: ".text-scroll-container",
                 scrub: true,
-                start: 1000,
-                end: 3000
+                start: 10000,
+                end: 13000
             },
-            top: "-15%"
+            top: "-25%"
+        })
+
+        gsap.to(sakiOctoRef.current, {
+            scrollTrigger: {
+                trigger: ".text-scroll-container",
+                scrub: true,
+                start: 10000,
+                end: 13000
+            },
+            top: "-25%"
         })
 
         gsap.to(".qr-code-container", {
             scrollTrigger: {
                 trigger: ".text-scroll-container",
                 scrub: true,
-                start: 24000,
-                end: 25000,
+                start: 28000,
+                end: 29000,
             },
             opacity: 1
         })
@@ -181,6 +239,7 @@ function InvitationPage() {
                     <div className="arrow"></div>
                     <div className="arrow"></div>
                 </div>
+                <img className='moon-initial' src='/assets/moon.webp' ref={moonInitialRef}/>
                 <img ref={anonOctoRef} src='/assets/anon_octo.webp' className='octo-image invitation-easter-egg'/>
                 <img ref={sakiOctoRef} src='/assets/saki_octo.webp' className='octo-image invitation-easter-egg'/>
             </div>
@@ -188,8 +247,9 @@ function InvitationPage() {
                 text={text} 
                 className={`scroll-text--${i}`} 
                 key={i} 
-                offset = {1000 + i * DISPLAY_DURATION + (i == 10? DISPLAY_DURATION:0)}
-                isOdd = {i%2}
+                offset = {1000 + OFFSET[i]*INC + (i == 10? DISPLAY_DURATION:0)}
+                index = {i}
+                moonRef = {moonRef}
                 />))}
             {/* <ScrollText text={"两人的恋情一旦被人知晓,那么毁灭之时便会来临。"}/> */}
             {/* <h1 className='split title'>Epistula Invitatoria</h1>

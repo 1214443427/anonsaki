@@ -674,16 +674,19 @@ h1, h2, h3, h4, h5, h6 {
 .invitation-page{
   height: 100dvh;
   width: 100vw;
+  color: white;
 }
 
 
 .text-scroll-container{
-  height: 26000px;
-  background-color: rgba(var(--anon-color), 0.6);
+  height: 30000px;
+  /* background-color: rgba(var(--anon-color), 0.6); */
+  background-color: #1d1d1d;
 }
 
+
 .arrow {
-  border: solid black;
+  border: solid white;
   border-width: 0 3px 3px 0;
   display: inline-block;
   padding: 3px;
@@ -746,6 +749,23 @@ h1, h2, h3, h4, h5, h6 {
   position: fixed;
 }
 
+.moon-initial{
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 25%;
+  /* opacity: 0; */
+}
+
+.moon-final{
+  margin-top: 0.25rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  aspect-ratio: 1;
+  opacity: 0;
+}
+
 .scroll-text--0, .scroll-text--10{
   top: 20%;
   left: 50%;
@@ -754,6 +774,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .scroll-text--1{
+  display: flex;
   top: 30%;
   right: 10%;
 }
