@@ -153,27 +153,27 @@ function InvitationPage() {
 
     useGSAP(()=>{
 
-        Flip.fit(moonInitialRef.current, moonRef.current)
-        const state = Flip.getState(moonInitialRef.current);
+        const state = Flip.getState(moonRef.current);
+        Flip.fit(moonRef.current, moonInitialRef.current)
         
 
-        gsap.set(moonInitialRef.current, {clearProps: true});
-        gsap.set(moonInitialRef.current, {
-            left: "50%",
-            top: "50%",
-            width: "25%",
-            aspectRatio: 1,
-            opacity: 1,
-        });
+        // gsap.set(moonInitialRef.current, {clearProps: true});
+        // gsap.set(moonInitialRef.current, {
+        //     left: "50%",
+        //     top: "50%",
+        //     width: "25%",
+        //     aspectRatio: 1,
+        //     opacity: 1,
+        // });
 
-        gsap.from(moonInitialRef.current,{
+        gsap.to(moonRef.current,{
             scrollTrigger: {
                 trigger: ".text-scroll-container",
                 scrub: true,
                 start: 500,
                 end: 1000,
             },
-            opacity: 0
+            opacity: 1
         })
 
 
@@ -188,7 +188,7 @@ function InvitationPage() {
             ease:"power2.inOut",
         })    
             
-        gsap.to(moonInitialRef.current,{
+        gsap.to(moonRef.current,{
             scrollTrigger: {
                 trigger: ".text-scroll-container",
                 scrub: true,
