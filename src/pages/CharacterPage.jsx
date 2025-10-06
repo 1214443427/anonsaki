@@ -11,15 +11,15 @@ const IMG_OFFSET = 3;
 const ANIMAION_DURATION = 3000;
 const DANMAKU = [
   {text: "爱祥99", speed: 0.85, yPos: 10, color: "#FF6B6B", delay: 0},
-  {text: "爱祥99", speed: 0.8, yPos: 20, color: "#C7B8FF", delay: 0.3},
-  {text: "哦不，推推的开", speed: 0.4, yPos: 20, color: "#96CEB4", delay: 0.3},
-  {text: "哦耶，爱爱的祥", speed: 0.75, yPos: 20, color: "#96CEB4", delay: 0.3},
-  {text: "呃啊感性感性", speed: 0.8, yPos: 20, color: "#45B7D1", delay: 0.3},
-  {text: "呃啊本能本能", speed: 0.6, yPos: 20, color: "#4ECDC4", delay: 0.3},
-  {text: "呃啊理性理性", speed: 0.5, yPos: 20, color: "#FFEAA7", delay: 0.3},
-  {text: "没有算了", speed: 1, yPos: 20, color: "#DDA0DD", delay: 0.3},
-  {text: "真的唉", speed: 0.2, yPos: 20, color: "#a0caddff", delay: 0.3},
-  {text: "汉墓封土", speed: 0.1, yPos: 20, color: "#0d6e9bff", delay: 0.3},
+  {text: "爱祥99", speed: 0.8, yPos: 20, color: "#C7B8FF", delay: 0.9},
+  {text: "哦不，推推的开", speed: 0.4, yPos: 20, color: "#96CEB4", delay: 0.8},
+  {text: "哦耶，爱爱的祥", speed: 0.75, yPos: 20, color: "#96CEB4", delay: 0.7},
+  {text: "呃啊感性感性", speed: 0.8, yPos: 20, color: "#45B7D1", delay: 0.6},
+  {text: "呃啊本能本能", speed: 0.6, yPos: 20, color: "#4ECDC4", delay: 0.5},
+  {text: "呃啊理性理性", speed: 0.5, yPos: 20, color: "#FFEAA7", delay: 0.4},
+  {text: "没有算了", speed: 1, yPos: 20, color: "#DDA0DD", delay: 0.2},
+  {text: "真的唉", speed: 0.2, yPos: 20, color: "#a0caddff", delay: 0.1},
+  {text: "汉墓封土", speed: 0.5, yPos: 20, color: "#0d6e9bff", delay: 2.0},
   
 ]
 
@@ -263,7 +263,7 @@ function Danmaku({danmaku, timelinesRef, index}){
         x:300
     })
     .to(ref.current, {
-      x: -window.innerWidth - 300,
+      x: -window.innerWidth - 300*(1+DANMAKU[index].delay),
       duration: 1,
       ease: "none",
     });

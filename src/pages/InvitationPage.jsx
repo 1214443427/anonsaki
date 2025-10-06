@@ -129,10 +129,12 @@ const ScrollText = ({as: Component = "h2", text, effect, className, offset, inde
                     信徒敬启,
                     日
                     <span className='img-span'>
-                    <img 
-                        className='moon-final' 
-                        src='/assets/moon.webp' 
-                        ref={moonRef}/>
+                        <div className='moon-element'>
+                            <img 
+                                className='moon-final' 
+                                src='/assets/moon.webp' 
+                                ref={moonRef}/>
+                        </div>
                     </span>
                     的相恋乃是禁忌。
             </h2>
@@ -181,7 +183,7 @@ function InvitationPage() {
             scrollTrigger:{
                 trigger: ".text-scroll-container",
                 scrub: true,
-                start: 3000,
+                start: 2400,
                 end: 3400,
                 // markers: true
             },
@@ -200,24 +202,98 @@ function InvitationPage() {
             immediateRender: false
         })
 
-        gsap.to(sakiOctoRef.current, {
+
+        gsap.to("#saki-laser", {
             scrollTrigger: {
-                trigger: ".text-scroll-container",
+                trigger:  ".text-scroll-container",
                 scrub: true,
-                start: 10000,
-                end: 13000
+                start: 5000,
+                end: 8000,
+                onEnter: ()=>{gsap.set("#saki-laser", {opacity:1})},
+                onLeaveBack: ()=>{gsap.set("#saki-laser", {opacity:0})},
+                // onLeave: ()=>{gsap.set("#saki-laser", {opacity:0})},
+                // onEnterBack: ()=>{gsap.set("#saki-laser", {opacity:1})},
             },
-            top: "-25%"
+            scale: 1,
+            translateX: 0,
+            translateY: 0,
+            left: "0%",
+            top: "0%",
         })
+
+        gsap.to("#anon-laser", {
+            scrollTrigger: {
+                trigger:  ".text-scroll-container",
+                scrub: true,
+                start: 7000,
+                end: 8000,
+                onEnter: ()=>{gsap.set("#anon-laser", {opacity:1})},
+                onLeaveBack: ()=>{gsap.set("#anon-laser", {opacity:0})},
+            },
+            left: "0%",
+        })
+
+        gsap.to(".laser-div", {
+            scrollTrigger: {
+                trigger:  ".text-scroll-container",
+                scrub: true,
+                start: 8000,
+                end: 12000,
+            },
+            x: `+=${20 * gsap.utils.random(1,10)}`,
+            repeatRefresh: true,
+            repeat: 20,
+            yoyo:true,
+            immediateRender: false
+        })
+
+        // gsap.to("#anon-laser", {
+        //     scrollTrigger: {
+        //         trigger:  ".text-scroll-container",
+        //         scrub: true,
+        //         start: 8000,
+        //         end: 12000,
+        //     },
+        //     x: "+=20",
+        //     repeat: 20,
+        //     yoyo:true,
+        // })
 
         gsap.to(sakiOctoRef.current, {
             scrollTrigger: {
                 trigger: ".text-scroll-container",
                 scrub: true,
-                start: 10000,
-                end: 13000
+                start: 11000,
+                end: 14000
             },
             top: "-25%"
+        })
+
+
+        gsap.to("#heart", {
+            scrollTrigger: {
+                trigger: ".text-scroll-container",
+                scrub: true,
+                start: 12000,
+                end: 15000,
+                // onEnter: ()=>{
+                //     gsap.set("#heart", {opacity:1})
+                // },
+                // onLeaveBack: ()=>{
+                //     gsap.set("#heart", {opacity:0})
+                // },
+                onLeave: ()=>{
+                    gsap.set("#heart", {opacity:0})
+                    gsap.set(".laser-div", {opacity:0})
+                },
+                onEnterBack: ()=>{
+                    gsap.set("#heart", {opacity:1})
+                    gsap.set(".laser-div", {opacity:1})
+                },
+            },
+            scale: 500,
+            rotate: -30,
+            ease: "power1.inOut",
         })
 
         gsap.to(".qr-code-container", {
@@ -225,10 +301,34 @@ function InvitationPage() {
                 trigger: ".text-scroll-container",
                 scrub: true,
                 start: 28000,
-                end: 29000,
+                end: 30000,
             },
-            opacity: 1
+            keyframes: {
+                "0%": { opacity: 0 },
+                "20%": { opacity: 1 },  // fade in
+                "50%": { translateY: 0 },  // hold visible
+                "100%": { translateY: "-100vh"}, // fade out
+            },
+            pointerEvents: "auto",
         })
+
+        gsap.to(".scroll-text--10", {
+            scrollTrigger: {
+                trigger: ".text-scroll-container",
+                scrub: true,
+                start: 28000,
+                end: 30000,
+            },
+            keyframes: {
+                "50%": { translateY: 0 },  // hold visible
+                "100%": { translateY: "-100vh"}, // fade out
+            },
+            immediateRender: false
+        })
+
+
+
+
     }, [])
 
 
@@ -240,9 +340,22 @@ function InvitationPage() {
                     <div className="arrow"></div>
                     <div className="arrow"></div>
                 </div>
-                <img className='moon-initial' src='/assets/moon.webp' ref={moonInitialRef}/>
-                <img ref={anonOctoRef} src='/assets/anon_octo.webp' className='octo-image invitation-easter-egg'/>
-                <img ref={sakiOctoRef} src='/assets/saki_octo.webp' className='octo-image invitation-easter-egg'/>
+                <div className='bg--1'>
+                    <img className='moon-initial' src='/assets/moon.webp' ref={moonInitialRef}/>
+                </div>
+                <div className='bg--transition'></div>
+                <div className='bg--2'>
+                    <img ref={anonOctoRef} src='/assets/anon_octo.webp' className='octo-image invitation-easter-egg'/>
+                    <img ref={sakiOctoRef} src='/assets/saki_octo.webp' className='octo-image invitation-easter-egg'/>
+                </div>
+                <div className='bg--3'></div>
+                <div className='laser-div'>
+                    <img id='saki-laser' src='/assets/saki-laser.webp' className='invitation-easter-egg' />
+                    <div id='anon-laser'  className='invitation-easter-egg' >
+                        <img src='/assets/anon-laser-edit.webp'/>
+                        <img id='heart' src='/assets/heart.webp' />
+                    </div>
+                </div>
             </div>
             {TEXT.map((text, i)=>(<ScrollText 
                 text={text} 
@@ -271,6 +384,19 @@ function InvitationPage() {
             <h2 className='split paragraph--6'>我期待着能与您共同沐浴在爱月祥音之中。</h2>
             <h2 className='split paragraph--7'>请将您的答案与月桂诉说。</h2>
             <h3 className='split sign-off'>深秘敬意,</h3> */}
+            <div className='disclaimer'>
+                <div className='dialog-box'>
+                    <h1>碎碎念</h1>
+                    <h2>感谢所有看这的人。<br/> 我喜欢你们！🩷🩵</h2>
+                    <p>这个个人小工程花了比想象中多了很多的时间。一开始的企划只有角色展示这一栏。当时只是觉得用第十三集的切片做专场会很酷。凑巧发现了GSAP，于是把里面提供的功能多用了几个。</p>
+                    <p>前端代码全部为React。Live2D的框架比我期待的难用太多了，研究他浪费了许多时间。</p>
+                    <p>如有问题，请联系我<a href="https://space.bilibili.com/14766618" target='_blank'>个人B站</a>。</p>
+                    <p>制作邀请函这部分的时候感觉有点燃尽了。很多地方是硬编码。如果在您的设备上不能正确显示的话，致歉。</p>
+                    
+                    <p>至此。<span></span></p>
+                    <p>（PS，代码里祥子是0。）</p>
+                </div>
+            </div>
             <div className='qr-code-container'>
                 <img className='qr-code-image non-select' src='/assets/qr-code.png'/>
                 <button className='qr-code-button menu-button' onClick={()=>{window.open(URL, '_blank')}}>加入舞会</button>

@@ -6,7 +6,7 @@ function ScrollIndicator() {
     const {isIdle, isBottom} = useIdle()
 
     return (
-        <div className={`scroll-indicator-mini ${isIdle && !isBottom ? "show" : ""}`}>
+        <div className={`non-select scroll-indicator-mini ${isIdle && !isBottom ? "show" : ""}`}>
             下滑阅览   ⬇️
         </div>
     )

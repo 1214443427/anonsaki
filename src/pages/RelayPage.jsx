@@ -74,7 +74,7 @@ function RelayPage({navigateTo}) {
             }
             catch (err){
                 console.error('Failed to fetch data', err);
-                setError("无法获取接力信息！请联系作者B站。")
+                setError("无法获取接力信息！请联系作者qq:1214443427。")
             }
         }
         fetchData();

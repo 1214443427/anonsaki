@@ -674,14 +674,12 @@ h1, h2, h3, h4, h5, h6 {
 .invitation-page{
   height: 100dvh;
   width: 100vw;
-  color: white;
 }
 
 
 .text-scroll-container{
   height: 30000px;
   /* background-color: rgba(var(--anon-color), 0.6); */
-  background-color: #1d1d1d;
 }
 
 
@@ -697,6 +695,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .scroll-indicator{
+  color: white;
   --top-start: 45%;
   --top-end: 55%;
   font-size: 2rem;
@@ -720,6 +719,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .scroll-indicator-mini {
+  pointer-events: none;
   --top-start: 85%;
   --top-end: 87%;
   position: fixed;
@@ -747,6 +747,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .scroll-text{
   position: fixed;
+  pointer-events: none;
+  z-index: 10;
 }
 
 .moon-initial{
@@ -760,11 +762,26 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .moon-final{
-  margin-top: 0.25rem;
   width: 1.5rem;
   height: 1.5rem;
   aspect-ratio: 1;
   opacity: 0;
+  position: absolute;
+}
+
+.img-span{
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  width: 1.5rem;
+}
+
+.moon-element{
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1;
 }
 
 .scroll-text--0, .scroll-text--10{
@@ -774,26 +791,34 @@ h1, h2, h3, h4, h5, h6 {
   white-space: nowrap;
 }
 
+.scroll-text--0{
+  color: white;
+}
+
 .scroll-text--1{
-  display: flex;
+  display: block;
   top: 30%;
   right: 10%;
+  color: white;
 }
+
+
 
 .scroll-text--2{
   bottom: 20%;
   left: 10%;
   width: 50%;
+  color: white;
 }
 
 .scroll-text--3{
   top: 30%;
-  right: 15%;
-  width: 75%;
+  right: 0%;
+  width: 50%;
 }
 
 .scroll-text--4{
-  bottom: 30%;
+  bottom: 20%;
   right: 5%;
   width: 50%;
 }
@@ -837,6 +862,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .qr-code-container{
+  pointer-events: none;
   width: 25%;
   position: fixed;
   top: 50%;
@@ -853,15 +879,87 @@ h1, h2, h3, h4, h5, h6 {
   pointer-events: none;
 }
 
+.bg--1{
+  width: 100%;
+  background: linear-gradient(#1d1d1d,#1c1c1c,#1b1b1b,#1a1a1a, #000);
+  height: 3000px;
+}
 
-.octo-image.invitation-easter-egg{
+.bg--transition{
+  width: 100%;  
+  background-color: #000;
+  height: 3500px
+}
+
+.bg--2{
+  width: 100%;;
+  background-color: rgba(var(--combined-color), 0.7);
+  height: 8000px;
+}
+
+.bg--3{
+  width: 100%;;
+  background-color: rgb(249, 159, 183);
+  height: 15500px;
+}
+
+.disclaimer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+  background: linear-gradient(rgb(var(--saki-color)));
+}
+
+.disclaimer .dialog-box{
+  --border-color: rgb(var(--combined-color));
+  padding: 10%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+
+.invitation-easter-egg{
   position: fixed;
   bottom: -15vw;
   width: 15vw;
   cursor: default;
 }
 
+.laser-div{
+  position: fixed;
+  top: 50%;
+  left: 25%;
+  transform: translate(0);
+  width: 30vw;
+  height: auto;
+  aspect-ratio: 2/1;
+}
 
+#saki-laser{
+  transform: scale(100) translate(-35%,-17.5%);
+  right: 0;
+  top: 50%;
+  aspect-ratio: 1;
+  opacity: 0;
+}
+
+#anon-laser{
+  left: 100vw;
+  top: 0%;
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+#heart{
+  position: absolute;
+  left: 0%;
+  top: 30%;
+  width: 17.5%;
+  rotate: 180deg;
+}
 
 /* larger screen */
 @media screen and (min-width: 1920px){
