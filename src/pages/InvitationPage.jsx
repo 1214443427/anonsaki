@@ -156,7 +156,7 @@ function InvitationPage() {
 
     useGSAP(()=>{
 
-        stopOverscroll(".text-scroll-container");
+        stopOverscroll();
 
         const state = Flip.getState(moonRef.current);
         Flip.fit(moonRef.current, moonInitialRef.current)
