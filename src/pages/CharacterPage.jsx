@@ -249,7 +249,7 @@ function Danmaku({danmaku, timelinesRef, index}){
   const [style] = useState(()=>({
       "--color": danmaku.color,
       "--top":`${Math.random() > 0.5? Math.random() * 30 + 60 : Math.random() * 30 + 10}vh`,
-      "--size":`${Math.random() + 1} rem`
+      "--size":`${Math.random() + 1}rem`
   }))
 
   // console.log("danmaku called")

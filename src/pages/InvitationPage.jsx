@@ -4,6 +4,7 @@ import { Flip } from 'gsap/Flip';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
 import React, { useRef, useState } from 'react'
+import { stopOverscroll } from '../utils/gsapUtils';
 
 const TEXT = [
 `Epistula Invitatoria`,
@@ -155,6 +156,8 @@ function InvitationPage() {
 
     useGSAP(()=>{
 
+        stopOverscroll(".text-scroll-container");
+
         const state = Flip.getState(moonRef.current);
         Flip.fit(moonRef.current, moonInitialRef.current)
         
@@ -259,16 +262,30 @@ function InvitationPage() {
         //     yoyo:true,
         // })
 
-        gsap.to(sakiOctoRef.current, {
+        gsap.to(anonOctoRef.current, {
             scrollTrigger: {
                 trigger: ".text-scroll-container",
                 scrub: true,
                 start: 11000,
-                end: 14000
+                end: 14000,
+                onEnter: ()=>{gsap.set(anonOctoRef.current, {opacity:1})},
+                onLeaveBack: ()=>{gsap.set(anonOctoRef.current, {opacity:0})},
             },
             top: "-25%"
         })
 
+        gsap.set(sakiOctoRef.current, {right: "15%"})
+
+        gsap.to(sakiOctoRef.current, {
+            scrollTrigger: {
+                trigger: ".text-scroll-container",
+                scrub: true,
+                start: 18000,
+                end: 21000
+            },
+            top: "-25%",
+            rotate: 420
+        })
 
         gsap.to("#heart", {
             scrollTrigger: {
@@ -346,7 +363,8 @@ function InvitationPage() {
                 <div className='bg--transition'></div>
                 <div className='bg--2'>
                     <img ref={anonOctoRef} src='/assets/anon_octo.webp' className='octo-image invitation-easter-egg'/>
-                    <img ref={sakiOctoRef} src='/assets/saki_octo.webp' className='octo-image invitation-easter-egg'/>
+                    <img ref={sakiOctoRef} src="/assets/happy_saki_octo.webp" className='octo-image invitation-easter-egg' />
+
                 </div>
                 <div className='bg--3'></div>
                 <div className='laser-div'>

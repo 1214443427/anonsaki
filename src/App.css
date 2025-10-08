@@ -907,15 +907,17 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
   width: 100%;
   background: linear-gradient(rgb(var(--saki-color)));
 }
 
 .disclaimer .dialog-box{
+  margin: 40px 0;
   --border-color: rgb(var(--combined-color));
   padding: 10%;
   display: flex;
+  gap: 2rem;
   flex-direction: column;
   justify-content: space-between;
 }
@@ -1110,6 +1112,10 @@ h1, h2, h3, h4, h5, h6 {
 
   .drag-me-message{
     font-size: 1rem;
+  }
+
+  .character-section h1{
+    font-size: 2rem;
   }
 
   .relay-grid{
