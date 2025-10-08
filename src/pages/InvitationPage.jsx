@@ -4,7 +4,6 @@ import { Flip } from 'gsap/Flip';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
 import React, { useRef, useState } from 'react'
-import { stopOverscroll } from '../utils/gsapUtils';
 
 const TEXT = [
 `Epistula Invitatoria`,
@@ -156,7 +155,7 @@ function InvitationPage() {
 
     useGSAP(()=>{
 
-        stopOverscroll();
+        ScrollTrigger.normalizeScroll(true)
 
         const state = Flip.getState(moonRef.current);
         Flip.fit(moonRef.current, moonInitialRef.current)
