@@ -4,6 +4,7 @@ import { Flip } from 'gsap/Flip';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
 import React, { useRef, useState } from 'react'
+import ExternalLink from '../components/ExternalLink';
 
 const TEXT = [
 `Epistula Invitatoria`,
@@ -155,7 +156,7 @@ function InvitationPage() {
 
     useGSAP(()=>{
 
-        ScrollTrigger.normalizeScroll(true)
+        // ScrollTrigger.normalizeScroll(true)
 
         const state = Flip.getState(moonRef.current);
         Flip.fit(moonRef.current, moonInitialRef.current)
@@ -242,11 +243,13 @@ function InvitationPage() {
                 start: 8000,
                 end: 12000,
             },
-            x: `+=${20 * gsap.utils.random(1,10)}`,
+            x: ()=>`+=${20 * gsap.utils.random(1,10)}`,
+            y: ()=>20*gsap.utils.random(-1,1),
             repeatRefresh: true,
             repeat: 20,
             yoyo:true,
-            immediateRender: false
+            immediateRender: false,
+            ease: "power1.inOut",
         })
 
         // gsap.to("#anon-laser", {
@@ -265,12 +268,17 @@ function InvitationPage() {
             scrollTrigger: {
                 trigger: ".text-scroll-container",
                 scrub: true,
-                start: 11000,
-                end: 14000,
+                start: 8000,
+                end: 12000,
                 onEnter: ()=>{gsap.set(anonOctoRef.current, {opacity:1})},
                 onLeaveBack: ()=>{gsap.set(anonOctoRef.current, {opacity:0})},
             },
-            top: "-25%"
+            top: "-25%",
+            keyframes: {
+                "0%": {opacity: 1},
+                "90%": {opacity: 1},
+                "100%": {opacity: 0}
+            }
         })
 
         gsap.set(sakiOctoRef.current, {right: "15%"})
@@ -283,7 +291,12 @@ function InvitationPage() {
                 end: 21000
             },
             top: "-25%",
-            rotate: 420
+            rotate: -420,
+            keyframes: {
+                "0%": {opacity: 1},
+                "90%": {opacity: 1},
+                "100%": {opacity: 0}
+            }
         })
 
         gsap.to("#heart", {
@@ -411,12 +424,16 @@ function InvitationPage() {
                     <p>制作邀请函这部分的时候感觉有点燃尽了。很多地方是硬编码。如果在您的设备上不能正确显示的话，致歉。</p>
                     
                     <p>至此。<span></span></p>
-                    <p>（PS，代码里祥子是0。）</p>
+                    <p>（PS，虽然我是祥1，但是代码里祥子是0。）</p>
                 </div>
             </div>
             <div className='qr-code-container'>
                 <img className='qr-code-image non-select' src='/assets/qr-code.png'/>
-                <button className='qr-code-button menu-button' onClick={()=>{window.open(URL, '_blank')}}>加入舞会</button>
+                <button 
+                    className='qr-code-button menu-button' 
+                    onClick={()=>{window.open(URL, '_blank')}}>
+                        <ExternalLink />
+                        加入舞会</button>
             </div>
         </div>
     )

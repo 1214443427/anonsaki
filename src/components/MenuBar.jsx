@@ -21,7 +21,13 @@ function MenuBar({navigateTo, isOpen, setIsOpen}) {
       </div>
       <div className={`menu-bar flex ${isOpen?"":"toggled"}`} onClick={(e)=>e.stopPropagation()}>
         <div className='menu-left-side'>
-            <img className='logo' src='/assets/logo.jpg' alt='爱祥tv'/>
+            {/* <div className='logo-container'>
+              <div class="triangle-up">
+                <img className="logo" src='/assets/anon-avatar.webp' />
+              </div>
+              <div class="triangle-down"></div> */}
+            <img className='logo' src='/assets/combined-avatar.webp' alt='爱祥tv' onClick={()=>navigateTo("/")}/>
+            {/* </div> */}
             <h1 className=''></h1>
             <MusicPlayer />
         </div>

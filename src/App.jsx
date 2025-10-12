@@ -51,16 +51,28 @@ function App() {
   //   await  loadScript("live2d/LAppLive2DManager")
   //   setScriptLoading(false)
   // }
+  const NUM_OF_EASTEREGGS = 6;
 
   const [currentRoute, setCurrentRoute] = useState('landing');
   const [currentRelayId, setCurrentRelayId] = useState(null); //to be implemented as record.
   const [touching, setTouching] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [easterEgg, setEasterEgg] = useState([])
 
   //Example: navigateTo('/character')
   const navigateTo = (path) => {
     window.location.hash = path; 
   };
+
+  function collectEasterEgg(id){
+    if (easterEgg.includes(id)){
+      const collectedEasterEggs = [...easterEgg, id]
+      if(collectedEasterEggs.length === NUM_OF_EASTEREGGS){
+        //TODO
+      }
+      setEasterEgg(collectedEasterEggs)
+    }
+  }
 
   const parseRoute = () => {
     const hash = window.location.hash.slice(1);
@@ -100,16 +112,16 @@ function App() {
       {(()=>{ 
         switch(currentRoute){
         case 'landing':
-          return <LandingPage navigateTo={navigateTo}/>;
+          return <LandingPage navigateTo={navigateTo} collectEasterEgg={collectEasterEgg}/>;
         case 'character':
-          return <CharacterPage navigateTo={navigateTo}/> 
+          return <CharacterPage navigateTo={navigateTo} collectEasterEgg={collectEasterEgg}/> 
         case 'relays':
           if(currentRelayId == null)
-            return <RelayPage navigateTo={navigateTo}/>
+            return <RelayPage navigateTo={navigateTo} collectEasterEgg={collectEasterEgg}/>
           else
             return <RelayDetailsPage filename={decodeURI(currentRelayId)}></RelayDetailsPage>
         case "invitation":
-            return <InvitationPage />
+            return <InvitationPage collectEasterEgg={collectEasterEgg}/>
         }
       })()}
     </div>

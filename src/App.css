@@ -55,7 +55,9 @@ h1, h2, h3, h4, h5, h6 {
 #root, #__next {
   isolation: isolate;
   --anon-color: 255, 136, 153;
+  --anon-color-alpha: 246, 162, 174;
   --saki-color: 119, 153, 204;
+  --saki-color-alpha: 150, 174, 210;
   --combined-color: 186, 145, 204;
   --white-color: #f2f2f2
 
@@ -86,6 +88,10 @@ h1, h2, h3, h4, h5, h6 {
   user-select: none;         /* Standard syntax */
 }
 
+.layout{
+  /* background-color: rgb(var(--combined-color)); */
+}
+
 .menu-bar{
   position: fixed;
   justify-content: space-between;
@@ -93,7 +99,7 @@ h1, h2, h3, h4, h5, h6 {
   left: 5%;
   top: 1%;
   width: 90vw;
-  height: 8vh;
+  height: 100px;
   min-height: 80px;
   padding: 1rem;
   background-color: rgba(255, 255, 255, 0.15);
@@ -117,9 +123,12 @@ h1, h2, h3, h4, h5, h6 {
   gap: 20px;
 }
 
-.logo{
+.logo-container,.logo{
   height: 100%;
+  cursor: pointer;
+  aspect-ratio: 1;
 }
+
 
 .buttons{
   display: flex;
@@ -130,6 +139,9 @@ h1, h2, h3, h4, h5, h6 {
 .menu-button{
   background-color: rgb(var(--combined-color));
   width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Landing Page */
@@ -323,13 +335,27 @@ h1, h2, h3, h4, h5, h6 {
   animation: 2s jump forwards;
 } */
 
+.layout{
+  width: 100vw;
+}
 
 /* MainPage */
 
 .character-page{
   position: relative;
+  margin: auto;
   height: 100dvh;
+  max-width: 1280px;
   /* overflow: scroll; */
+}
+
+.character-page-background{
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  position: fixed;
+  background-color: rgba(var(--combined-color), 0.4);
+  left: 0;
 }
 
 .character-curtain{
@@ -355,11 +381,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .saki-section{
-  background-color: rgba(var(--anon-color), 0.7);
+  background-color: rgb(var(--anon-color-alpha));
 }
 
 .anon-section{
-  background-color: rgba(var(--saki-color), 0.7);
+  background-color: rgb(var(--saki-color-alpha));
   position: relative;
 }
 
@@ -397,7 +423,9 @@ h1, h2, h3, h4, h5, h6 {
   height: 70%;
   border-radius: 20px;
   padding: 30px;
+  font-size: 1.5rem;
 }
+
 
 .saki-border{
   --border-color:  rgba(var(--saki-color), 1);
@@ -428,7 +456,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .animation-container{
-  background: linear-gradient(rgba(var(--anon-color), 0.7), rgba(var(--saki-color), 0.7))
+  background: linear-gradient(rgb(var(--anon-color-alpha)), rgb(var(--saki-color-alpha)))
 }
 
 .animation-canvas{
@@ -439,6 +467,7 @@ h1, h2, h3, h4, h5, h6 {
   left: 50%;
   transform: translate(-50%, -50%);
   width: 75vw;
+  max-width: 900px;
   height: auto;
   aspect-ratio: 16/9;
   z-index: 1;
@@ -490,6 +519,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 
+
 /* ====== Relays Page ====== */
 .relays-page{
   height: auto;
@@ -528,6 +558,14 @@ h1, h2, h3, h4, h5, h6 {
   border-top: 5px solid rgb(var(--saki-color)); 
   border-radius: 50%; 
   animation: spin 1s linear infinite; 
+}
+
+.external-links{
+  height: 1.5rem;
+  width: auto;
+  aspect-ratio: 1;
+  display: inline-block;
+    vertical-align: middle;
 }
 
 @keyframes spin {
@@ -614,10 +652,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .memory-button{
-  background-color: rgb(var(--combined-color));
   position: fixed;
   height: 45px;
   bottom: -50px;
+  width: 150px;
+  justify-content: space-evenly;
   left: 50vw;
   z-index: 99;
   translate: -50% 0;
@@ -904,6 +943,12 @@ h1, h2, h3, h4, h5, h6 {
   height: 15500px;
 }
 
+.qr-code-button{
+  width: 150px;
+  height: 45px;
+  justify-content: space-evenly;
+}
+
 .disclaimer{
   display: flex;
   justify-content: center;
@@ -918,6 +963,7 @@ h1, h2, h3, h4, h5, h6 {
   --border-color: rgb(var(--combined-color));
   padding: 10%;
   display: flex;
+  font-size: 1rem;
   gap: 2rem;
   flex-direction: column;
   justify-content: space-between;
@@ -983,6 +1029,25 @@ h1, h2, h3, h4, h5, h6 {
     border-radius: 20px; 
     pointer-events: none;
   } */
+
+  .invitation-page{
+    font-size: 2rem;
+  }
+  
+  .img-span{
+    width: 3rem;
+  }
+
+  .moon-final{
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .menu-button{
+    width: 200px;
+    font-size: 1.5rem;
+  }
+
 }
 
 .polaroid-container{
@@ -1117,6 +1182,10 @@ h1, h2, h3, h4, h5, h6 {
 
   .character-section h1{
     font-size: 2rem;
+  }
+
+  .dialog-box{
+    font-size: 1rem;
   }
 
   .relay-grid{

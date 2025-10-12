@@ -4,6 +4,7 @@ import { Flip } from 'gsap/all';
 import React, { useMemo, useRef } from 'react'
 import { useEffect, useState } from 'react';
 import Spinner from "../components/Spinner"
+import ExternalLink from '../components/ExternalLink';
 
 gsap.registerPlugin(Flip) 
 
@@ -74,7 +75,7 @@ function RelayPage({navigateTo}) {
             }
             catch (err){
                 console.error('Failed to fetch data', err);
-                setError("无法获取接力信息！请联系作者qq:1214443427。")
+                setError("无法获取接力信息！请联系作者B站")
             }
         }
         fetchData();
@@ -211,11 +212,13 @@ function RelayPage({navigateTo}) {
             {/* } */}
             <Polaroids relay={relays[selectedRelay]} details={true} ref={detailsRef} onClick={hideDetails}/>
             {/* <Details relay={relays[selectedRelay]} ref={detailsRef} onClick={hideDetails}/> onClick={()=>setSelectedRelay(null)} change to a modal that hides this. */}
-            <button className='memory-button' 
+            <button className='memory-button menu-button' 
                 onClick={()=>{
                         // navigateTo(`/relays/${relays[selectedRelay].name}`)
                         open(relays[selectedRelay].details.link, "_blank")
-                    }}>浏览回忆
+                    }}>
+                        <ExternalLink />
+                        浏览回忆
             </button>
         </div>
     )
