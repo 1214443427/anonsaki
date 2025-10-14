@@ -464,18 +464,17 @@ function CharacterPage({navigateTo}) {
       <section className='character-section saki-section'>
         <div className='dialog-box saki-border'>
           <h1>Togawa Sakiko</h1>
-          <p>羽丘学院1年b班，<br/>
-            Ave Mujica键盘手，
+          <p>羽丘学院1年b班<br/>
+            Ave Mujica键盘手
+          </p>
             <ToolTips displayText={"炽天使31O部队队长"} 
               link={"https://ngabbs.com/read.php?tid=41989465"}
               content={"丰川祥子、为了人类的未来而战……真的能战吗？"}
-              />，
-            <br/>
+              />
             <ToolTips displayText={"霍格沃茨魔法学校，拉文克劳学院学生"} 
               content={"迷子和人偶们在破坏霍格沃茨的世界观。"} 
               link={"https://ngabbs.com/read.php?tid=40811445"}
               />
-            </p>
         </div>
       </section>
 
@@ -500,16 +499,15 @@ function CharacterPage({navigateTo}) {
           <p>羽丘学院1年a班<br/>
             Mygo 吉他手
             <br/>
+          </p>
             <ToolTips displayText={"炽天使30A部队队长"} 
               link={"https://ngabbs.com/read.php?tid=41989465"}
               content={"丰川祥子、为了人类的未来而战……真的能战吗？"}
-              />，
-            <br/>
+              />
             <ToolTips displayText={"霍格沃茨魔法学校，拉文克劳学院学生"} 
               content={"迷子和人偶们在破坏霍格沃茨的世界观。"} 
               link={"https://ngabbs.com/read.php?tid=40811445"}
               />
-            </p>
         </div>
       <button id='explore-button' onClick={()=>navigateTo("/relays")}>探索接力</button>
       </section>

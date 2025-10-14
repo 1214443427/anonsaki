@@ -49,7 +49,7 @@ function EmojiBubble({emoji, index}){
 
     return(
         <div 
-            className={`emoji-bubble non-select ${emoji.location}`} 
+            className={`emoji-bubble non-select ${emoji.location} animated`} 
             style={{
                 animationDelay: `${properties.animationDelay}s`,
                 "--offset": `${properties.offset}%`,

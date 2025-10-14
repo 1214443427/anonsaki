@@ -5,6 +5,8 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
 import React, { useRef, useState } from 'react'
 import ExternalLink from '../components/ExternalLink';
+import MotionPathPlugin from 'gsap/MotionPathPlugin';
+import { MotionPathHelper } from 'gsap/MotionPathHelper';
 
 const TEXT = [
 `Epistula Invitatoria`,
@@ -46,7 +48,7 @@ const OFFSET = [
   249
 ]
 
-gsap.registerPlugin(SplitText, ScrollTrigger, Flip);
+gsap.registerPlugin(SplitText, ScrollTrigger, Flip, MotionPathPlugin, MotionPathHelper);
 
 const segmenter = new Intl.Segmenter("zh", { granularity: "word" });
 
@@ -115,6 +117,7 @@ const ScrollText = ({as: Component = "h2", text, effect, className, offset, inde
                     // })
                 })
             })()
+            gsap.set(".scroll-text", {opacity:1}) //sets opacity back to 1 after text splits. 
         // )    
         })
     
@@ -263,17 +266,19 @@ function InvitationPage() {
         //     repeat: 20,
         //     yoyo:true,
         // })
+        gsap.set(anonOctoRef.current, {right: "5%"})
 
         gsap.to(anonOctoRef.current, {
             scrollTrigger: {
                 trigger: ".text-scroll-container",
                 scrub: true,
-                start: 8000,
-                end: 12000,
+                start: 18500,
+                end: 20750,
                 onEnter: ()=>{gsap.set(anonOctoRef.current, {opacity:1})},
                 onLeaveBack: ()=>{gsap.set(anonOctoRef.current, {opacity:0})},
             },
             top: "-25%",
+            rotate: 300,
             keyframes: {
                 "0%": {opacity: 1},
                 "90%": {opacity: 1},
@@ -297,6 +302,72 @@ function InvitationPage() {
                 "90%": {opacity: 1},
                 "100%": {opacity: 0}
             }
+        })
+
+        gsap.set("#soyo", {right: "-100%", top: "10%"})
+        gsap.to("#soyo", {
+            scrollTrigger: {
+                trigger: ".text-scroll-container",
+                scrub: true,
+                start: 10500,
+                end: 12500
+            },
+            keyframes: {
+                "0%": {opacity: 1},
+                "15%": {opacity: 1, left: "50%"},
+                "75%": {opacity: 1, left: "50%"},
+                "100%": {opacity: 0, left: "100%"}
+            }
+        })
+
+        gsap.set("#anon-heart", {opacity:0, left: "25%", bottom: "-15%"})
+        gsap.to("#anon-heart", {
+            scrollTrigger: {
+                trigger: ".text-scroll-container",
+                scrub: true,
+                start: 22000,
+                end: 27000
+            },
+            keyframes: {
+                "0%": { opacity: 1 },
+                "90%": { opacity: 1 },
+                "100%": { opacity: 0 }, 
+            },
+            motionPath:[
+                {left: "35%",bottom: "15%", zIndex: 1},
+                {left: "65%",bottom: "35%", zIndex: 1},
+                {left: "35%",bottom: "55%", zIndex: 0},
+                {left: "55%",bottom: "75%", zIndex: 0},
+                {left: "45%",bottom: "85%", zIndex: 1},
+                {left: "53%",bottom: "95%", zIndex: 1},
+                {left: "50%",bottom: "105%", zIndex: 0}
+            ]
+        })
+
+        // MotionPathHelper.create(tween)
+
+        gsap.set("#saki-heart", {opacity:0, right: "25%", bottom: "-15%"})
+        gsap.to("#saki-heart", {
+            scrollTrigger: {
+                trigger: ".text-scroll-container",
+                scrub: true,
+                start: 22000,
+                end: 27000
+            },
+            keyframes: {
+                "0%": { opacity: 1 },
+                "90%": { opacity: 1 },
+                "100%": { opacity: 0 }, 
+            },
+            motionPath:[
+                {right: "35%",bottom: "15%", zIndex: 0},
+                {right: "65%",bottom: "35%", zIndex: 0},
+                {right: "35%",bottom: "55%", zIndex: 1},
+                {right: "55%",bottom: "75%", zIndex: 1},
+                {right: "45%",bottom: "85%", zIndex: 0},
+                {right: "53%",bottom: "95%", zIndex: 0},
+                {right: "50%",bottom: "105%", zIndex: 1}
+            ]
         })
 
         gsap.to("#heart", {
@@ -376,7 +447,11 @@ function InvitationPage() {
                 <div className='bg--2'>
                     <img ref={anonOctoRef} src='/assets/anon_octo.webp' className='octo-image invitation-easter-egg'/>
                     <img ref={sakiOctoRef} src="/assets/happy_saki_octo.webp" className='octo-image invitation-easter-egg' />
-
+                    <img src="/assets/soyo.jpg" id="soyo" className='invitation-easter-egg' />
+                    <p  id="saki-heart" className='invitation-heart'>🩵</p>
+                    <p  id="anon-heart" className='invitation-heart'>🩷</p>
+                    <p className='emoji-bubble' id="keyboard">🎹</p>
+                    <p className='emoji-bubble' id="guitar">🎸</p>
                 </div>
                 <div className='bg--3'></div>
                 <div className='laser-div'>

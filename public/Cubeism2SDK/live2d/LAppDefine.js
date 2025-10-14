@@ -27,7 +27,7 @@ var LAppDefine = {
     PRIORITY_FORCE : 3,
     
     
-    BACK_IMAGE_NAME : "assets/image/back_class_normal.png",
+    // BACK_IMAGE_NAME : "assets/image/back_class_normal.png",
 
     
     // MODEL_HARU : "assets/live2d/haru/haru.model.json",

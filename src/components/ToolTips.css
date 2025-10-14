@@ -1,5 +1,6 @@
 .tooltip-container{
     position: relative;
+    width: fit-content;
 }
 
 .tooltip-display-text{
@@ -11,23 +12,24 @@
 .tooltip-body{
     font-size: 1rem;
     position: absolute;
-    top: -20px;
+    top: 0px;
     left: 50%;
     transition: opacity 0.5s ease;
     opacity: 0;
-    max-width: 500px;
-    width: 120%;
+    max-width: 200px;
+    width: max-content;
     padding: 5px;
     border-radius: 15px;
     background-color: rgb(var(--anon-color-alpha));
     border: 2px solid rgb(var(--saki-color));
     transform: translate(-50%, -100%);
     pointer-events: none;
+    line-height: 1rem;
+
 }
 
 .link-content{
-    display:inline-block;       
-
+    display:block;       
 }
 
 .tooltip-body.display{
@@ -36,4 +38,7 @@
 }
 
 .tooltip-content{
+    display: -webkit-box; /* Required for -webkit-line-clamp */
+    -webkit-box-orient: vertical; /* Required for -webkit-line-clamp */
+    -webkit-line-clamp: 2;
 }

@@ -57,7 +57,7 @@ function ToolTips({displayText, content, link}) {
     }
 
     return (
-        <span className='tooltip-container'>
+        <div className='tooltip-container'>
             <p className='tooltip-display-text' 
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
@@ -67,25 +67,25 @@ function ToolTips({displayText, content, link}) {
                 >
                 {displayText}
             </p>
-            <span className={`tooltip-body ${isVisible? "display":""}`} 
+            <div className={`tooltip-body ${isVisible? "display":""}`} 
                 ref={tooltipRef}
                 onMouseEnter={handleTooltipEnter}
                 onMouseLeave={handleMouseLeave}
                >
                 {link?
-                <a href={link}> 
-                <p className='link-content'>
-                    <ExternalLink />
-                    {content}
-                </p>
+                <a href={link} target='_blank'> 
+                    <p className='link-content'>
+                        <ExternalLink />
+                        {content}
+                    </p>
                 </a>
                 :
                 <p className='tooltip-content'>
                     {content}
                 </p>
                 }
-            </span>
-        </span>
+            </div>
+        </div>
     )
 }
 
