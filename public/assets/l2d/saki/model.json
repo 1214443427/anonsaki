@@ -30,6 +30,23 @@
     "data/textures/texture_01.png"
   ],
   "motions": {
+    "tap_body": [
+      {
+        "file": "data/motions/smile01.mtn"
+      },
+      {
+        "file": "data/motions/smile02.mtn"
+      },      
+      {
+        "file": "data/motions/smile03.mtn"
+      },
+      {
+        "file": "data/motions/smile05.mtn"
+      },
+      {
+        "file": "data/motions/kime01.mtn"
+      }
+    ],
     "angry01": [
       {
         "file": "data/motions/angry01.mtn"

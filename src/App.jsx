@@ -55,9 +55,9 @@ function App() {
 
   const [currentRoute, setCurrentRoute] = useState('landing');
   const [currentRelayId, setCurrentRelayId] = useState(null); //to be implemented as record.
-  const [touching, setTouching] = useState(false)
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [easterEgg, setEasterEgg] = useState([])
+
+
 
   //Example: navigateTo('/character')
   const navigateTo = (path) => {
@@ -107,8 +107,8 @@ function App() {
 
 
   return (
-    <div onClick={()=>setIsMenuOpen(false)} className='layout'>
-      <MenuBar navigateTo={navigateTo} isOpen={isMenuOpen} setIsOpen={setIsMenuOpen}/>
+    <div className='layout'>
+      <MenuBar navigateTo={navigateTo}/>
       {(()=>{ 
         switch(currentRoute){
         case 'landing':

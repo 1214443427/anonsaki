@@ -66,7 +66,7 @@ export function useIdle(timeout = 10000){
     }, [resetTimer])
 
     return(
-        {isIdle, isBottom}
+        {isIdle, isBottom, resetTimer}
     )
 
 }

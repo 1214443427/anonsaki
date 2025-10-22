@@ -372,7 +372,7 @@ h1, h2, h3, h4, h5, h6 {
   height: 100dvh;
   justify-content: center;
   align-items: center;
-  line-height: 3rem;
+  /* line-height: 3rem; */
 }
 
 @keyframes fadeIn {
@@ -428,6 +428,9 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: 20px;
   padding: 30px;
   font-size: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 
@@ -515,10 +518,26 @@ h1, h2, h3, h4, h5, h6 {
 
 #gl_canvas{
   position: absolute;
+}
+
+.canvas-dialog{
+  position: absolute;
+  border: 2px solid rgb(var(--combined-color));
+  left: 10%;
+  width: 80%;
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.75);
+  min-height: 4rem;
+  padding: 1rem;
+  bottom: 0;
+  opacity: 0;
+}
+
+.character-page #gl_canvas{
   z-index: 3;
   right: calc(10vw + 10px);
   aspect-ratio: 3/4;
-  height: 40vh;
+  height: 50vh;
   min-height: 280px;
 }
 
@@ -1194,12 +1213,13 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 2rem;
   }
 
-   .character-section{
-    line-height: 1.5rem;
-   }
-
+  .character-page #gl_canvas{
+    height: 40vh;
+  }
+  
   .dialog-box{
     font-size: 1rem;
+    gap: 0px;
   }
 
   .relay-grid{

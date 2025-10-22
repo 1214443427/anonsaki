@@ -48,11 +48,13 @@ LAppLive2DManager.prototype.changeModel = function(gl, model)
         var no = parseInt(this.count % 5);
 
         var thisRef = this;
-        console.log("changeModel", model)
+        if(LAppDefine.DEBUG_LOG){
+            console.log("changeModel", model)
+        }
         switch (model)
         {
             case 0: 
-                this.releaseModel(1, gl);
+                // this.releaseModel(1, gl);
                 this.releaseModel(0, gl);
                 
                 this.createModel();
@@ -146,17 +148,17 @@ LAppLive2DManager.prototype.tapEvent = function(x, y)
     for (var i = 0; i < this.models.length; i++)
     {
 
-        if ( x > -0.3 && x < 0.3 && y < 0.8 && y > 0.2)
+        if ( x > 0.35 && x < 0.65 && y < 0.42 && y > 0.18)
         {
             
             if (LAppDefine.DEBUG_LOG)
                 console.log("Tap face.", this.lastInteraction);
             
-            // this.models[i].setRandomExpression();
-            this.models[i].setExpression("smile02")
-            setTimeout(this.models[i].setExpression.bind(this.models[i], "idle01"), 1000)
+            this.models[i].setRandomSmileExpression();
+            // this.models[i].setExpression(`smile02`)
+            // setTimeout(this.models[i].setExpression.bind(this.models[i], "idle01"), 2000)
         }
-        else if (this.models[i].hitTest(LAppDefine.HIT_AREA_BODY, x, y))
+        else if ( x > 0.3 && x < 0.7 && y < 1 && y > 0.42)
         {
             
             if (LAppDefine.DEBUG_LOG)
@@ -169,6 +171,20 @@ LAppLive2DManager.prototype.tapEvent = function(x, y)
 
     return true;
 };
+
+
+LAppLive2DManager.prototype.idelExpression = function(){
+    for (var i = 0; i < this.models.length; i++){
+        this.models[i].setExpression(`idle01`)
+    }
+}
+
+LAppLive2DManager.prototype.thinking = function(){
+    for (var i = 0; i < this.models.length; i++){
+        this.models[i].startMotion(`thinking01`, 0, LAppDefine.PRIORITY_FORCE)
+        this.models[i].setExpression(`shame02`)
+    }
+}
 
 LAppLive2DManager.prototype.idelEvent = function(){
     console.log("idle event")

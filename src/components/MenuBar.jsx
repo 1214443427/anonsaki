@@ -1,20 +1,39 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import MusicPlayer from './MusicPlayer'
 
-function MenuBar({navigateTo, isOpen, setIsOpen}) {
-  
+function MenuBar({navigateTo}) { //, isOpen, setIsOpen
+  const [isOpen, setIsOpen] = useState(false)
+
   const buttonOnClick = (path) => {
     navigateTo(path)
     setIsOpen(false)
   }
 
+  const toggleMenu = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsOpen(!isOpen)
+  }
+
+  useEffect(()=>{
+    const closeMenu = (e) => {
+      e.stopPropagation()
+      setIsOpen(false)
+    }
+    window.addEventListener("click", closeMenu)
+    window.addEventListener("scroll", closeMenu)
+    return () => {
+      window.removeEventListener("click", closeMenu)
+      window.removeEventListener("scroll", closeMenu)
+    }
+  }, [])
+
   return (
     <>
       <div className={`hamburger-button ${isOpen?"toggled":""}`} 
-      onClick={(e)=>{
-        e.stopPropagation()
-        setIsOpen(!isOpen)}
-        }>
+        onClick={(e)=>{toggleMenu(e)}}
+        // onTouch={(e)=>{toggleMenu(e)}}
+        >
         <span></span>
         <span></span>
         <span></span>
@@ -26,7 +45,7 @@ function MenuBar({navigateTo, isOpen, setIsOpen}) {
                 <img className="logo" src='/assets/anon-avatar.webp' />
               </div>
               <div class="triangle-down"></div> */}
-            <img className='logo' src='/assets/combined-avatar.webp' alt='爱祥tv' onClick={()=>navigateTo("/")}/>
+            <img className='logo' src='/assets/combined-avatar.webp' alt='爱祥tv' onClick={()=>buttonOnClick("/")}/>
             {/* </div> */}
             <h1 className=''></h1>
             <MusicPlayer />

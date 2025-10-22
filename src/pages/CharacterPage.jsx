@@ -4,6 +4,7 @@ import ScrollTrigger from 'gsap/ScrollTrigger'
 import { useGSAP } from '@gsap/react';
 import ScrollIndicator from '../components/ScrollIndicator';
 import ToolTips from '../components/ToolTips';
+import L2dCanvas from '../components/L2dCanvas';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -11,238 +12,21 @@ const TOTAL_FRAMES = 180;
 const IMG_OFFSET = 3;
 const ANIMAION_DURATION = 3000;
 const DANMAKU = [
-  {text: "爱祥99", speed: 0.85, yPos: 10, color: "#FF6B6B", delay: 0},
-  {text: "爱祥99", speed: 0.8, yPos: 20, color: "#C7B8FF", delay: 0.9},
-  {text: "哦不，推推的开", speed: 0.4, yPos: 20, color: "#96CEB4", delay: 0.8},
-  {text: "哦耶，爱爱的祥", speed: 0.75, yPos: 20, color: "#96CEB4", delay: 0.7},
-  {text: "呃啊感性感性", speed: 0.8, yPos: 20, color: "#45B7D1", delay: 0.6},
-  {text: "呃啊本能本能", speed: 0.6, yPos: 20, color: "#4ECDC4", delay: 0.5},
-  {text: "呃啊理性理性", speed: 0.5, yPos: 20, color: "#FFEAA7", delay: 0.4},
-  {text: "没有算了", speed: 1, yPos: 20, color: "#DDA0DD", delay: 0.2},
-  {text: "真的唉", speed: 0.2, yPos: 20, color: "#a0caddff", delay: 0.1},
-  {text: "汉墓封土", speed: 0.5, yPos: 20, color: "#0d6e9bff", delay: 2.0},
+  {text: "爱祥99", speed: 0.85, yPos: 10, color: "#881144", delay: 0},  //ave mujica
+  {text: "爱祥99", speed: 0.8, yPos: 20, color: "#3388BB", delay: 0.9}, //mygo
+  {text: "哦不，推推的开", speed: 0.4, yPos: 20, color: "#FF8899", delay: 0.8},  //anon
+  {text: "哦耶，爱爱的祥", speed: 0.75, yPos: 20, color: "#77DD77", delay: 0.7},  //raana
+  {text: "呃啊感性感性", speed: 0.8, yPos: 20, color: "#FFDD88", delay: 0.6},  //soyo
+  {text: "呃啊本能本能", speed: 0.6, yPos: 20, color: "#7777AA", delay: 0.5},  //taki
+  {text: "呃啊理性理性", speed: 0.5, yPos: 20, color: "#77BBDD", delay: 0.4},  //tomori
+  {text: "没有算了", speed: 1, yPos: 20, color: "#7799CC", delay: 0.2},  //saki
+  {text: "真的唉", speed: 0.2, yPos: 20, color: "#BB9955", delay: 0.1},  //uika
+  {text: "汉墓封土", speed: 0.5, yPos: 20, color: "#779977", delay: 2.0},  //mutsumi
+  {text: "祥祥？什么时候？", speed: 0.5, yPos: 20, color: "#335566", delay: 2.0}, //umiri
+  {text: "爱祥，你在哪里", speed: 0.5, yPos: 20, color: "#AA4477", delay: 2.0}, //umiri
+  {text: "place holder", speed: 0.5, yPos: 20, color: "#FFFF66", delay: 2.0}, //sumimi tentitive.
   
 ]
-
-function L2dCanvas( {character, offsetBottom} ) {
-  const live2DMgrRef = useRef(null)
-  
-  const model = character == "anon" ? 1 : 0 ; //saki = 0
-
-  const [isDrawStart, setIsDrawStart] = useState(false)
-  
-  const glRef = useRef(null)
-  const canvasRef = useRef(null);
-  
-  const dragMgrRef = useRef(null);
-  const viewMatrixRef = useRef(null);
-  const projMatrixRef = useRef(null);
-  const deviceToScreenRef = useRef(null);
-
-  const [isDrag, setIsDrag] = useState(false)
-  const [lastMouseX, setLastMouseX] = useState(0)
-  const [lastMouseY, setLastMouseY] = useState(0)
-
-  const [isModelShown, setIsModelShown] = useState(false)
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const mouseHandler = (e) => { /* handle mouse */ };
-    const touchHandler = (e) => { /* handle touch */ };
-
-    canvas.addEventListener("mousedown", mouseHandler);
-    canvas.addEventListener("mousemove", mouseHandler);
-    canvas.addEventListener("mouseup", mouseHandler);
-    canvas.addEventListener("mouseout", mouseHandler);
-
-    canvas.addEventListener("touchstart", touchHandler);
-    canvas.addEventListener("touchend", touchHandler);
-    canvas.addEventListener("touchmove", touchHandler);
-
-    return () => {
-      // cleanup listeners
-      canvas.removeEventListener("mousedown", mouseHandler);
-      canvas.removeEventListener("mousemove", mouseHandler);
-      canvas.removeEventListener("mouseup", mouseHandler);
-      canvas.removeEventListener("mouseout", mouseHandler);
-
-      canvas.removeEventListener("touchstart", touchHandler);
-      canvas.removeEventListener("touchend", touchHandler);
-      canvas.removeEventListener("touchmove", touchHandler);
-    };
-  }, []);
-
-  useEffect(() => {
-    const canvas = canvasRef.current
-    console.log(canvas)
-    if (!canvas) return;
-
-    live2DMgrRef.current = new LAppLive2DManager(canvas)
-    
-    const width = canvas.width
-    const height = canvas.height
-
-    dragMgrRef.current  = new L2DTargetPoint();
-  
-    const ratio = height/width;
-    const left = LAppDefine.VIEW_LOGICAL_LEFT;
-    const right = LAppDefine.VIEW_LOGICAL_RIGHT;
-    const bottom = -ratio;
-    const top = ratio;
-
-    viewMatrixRef.current  = new L2DViewMatrix();
-    const viewMatrix = viewMatrixRef.current;
-
-    viewMatrix.setScreenRect(left, right, bottom, top);
-    viewMatrix.setMaxScreenRect(LAppDefine.VIEW_LOGICAL_MAX_LEFT,
-                                LAppDefine.VIEW_LOGICAL_MAX_RIGHT,
-                                LAppDefine.VIEW_LOGICAL_MAX_BOTTOM,
-                                LAppDefine.VIEW_LOGICAL_MAX_TOP); 
-
-    viewMatrix.setMaxScale(LAppDefine.VIEW_MAX_SCALE)
-    viewMatrix.setMinScale(LAppDefine.VIEW_MIN_SCALE);
-
-    projMatrixRef.current = new L2DMatrix44();
-    const projMatrix = projMatrixRef.current
-    projMatrix.multScale(1, (width / height));
-
-    deviceToScreenRef.current = new L2DMatrix44();
-    const deviceToScreen = deviceToScreenRef.current;
-    deviceToScreen.multTranslate(-width / 2.0, -height / 2.0);
-    deviceToScreen.multScale(2 / width, -2 / width);
-    const gl = getWebGLContext(canvas);
-    if (!gl) {
-        console.log("Failed to create WebGL context.");
-        return;
-    }
-    console.log("glno", model)
-    Live2D.setGL(gl);
-    gl.clearColor(0.0, 0.0, 0.0, 0.0);
-    glRef.current = gl;
-
-    changeModel(model);
-    return(()=>{
-      Live2D.dispose();
-    })
-  }, [])
-  
-
-  useEffect(()=>{
-    let animationFrameId;
-    const drawLoop = () => {
-      if(!isDrawStart && glRef.current && live2DMgrRef.current){
-        setIsDrawStart(true);
-        // console.log("num of model on draw", live2DMgrRef.current.numModels())
-        function tick(){
-          draw();
-          animationFrameId  = requestAnimationFrame(tick, canvasRef.current)
-        }
-        tick()
-      }
-    }
-    drawLoop();
-    return(()=>{
-      cancelAnimationFrame(animationFrameId)
-    })
-  }, [])
-
-  useEffect(()=>{
-    if(glRef.current && live2DMgrRef.current){
-      console.log("useEffect model re-render")
-      changeModel(model)
-    }
-  }, [model])
-
-
-  // useImperativeHandle(ref, ()=>{
-  //   return{
-  //     switchModel(model){
-  //       changeModel(model)
-  //     }
-  //   }
-  // })
-
-
-  function draw(){
-    MatrixStack.reset();
-    MatrixStack.loadIdentity();
-    const dragMgr = dragMgrRef.current
-    dragMgr.update()  
-    const live2DMgr = live2DMgrRef.current
-    live2DMgr.setDrag(dragMgr.getX(), dragMgr.getY())
-
-    const gl = glRef.current
-    gl.clear(gl.COLOR_BUFFER_BIT)
-
-    const projMatrix = projMatrixRef.current
-    const viewMatrix = viewMatrixRef.current;
-
-
-    MatrixStack.multMatrix(projMatrix.getArray());
-    MatrixStack.multMatrix(viewMatrix.getArray());
-    MatrixStack.push();
-  
-    for (let i = 0; i < live2DMgr.numModels(); i++){
-      const model = live2DMgr.getModel(i);
-      if(model == null) return;
-
-      if(model.initialized && !model.updating){
-
-
-        const matrix = new L2DMatrix44();
-        // if (i === 0) {
-        //   matrix.translate(-0.2, 0); // left
-        //   matrix.scale(0.8, 0.8);
-        // } else {
-        // matrix.translate(0.2, 0); // right
-        // matrix.scale(0.8, 0.8);
-        // }
-        MatrixStack.multMatrix(matrix.getArray());
-
-        model.update();
-        model.draw(gl);
-
-        if(!isModelShown && i == live2DMgr.numModels()-1){
-          setIsModelShown((prev)=>!prev)
-          //(prev)=>!prev
-        }
-      }
-
-    }
-    MatrixStack.pop();
-
-  }
-
-
-
-  function createModel(character)
-  {
-    live2DMgrRef.current.createModel(glRef.current, character)
-  }
-
-  function changeModel(model)
-  {
-    if(glRef.current){
-      live2DMgrRef.current.reloadFlg = true;
-      live2DMgrRef.current.changeModel(glRef.current, model)
-    }
-  }
-
-  function smile(){
-    live2DMgrRef.current.tapEvent(0, 0.5)
-  }
-
-  return (
-    <>
-      <canvas ref={canvasRef} id={'gl_canvas'} width={600} height={800}
-        style={{bottom: offsetBottom }} //(canvasRef.current? canvasRef.current.offsetHeight:0)
-      />
-    </>
-  )
-
-}  
 
 
 function Danmaku({danmaku, timelinesRef, index}){
@@ -460,20 +244,26 @@ function CharacterPage({navigateTo}) {
     <div className='page character-page'>
       <div className='character-page-background'></div>
       <div className='character-curtain curtain'></div>
-      <L2dCanvas character={character} offsetBottom={offsetBottom}/> 
+      <L2dCanvas character={character} offsetBottom={offsetBottom} width={600} height={800}/> 
       <section className='character-section saki-section'>
         <div className='dialog-box saki-border'>
           <h1>Togawa Sakiko</h1>
-          <p>羽丘学院1年b班<br/>
+          <p>羽丘学院1年b班</p>
+          <p>
             Ave Mujica键盘手
           </p>
             <ToolTips displayText={"炽天使31O部队队长"} 
               link={"https://ngabbs.com/read.php?tid=41989465"}
               content={"丰川祥子、为了人类的未来而战……真的能战吗？"}
               />
-            <ToolTips displayText={"霍格沃茨魔法学校，拉文克劳学院学生"} 
+            {/* <ToolTips displayText={"霍格沃茨魔法学校，拉文克劳学院学生"} 
               content={"迷子和人偶们在破坏霍格沃茨的世界观。"} 
               link={"https://ngabbs.com/read.php?tid=40811445"}
+              /> */}
+            <ToolTips displayText={"千早家的猫"} 
+              content={"领养的蓝色猫咪有点怪?!"} 
+              link={"https://sakikoblivionis.lofter.com/post/8a3fd737_2bf77668e"}
+              style = "spoiler"
               />
         </div>
       </section>
@@ -496,17 +286,22 @@ function CharacterPage({navigateTo}) {
       <section className='character-section anon-section'>
         <div className='dialog-box anon-border'>
           <h1>Chihaya Anon</h1>
-          <p>羽丘学院1年a班<br/>
+          <p>羽丘学院1年a班</p>
+          <p>
             Mygo 吉他手
-            <br/>
           </p>
-            <ToolTips displayText={"炽天使30A部队队长"} 
+            {/* <ToolTips displayText={"炽天使30A部队队长"} 
               link={"https://ngabbs.com/read.php?tid=41989465"}
               content={"丰川祥子、为了人类的未来而战……真的能战吗？"}
-              />
+              /> */}
             <ToolTips displayText={"霍格沃茨魔法学校，拉文克劳学院学生"} 
               content={"迷子和人偶们在破坏霍格沃茨的世界观。"} 
               link={"https://ngabbs.com/read.php?tid=40811445"}
+              />
+            <ToolTips displayText={"AnonTokyo Auto Repair店长"} 
+              content={"修车粉毛"} 
+              link={"https://www.bilibili.com/video/BV1D13qziEgG"}
+              style = "spoiler"
               />
         </div>
       <button id='explore-button' onClick={()=>navigateTo("/relays")}>探索接力</button>

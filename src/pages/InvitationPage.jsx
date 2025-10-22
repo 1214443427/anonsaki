@@ -52,7 +52,7 @@ gsap.registerPlugin(SplitText, ScrollTrigger, Flip, MotionPathPlugin, MotionPath
 
 const segmenter = new Intl.Segmenter("zh", { granularity: "word" });
 
-const ScrollText = ({as: Component = "h2", text, effect, className, offset, index, moonRef}) => {
+const ScrollText = ({as: Component = "h2", text, effect, className, offset, index, moonRef, scrollRef}) => {
 
     const ref = useRef(null);
     useGSAP((context, contextSafe)=>{
@@ -85,7 +85,7 @@ const ScrollText = ({as: Component = "h2", text, effect, className, offset, inde
                     const initialPosition = offset + INC * index //+ isOdd * 500
                     gsap.to(word, {
                         scrollTrigger: {
-                            trigger: ".text-scroll-container",
+                            trigger: scrollRef.current,
                             scrub: true,
                             start: ()=> initialPosition,
                             end: ()=> initialPosition + DISPLAY_DURATION,
@@ -107,7 +107,7 @@ const ScrollText = ({as: Component = "h2", text, effect, className, offset, inde
                     })
                     // gsap.to(word, {
                     //     scrollTrigger: {
-                    //         trigger: ".text-scroll-container",
+                    //         trigger: scrollRef.current,
                     //         scrub: true,
                     //         start: ()=>offset + index *INC + DISPLAY_DURATION,
                     //         end: ()=>offset  + index *INC + PADDING + DISPLAY_DURATION,
@@ -157,6 +157,8 @@ function InvitationPage() {
     const moonRef = useRef()
     const moonInitialRef = useRef()
 
+    const scrollRef = useRef()
+
     useGSAP(()=>{
 
         // ScrollTrigger.normalizeScroll(true)
@@ -176,7 +178,7 @@ function InvitationPage() {
 
         gsap.to(moonRef.current,{
             scrollTrigger: {
-                trigger: ".text-scroll-container",
+                trigger: scrollRef.current,
                 scrub: true,
                 start: 500,
                 end: 1000,
@@ -187,7 +189,7 @@ function InvitationPage() {
 
         Flip.to(state, {
             scrollTrigger:{
-                trigger: ".text-scroll-container",
+                trigger: scrollRef.current,
                 scrub: true,
                 start: 2400,
                 end: 3400,
@@ -198,7 +200,7 @@ function InvitationPage() {
             
         gsap.to(moonRef.current,{
             scrollTrigger: {
-                trigger: ".text-scroll-container",
+                trigger: scrollRef.current,
                 scrub: true,
                 start: 4900,
                 end: 5300,
@@ -211,7 +213,7 @@ function InvitationPage() {
 
         gsap.to("#saki-laser", {
             scrollTrigger: {
-                trigger:  ".text-scroll-container",
+                trigger:  scrollRef.current,
                 scrub: true,
                 start: 5000,
                 end: 8000,
@@ -229,7 +231,7 @@ function InvitationPage() {
 
         gsap.to("#anon-laser", {
             scrollTrigger: {
-                trigger:  ".text-scroll-container",
+                trigger:  scrollRef.current,
                 scrub: true,
                 start: 7000,
                 end: 8000,
@@ -241,7 +243,7 @@ function InvitationPage() {
 
         gsap.to(".laser-div", {
             scrollTrigger: {
-                trigger:  ".text-scroll-container",
+                trigger:  scrollRef.current,
                 scrub: true,
                 start: 8000,
                 end: 12000,
@@ -257,7 +259,7 @@ function InvitationPage() {
 
         // gsap.to("#anon-laser", {
         //     scrollTrigger: {
-        //         trigger:  ".text-scroll-container",
+        //         trigger:  scrollRef.current,
         //         scrub: true,
         //         start: 8000,
         //         end: 12000,
@@ -270,7 +272,7 @@ function InvitationPage() {
 
         gsap.to(anonOctoRef.current, {
             scrollTrigger: {
-                trigger: ".text-scroll-container",
+                trigger: scrollRef.current,
                 scrub: true,
                 start: 18500,
                 end: 20750,
@@ -290,7 +292,7 @@ function InvitationPage() {
 
         gsap.to(sakiOctoRef.current, {
             scrollTrigger: {
-                trigger: ".text-scroll-container",
+                trigger: scrollRef.current,
                 scrub: true,
                 start: 18000,
                 end: 21000
@@ -307,7 +309,7 @@ function InvitationPage() {
         gsap.set("#soyo", {right: "-100%", top: "10%"})
         gsap.to("#soyo", {
             scrollTrigger: {
-                trigger: ".text-scroll-container",
+                trigger: scrollRef.current,
                 scrub: true,
                 start: 10500,
                 end: 12500
@@ -323,7 +325,7 @@ function InvitationPage() {
         gsap.set("#anon-heart", {opacity:0, left: "25%", bottom: "-15%"})
         gsap.to("#anon-heart", {
             scrollTrigger: {
-                trigger: ".text-scroll-container",
+                trigger: scrollRef.current,
                 scrub: true,
                 start: 22000,
                 end: 27000
@@ -349,7 +351,7 @@ function InvitationPage() {
         gsap.set("#saki-heart", {opacity:0, right: "25%", bottom: "-15%"})
         gsap.to("#saki-heart", {
             scrollTrigger: {
-                trigger: ".text-scroll-container",
+                trigger: scrollRef.current,
                 scrub: true,
                 start: 22000,
                 end: 27000
@@ -372,7 +374,7 @@ function InvitationPage() {
 
         gsap.to("#heart", {
             scrollTrigger: {
-                trigger: ".text-scroll-container",
+                trigger: scrollRef.current,
                 scrub: true,
                 start: 12000,
                 end: 15000,
@@ -396,9 +398,43 @@ function InvitationPage() {
             ease: "power1.inOut",
         })
 
+        // gsap.set("#guitar", {opacity:0, right: "25%", bottom: "-15%"})
+        // gsap.to("#guitar", {
+        //     scrollTrigger: {
+        //         trigger: scrollRef.current,
+        //         scrub: true,
+        //         start: 16000,
+        //         end: 24000,
+        //     },
+        //     rotate: -30,
+        //     ease: "power1.inOut",
+        //     keyframes: {
+        //         "0%": {opacity: 1},
+        //         "50%": {opacity: 1, bottom: "20%"},
+        //         "75%": {opacity: 1, bottom: "100%"},
+        //         "100%": {opacity: 0, bottom: "120%"}
+        //     },
+            
+        //     y: ()=>20*gsap.utils.random(-1,1),
+        //     repeat: 20,
+        // })
+
+        // gsap.to("#keyboard", {
+        //     scrollTrigger: {
+        //         trigger: scrollRef.current,
+        //         scrub: true,
+        //         start: 12000,
+        //         end: 15000,
+        //     },
+        //     scale: 500,
+        //     rotate: -30,
+        //     ease: "power1.inOut",
+        // })
+
+
         gsap.to(".qr-code-container", {
             scrollTrigger: {
-                trigger: ".text-scroll-container",
+                trigger: scrollRef.current,
                 scrub: true,
                 start: 28000,
                 end: 30000,
@@ -414,7 +450,7 @@ function InvitationPage() {
 
         gsap.to(".scroll-text--10", {
             scrollTrigger: {
-                trigger: ".text-scroll-container",
+                trigger: scrollRef.current,
                 scrub: true,
                 start: 28000,
                 end: 30000,
@@ -434,31 +470,31 @@ function InvitationPage() {
 
     return (
         <div className='invitation-page'>
-            <div className='text-scroll-container'>
+            <div className='text-scroll-container' ref={scrollRef}>
                 <div className='scroll-indicator'>
-                    <p>下滑阅读</p>
+                    <p >下滑阅读</p>
                     <div className="arrow"></div>
                     <div className="arrow"></div>
                 </div>
                 <div className='bg--1'>
-                    <img className='moon-initial' src='/assets/moon.webp' ref={moonInitialRef}/>
+                    <img className='moon-initial non-select' src='/assets/moon.webp' ref={moonInitialRef}/>
                 </div>
                 <div className='bg--transition'></div>
                 <div className='bg--2'>
-                    <img ref={anonOctoRef} src='/assets/anon_octo.webp' className='octo-image invitation-easter-egg'/>
-                    <img ref={sakiOctoRef} src="/assets/happy_saki_octo.webp" className='octo-image invitation-easter-egg' />
-                    <img src="/assets/soyo.jpg" id="soyo" className='invitation-easter-egg' />
-                    <p  id="saki-heart" className='invitation-heart'>🩵</p>
-                    <p  id="anon-heart" className='invitation-heart'>🩷</p>
-                    <p className='emoji-bubble' id="keyboard">🎹</p>
-                    <p className='emoji-bubble' id="guitar">🎸</p>
+                    <img ref={anonOctoRef} src='/assets/anon_octo.webp' className='octo-image invitation-easter-egg non-select'/>
+                    <img ref={sakiOctoRef} src="/assets/happy_saki_octo.webp" className='octo-image invitation-easter-egg non-select' />
+                    <img src="/assets/soyo.jpg" id="soyo" className='invitation-easter-egg non-select' />
+                    <p  id="saki-heart" className='invitation-heart non-select'>🩵</p>
+                    <p  id="anon-heart" className='invitation-heart non-select'>🩷</p>
+                    <p className='emoji-bubble non-select' id="keyboard ">🎹</p>
+                    <p className='emoji-bubble non-select' id="guitar">🎸</p>
                 </div>
                 <div className='bg--3'></div>
                 <div className='laser-div'>
-                    <img id='saki-laser' src='/assets/saki-laser.webp' className='invitation-easter-egg' />
-                    <div id='anon-laser'  className='invitation-easter-egg' >
-                        <img src='/assets/anon-laser-edit.webp'/>
-                        <img id='heart' src='/assets/heart.webp' />
+                    <img id='saki-laser' src='/assets/saki-laser.webp' className='invitation-easter-egg non-select' />
+                    <div id='anon-laser'  className='invitation-easter-egg non-select' >
+                        <img src='/assets/anon-laser-edit.webp' className='non-select'/>
+                        <img id='heart' src='/assets/heart.webp' className='non-select'/>
                     </div>
                 </div>
             </div>
@@ -469,6 +505,7 @@ function InvitationPage() {
                 offset = {1000 + OFFSET[i]*INC + (i == 10? DISPLAY_DURATION:0)}
                 index = {i}
                 moonRef = {moonRef}
+                scrollRef={scrollRef}
                 />))}
             {/* <ScrollText text={"两人的恋情一旦被人知晓,那么毁灭之时便会来临。"}/> */}
             {/* <h1 className='split title'>Epistula Invitatoria</h1>

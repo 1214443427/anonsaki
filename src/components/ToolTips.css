@@ -12,9 +12,9 @@
 .tooltip-body{
     font-size: 1rem;
     position: absolute;
-    top: 0px;
+    top: -5px;
     left: 50%;
-    transition: opacity 0.5s ease;
+    transition: opacity 0.5s ease-in-out;
     opacity: 0;
     max-width: 200px;
     width: max-content;
@@ -41,4 +41,13 @@
     display: -webkit-box; /* Required for -webkit-line-clamp */
     -webkit-box-orient: vertical; /* Required for -webkit-line-clamp */
     -webkit-line-clamp: 2;
+}
+
+.spoiler{
+    background-color: rgb(var(--combined-color));
+    transition: background-color 0.5s ease-in-out;
+}
+
+.spoiler.revealed{
+    background-color: transparent;
 }

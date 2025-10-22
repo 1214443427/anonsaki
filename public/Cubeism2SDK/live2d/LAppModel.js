@@ -18,7 +18,7 @@ LAppModel.prototype = new L2DBaseModel();
 
 LAppModel.prototype.load = function(gl, modelSettingPath, callback)
 {
-    console.log("Loading", modelSettingPath, gl)
+    // console.log("Loading", modelSettingPath, gl)
 
     this.setUpdating(true);
     this.setInitialized(false);
@@ -209,10 +209,9 @@ LAppModel.prototype.update = function()
     var timeSec = timeMSec / 1000.0;
     var t = timeSec * 2 * Math.PI; 
     
-    
+    // console.log("isfinished", this.mainMotionManager.isFinished())
     if (this.mainMotionManager.isFinished())
     {
-        
         this.startRandomMotion(LAppDefine.MOTION_GROUP_IDLE, LAppDefine.PRIORITY_IDLE);
     }
     
@@ -302,13 +301,27 @@ LAppModel.prototype.setRandomExpression = function()
     {
         tmp.push(name);
     }
-
+    if(LAppDefine.DEBUG_LOG)
+        console.log(tmp)
     var no = parseInt(Math.random() * tmp.length);
 
     this.setExpression(tmp[no]);
 }
 
+LAppModel.prototype.setRandomSmileExpression = function()
+{
+    var tmp = [];
+    for (var name in this.expressions)
+    {
+        if(name.includes("smile"))
+            tmp.push(name);
+    }
+    if(LAppDefine.DEBUG_LOG)
+        console.log(tmp)
+    var no = parseInt(Math.random() * tmp.length);
 
+    this.setExpression(tmp[no]);
+}
 
 LAppModel.prototype.startRandomMotion = function(name, priority)
 {
@@ -322,7 +335,7 @@ LAppModel.prototype.startRandomMotion = function(name, priority)
 LAppModel.prototype.startMotion = function(name, no, priority)
 {
     // console.log("startMotion : " + name + " " + no + " " + priority);
-    
+    // console.trace()
     var motionName = this.modelSetting.getMotionFile(name, no);
     
     if (motionName == null || motionName == "")
@@ -357,7 +370,7 @@ LAppModel.prototype.startMotion = function(name, no, priority)
         });
     }
     else 
-    {
+        {
         motion = this.motions[name];
         
         

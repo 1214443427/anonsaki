@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import './ToolTips.css'
 import ExternalLink from './ExternalLink';
 
-function ToolTips({displayText, content, link}) {
+function ToolTips({displayText, content, link, style}) {
 
     const [isVisible, setIsVisible] = useState(false);
     const [timeoutId, setTimeoutId] = useState(null);
@@ -18,6 +18,7 @@ function ToolTips({displayText, content, link}) {
                 !tooltipRef.current.contains(event.target) &&
                 !triggerRef.current.contains(event.target)
                 ) {
+                    triggerRef.current.classList.remove("revealed")
                     setIsVisible(false);
                 }
             };
@@ -37,6 +38,7 @@ function ToolTips({displayText, content, link}) {
             clearTimeout(timeoutId);
             setTimeoutId(null);
         }
+        triggerRef.current.classList.add("revealed")
         setIsVisible(true);
     };
 
@@ -44,8 +46,7 @@ function ToolTips({displayText, content, link}) {
         const id = setTimeout(()=>{
             setIsVisible(false);      
         }, 200)
-
-
+        triggerRef.current.classList.remove("revealed")
         setTimeoutId(id)
     }
 
@@ -58,7 +59,7 @@ function ToolTips({displayText, content, link}) {
 
     return (
         <div className='tooltip-container'>
-            <p className='tooltip-display-text' 
+            <p className={`tooltip-display-text ${style}`}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
                 onClick={handleMouseEnter}
