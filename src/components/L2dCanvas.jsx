@@ -163,29 +163,24 @@ function L2dCanvas( {character, offsetBottom, width, height} ) {
         }
     }, [model])
 
-
-    const {contextSafe} = useGSAP(
-    )
     
-    useGSAP(()=>{
-        if(isIdle && model == 0){
-            const tl = gsap.timeline({onComplete:resetTimer})
-            tl.to(".canvas-dialog", {
-                duration: 6,
-                onStart: thinking,
-                keyframes:{
-                    "0%": {opacity: 0},
-                    "10%": {opacity: 1},
-                    "90%": {opacity: 1},
-                    "100%": {opacity: 0},
-                }
-            })
-        }
-    }, [isIdle])
+    // useGSAP(()=>{
+    //     if(isIdle && model == 0){
+    //         const tl = gsap.timeline({onComplete:resetTimer})
+    //         tl.to(".canvas-dialog", {
+    //             duration: 6,
+    //             onStart: thinking,
+    //             keyframes:{
+    //                 "0%": {opacity: 0},
+    //                 "10%": {opacity: 1},
+    //                 "90%": {opacity: 1},
+    //                 "100%": {opacity: 0},
+    //             }
+    //         })
+    //     }
+    // }, [isIdle])
 
 
-    const showDialogBox =  contextSafe(()=>{
-    })
   // useImperativeHandle(ref, ()=>{
   //   return{
   //     switchModel(model){
