@@ -135,7 +135,7 @@ const ScrollText = ({as: Component = "h2", text, effect, className, offset, inde
                     <span className='img-span'>
                         <div className='moon-element'>
                             <img 
-                                className='moon-final' 
+                                className='moon-final non-select' 
                                 src='/assets/moon.webp' 
                                 ref={moonRef}/>
                         </div>
@@ -208,6 +208,22 @@ function InvitationPage() {
             },
             opacity: 0,
             immediateRender: false
+        })
+        gsap.set(".invitation-curtain", {opacity: 0})
+        gsap.to(".invitation-curtain", {
+                scrollTrigger: {
+                trigger: scrollRef.current,
+                scrub: true,
+                start: 2500,
+                end: 5200,
+                // markers: true
+            },
+            keyframes:{
+                "0%": {opacity: 0},
+                "1%": {opacity: 1},
+                "99%": {opacity: 1},
+                "100%": {opacity: 0},
+            }
         })
 
 
@@ -471,8 +487,9 @@ function InvitationPage() {
     return (
         <div className='invitation-page'>
             <div className='text-scroll-container' ref={scrollRef}>
+            <div className='curtain invitation-curtain'></div>
                 <div className='scroll-indicator'>
-                    <p >下滑阅读</p>
+                    <p className='non-select'>下滑阅读</p>
                     <div className="arrow"></div>
                     <div className="arrow"></div>
                 </div>
