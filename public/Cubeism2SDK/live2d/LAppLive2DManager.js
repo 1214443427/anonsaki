@@ -186,6 +186,13 @@ LAppLive2DManager.prototype.thinking = function(){
     }
 }
 
+LAppLive2DManager.prototype.startMotionExpressionPair = function(motion, expression){
+        for (var i = 0; i < this.models.length; i++){
+        this.models[i].startMotion(motion, 0, LAppDefine.PRIORITY_FORCE)
+        this.models[i].setExpression(expression)
+    }
+}
+
 LAppLive2DManager.prototype.idelEvent = function(){
     console.log("idle event")
 }

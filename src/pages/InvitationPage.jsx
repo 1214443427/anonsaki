@@ -6,7 +6,6 @@ import { SplitText } from 'gsap/SplitText';
 import React, { useRef, useState } from 'react'
 import ExternalLink from '../components/ExternalLink';
 import MotionPathPlugin from 'gsap/MotionPathPlugin';
-import { MotionPathHelper } from 'gsap/MotionPathHelper';
 
 const TEXT = [
 `Epistula Invitatoria`,
@@ -48,7 +47,7 @@ const OFFSET = [
   249
 ]
 
-gsap.registerPlugin(SplitText, ScrollTrigger, Flip, MotionPathPlugin, MotionPathHelper);
+gsap.registerPlugin(SplitText, ScrollTrigger, Flip, MotionPathPlugin);
 
 const segmenter = new Intl.Segmenter("zh", { granularity: "word" });
 
@@ -298,7 +297,8 @@ function InvitationPage() {
             top: "-25%",
             rotate: 300,
             keyframes: {
-                "0%": {opacity: 1},
+                "0%": {opacity: 0},
+                "1%": {opacity: 1},
                 "90%": {opacity: 1},
                 "100%": {opacity: 0}
             }
@@ -316,7 +316,8 @@ function InvitationPage() {
             top: "-25%",
             rotate: -420,
             keyframes: {
-                "0%": {opacity: 1},
+                "0%": {opacity: 0},
+                "1%": {opacity: 1},
                 "90%": {opacity: 1},
                 "100%": {opacity: 0}
             }

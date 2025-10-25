@@ -4,6 +4,8 @@ import SplitText from "gsap/SplitText";
 import { useIdle } from "../hooks/useIdle";
 import { useGSAP } from "@gsap/react";
 
+gsap.registerPlugin(SplitText)
+
 function L2dCanvas( {character, offsetBottom, width, height} ) {
     const live2DMgrRef = useRef(null)
     
@@ -27,13 +29,13 @@ function L2dCanvas( {character, offsetBottom, width, height} ) {
 //   const [isModelShown, setIsModelShown] = useState(false)  
     
     const {isIdle, resetTimer} = useIdle(20000)
-
+    
+    const timeoutId = useRef(null);
     useEffect(() => {
         const canvas = canvasRef.current;
         if (!canvas) return;
-        let timeoutId;
         const mouseHandler = (e) => {
-        if(timeoutId){
+        if(timeoutId.current){
             return
             // clearTimeout(timeoutId);
             // timeoutId = null;
@@ -55,9 +57,10 @@ function L2dCanvas( {character, offsetBottom, width, height} ) {
         live2DMgrRef.current.tapEvent(adjustedX, adjustedY)
         const id = setTimeout(()=>{
             live2DMgrRef.current.idelExpression()
-            timeoutId = null
+            console.log("timeout triggered")
+            timeoutId.current = null
         }, 2000)
-        timeoutId = id
+        timeoutId.current = id
         };
         const touchHandler = (e) => { /* handle touch */ };
 
@@ -158,8 +161,9 @@ function L2dCanvas( {character, offsetBottom, width, height} ) {
 
     useEffect(()=>{
         if(glRef.current && live2DMgrRef.current){
-        console.log("useEffect model re-render")
-        changeModel(model)
+            console.log("useEffect model re-render")
+            changeModel(model)
+            gsap.set(".canvas-dialog", {opacity:0})
         }
     }, [model])
 
@@ -180,6 +184,66 @@ function L2dCanvas( {character, offsetBottom, width, height} ) {
     //     }
     // }, [isIdle])
 
+    const splitRef = useRef(null)
+    const timelineRef = useRef(null)
+    const {contextSafe} = useGSAP(()=>{
+        document.fonts.ready.then(()=>{
+            splitRef.current = SplitText.create("#live2d-dialog", {
+                type: "chars, lines",
+                charsClass: "char",
+                linesClass: "line++",
+                })
+            })
+        timelineRef.current = gsap.timeline()
+        },[]
+    )
+    const playBrithdayAnimation =  contextSafe(()=>{
+        if(model == 0){
+            console.log("testing timeoutID", timeoutId.current)
+            if(timeoutId.current){
+                clearTimeout(timeoutId.current)
+                timeoutId.current = null
+            }
+            const tl = timelineRef.current
+            tl.clear()
+            gsap.set(".canvas-dialog", {opacity: 0})
+            tl.to(".canvas-dialog", {
+                duration: 1,
+                onStart: thinking,
+                opacity: 1
+                // keyframes:{
+                //     "0%": {opacity: 0},
+                //     "10%": {opacity: 1},
+                //     "90%": {opacity: 1},
+                //     "100%": {opacity: 0},
+                // }
+            })
+            .fromTo(".line1 .char", {opacity:0}, {
+                duration: 0.5,
+                opacity: 1,
+                stagger: 0.05,
+            }, "<0.25")
+            .fromTo(".line2 .char", {opacity:0}, {
+                duration: 0.5,
+                opacity: 1,
+                stagger: 0.05,
+            }, "+=1")
+            .to(".canvas-dialog , .line1 .char", {
+                duration: 1,
+                opacity: 0,
+                delay: 5
+            })
+            console.log(splitRef.current)
+        }
+    })
+
+    function thinking(){
+        live2DMgrRef.current.startMotionExpressionPair("thinking01", "shame02")
+        timeoutId.current = setTimeout(()=>{
+            live2DMgrRef.current.idelExpression()
+            timeoutId.current = null
+        }, 5000)
+    }
 
   // useImperativeHandle(ref, ()=>{
   //   return{
@@ -228,30 +292,30 @@ function L2dCanvas( {character, offsetBottom, width, height} ) {
 
     }
 
-        function transformViewX(deviceX)
-        {
-            var screenX = deviceToScreenRef.current.transformX(deviceX); 
-            return viewMatrixRef.current.invertTransformX(screenX); 
-        }
+    function transformViewX(deviceX)
+    {
+        var screenX = deviceToScreenRef.current.transformX(deviceX); 
+        return viewMatrixRef.current.invertTransformX(screenX); 
+    }
 
 
-        function transformViewY(deviceY)
-        {
-            var screenY = deviceToScreenRef.current.transformY(deviceY); 
-            return  viewMatrixRef.current.invertTransformY(screenY); 
-        }
+    function transformViewY(deviceY)
+    {
+        var screenY = deviceToScreenRef.current.transformY(deviceY); 
+        return  viewMatrixRef.current.invertTransformY(screenY); 
+    }
 
 
-        function transformScreenX(deviceX)
-        {
-            return deviceToScreenRef.current.transformX(deviceX);
-        }
+    function transformScreenX(deviceX)
+    {
+        return deviceToScreenRef.current.transformX(deviceX);
+    }
 
 
-        function transformScreenY(deviceY)
-        {
-            return deviceToScreenRef.current.transformY(deviceY);
-        }
+    function transformScreenY(deviceY)
+    {
+        return deviceToScreenRef.current.transformY(deviceY);
+    }
 
     function createModel(character)
     {
@@ -270,22 +334,20 @@ function L2dCanvas( {character, offsetBottom, width, height} ) {
         live2DMgrRef.current.tapEvent(0, 0.5)
     }
 
-    function thinking(){
-        live2DMgrRef.current.thinking()
-        setTimeout(()=>{
-            live2DMgrRef.current.idelExpression()
-        }, 5000)
-        }
 
-        return (
-            <div id={'gl_canvas'} style={{bottom: offsetBottom }} ref={containerRef}>
+
+    return (
+        <div id={'gl_canvas'} style={{bottom: offsetBottom }} ref={containerRef}>
             <canvas ref={canvasRef} width={width} height={height}
                 //(canvasRef.current? canvasRef.current.offsetHeight:0)
             />
-            <div className='canvas-dialog'>
-                <p>测试</p>
-            </div>
-            </div>
+                <div className='canvas-dialog'>
+                    <p id="live2d-dialog">今天是小爱的生日呢。<br/>
+                    Mujica风格的定制蛋糕她肯定会喜欢吧
+                    </p>
+                </div>
+            {/* <button onClick={playBrithdayAnimation}>test</button> */}
+        </div>
     )
 
 }  

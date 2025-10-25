@@ -20,12 +20,11 @@ const DANMAKU = [
   {text: "呃啊本能本能", speed: 0.6, yPos: 20, color: "#7777AA", delay: 0.5},  //taki
   {text: "呃啊理性理性", speed: 0.5, yPos: 20, color: "#77BBDD", delay: 0.4},  //tomori
   {text: "没有算了", speed: 1, yPos: 20, color: "#7799CC", delay: 0.2},  //saki
-  {text: "真的唉", speed: 0.2, yPos: 20, color: "#BB9955", delay: 0.1},  //uika
+  {text: "真的唉", speed: 0.3, yPos: 20, color: "#BB9955", delay: 0.2},  //uika
   {text: "汉墓封土", speed: 0.5, yPos: 20, color: "#779977", delay: 2.0},  //mutsumi
-  {text: "祥祥？什么时候？", speed: 0.5, yPos: 20, color: "#335566", delay: 2.0}, //umiri
-  {text: "爱祥，你在哪里", speed: 0.5, yPos: 20, color: "#AA4477", delay: 2.0}, //umiri
-  {text: "place holder", speed: 0.5, yPos: 20, color: "#FFFF66", delay: 2.0}, //sumimi tentitive.
-  
+  {text: "祥祥？什么时候？", speed: 0.45, yPos: 20, color: "#335566", delay: 2.0}, //umiri
+  {text: "爱祥，你在哪里", speed: 0.55, yPos: 20, color: "#AA4477", delay: 2.0}, //mujica
+  {text: "爱爱🩷祥祥💙爱爱🩷祥祥💙爱爱🩷祥祥💙", speed: 0.5, yPos: 20, color: "#6c5e53", delay: 0.5}, //donut
 ]
 
 
@@ -255,6 +254,7 @@ function CharacterPage({navigateTo}) {
             <ToolTips displayText={"炽天使31O部队队长"} 
               link={"https://ngabbs.com/read.php?tid=41989465"}
               content={"丰川祥子、为了人类的未来而战……真的能战吗？"}
+              style = "spoiler"
               />
             {/* <ToolTips displayText={"霍格沃茨魔法学校，拉文克劳学院学生"} 
               content={"迷子和人偶们在破坏霍格沃茨的世界观。"} 
@@ -297,6 +297,7 @@ function CharacterPage({navigateTo}) {
             <ToolTips displayText={"霍格沃茨魔法学校，拉文克劳学院学生"} 
               content={"迷子和人偶们在破坏霍格沃茨的世界观。"} 
               link={"https://ngabbs.com/read.php?tid=40811445"}
+              style = "spoiler"
               />
             <ToolTips displayText={"AnonTokyo Auto Repair店长"} 
               content={"修车粉毛"} 

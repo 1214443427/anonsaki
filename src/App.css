@@ -514,7 +514,7 @@ h1, h2, h3, h4, h5, h6 {
   left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 0;
+  z-index: 1;
   pointer-events: none;
   overflow: hidden;
 }
@@ -615,6 +615,7 @@ h1, h2, h3, h4, h5, h6 {
   flex-direction: column;
   align-items: center;
   cursor: pointer;
+  pointer-events: all;
 }
 
 .tape{
@@ -744,7 +745,7 @@ h1, h2, h3, h4, h5, h6 {
 
 
 .text-scroll-container{
-  height: 30000px;
+  height: 32000px;
   /* background-color: rgba(var(--anon-color), 0.6); */
 }
 
@@ -923,6 +924,9 @@ h1, h2, h3, h4, h5, h6 {
   width: 40%;
 }
 
+.line{
+  position: absolute;
+}
 
 .word{
   text-wrap: nowrap;
@@ -931,6 +935,10 @@ h1, h2, h3, h4, h5, h6 {
 
 .word .word{
   opacity: inherit
+}
+
+.char{
+  opacity: 0;
 }
 
 .qr-code-container{
@@ -973,7 +981,7 @@ h1, h2, h3, h4, h5, h6 {
 .bg--3{
   width: 100%;;
   background-color: rgb(249, 159, 183);
-  height: 15500px;
+  height: 17500px;
 }
 
 .qr-code-button{
