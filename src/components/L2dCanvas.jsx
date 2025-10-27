@@ -42,7 +42,7 @@ function L2dCanvas( {character, offsetBottom, width, height} ) {
         }
 
         const rect = e.target.getBoundingClientRect();
-        console.log("rect", rect)
+        // console.log("rect", rect)
         var sx = transformScreenX((e.clientX - rect.left)/rect.width*width);
         var sy = transformScreenY((e.clientY - rect.top)/rect.height*height);
         var vx = transformViewX((e.clientX - rect.left)/rect.width*width);
@@ -57,7 +57,7 @@ function L2dCanvas( {character, offsetBottom, width, height} ) {
         live2DMgrRef.current.tapEvent(adjustedX, adjustedY)
         const id = setTimeout(()=>{
             live2DMgrRef.current.idelExpression()
-            console.log("timeout triggered")
+            // console.log("timeout triggered")
             timeoutId.current = null
         }, 2000)
         timeoutId.current = id
@@ -87,7 +87,7 @@ function L2dCanvas( {character, offsetBottom, width, height} ) {
     }, []);
     useEffect(() => {
         const canvas = canvasRef.current
-        console.log(canvas)
+        // console.log(canvas)
         if (!canvas) return;
 
         live2DMgrRef.current = new LAppLive2DManager(canvas)
@@ -125,10 +125,10 @@ function L2dCanvas( {character, offsetBottom, width, height} ) {
         deviceToScreen.multScale(2 / width, -2 / width);
         const gl = getWebGLContext(canvas);
         if (!gl) {
-            console.log("Failed to create WebGL context.");
+            console.error("Failed to create WebGL context.");
             return;
         }
-        console.log("glno", model)
+        // console.log("glno", model)
         Live2D.setGL(gl);
         gl.clearColor(0.0, 0.0, 0.0, 0.0);
         glRef.current = gl;
@@ -161,7 +161,7 @@ function L2dCanvas( {character, offsetBottom, width, height} ) {
 
     useEffect(()=>{
         if(glRef.current && live2DMgrRef.current){
-            console.log("useEffect model re-render")
+            // console.log("useEffect model re-render")
             changeModel(model)
             gsap.set(".canvas-dialog", {opacity:0})
         }
@@ -199,7 +199,7 @@ function L2dCanvas( {character, offsetBottom, width, height} ) {
     )
     const playBrithdayAnimation =  contextSafe(()=>{
         if(model == 0){
-            console.log("testing timeoutID", timeoutId.current)
+            // console.log("testing timeoutID", timeoutId.current)
             if(timeoutId.current){
                 clearTimeout(timeoutId.current)
                 timeoutId.current = null
@@ -233,7 +233,7 @@ function L2dCanvas( {character, offsetBottom, width, height} ) {
                 opacity: 0,
                 delay: 5
             })
-            console.log(splitRef.current)
+            // console.log(splitRef.current)
         }
     })
 

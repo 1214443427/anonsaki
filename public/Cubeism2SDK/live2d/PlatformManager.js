@@ -13,7 +13,7 @@
 //============================================================
 function PlatformManager(canvas)
 {
-    console.log(canvas)
+    // console.log(canvas)
     this.canvas = canvas;
     this.gl = getWebGLContext(canvas, { premultipliedAlpha: true });
 }

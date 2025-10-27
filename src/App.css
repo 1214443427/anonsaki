@@ -436,6 +436,14 @@ h1, h2, h3, h4, h5, h6 {
   gap: 20px;
 }
 
+.character-page-octo{
+  position: absolute;
+  top: -10%;
+  right: -7.5%;
+  rotate: 45deg;
+  width: 20%;
+}
+
 
 .saki-border{
   --border-color:  rgba(var(--saki-color), 1);
@@ -570,7 +578,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .spinner-container {
-  position: fixed;
+  position: absolute;
   flex-direction: column;
   top: 50%;
   left: 50%;
@@ -632,7 +640,7 @@ h1, h2, h3, h4, h5, h6 {
           mask: var(--m);
 }
 
-.polaroid-container img{
+.polaroid-container img, .polaroid-container .loading-placeholder-img{
   width: 315px;
   height: 350px;
   border: 1px solid rgba(169, 169, 169, 0.5);
@@ -640,6 +648,7 @@ h1, h2, h3, h4, h5, h6 {
   flex-shrink: 0;
   pointer-events: none; 
 }
+
 
 .polaroids-text-container{
   place-items: center;
@@ -1012,6 +1021,8 @@ h1, h2, h3, h4, h5, h6 {
 
 
 .invitation-easter-egg{
+  display: flex;
+  aspect-ratio: 1;
   position: fixed;
   z-index: 9;
   bottom: -15vw;
@@ -1053,7 +1064,7 @@ h1, h2, h3, h4, h5, h6 {
 #heart{
   position: absolute;
   left: 0%;
-  top: 30%;
+  top: 60%;
   width: 17.5%;
   rotate: 180deg;
 }
@@ -1241,6 +1252,14 @@ h1, h2, h3, h4, h5, h6 {
     gap: 0px;
   }
 
+  .character-page-octo{
+    width: 30%;
+    left: 50%;
+    top: 0%;
+    rotate: 0deg;
+    translate: -50% -50%
+  }
+
   .relay-grid{
     grid-template-columns: 1fr 1fr;
     gap: 5px;
@@ -1284,7 +1303,7 @@ h1, h2, h3, h4, h5, h6 {
     pointer-events: none; 
   }
 
-  #soyo{
+  #chat-mate{
     width: 45vw;
   }
 

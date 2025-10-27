@@ -15,6 +15,8 @@ function Polaroids({relay, onClick, details=false, ref}) {
     //     }
     // ))
 
+    // const [loading, setLoading] = useState(true)
+
     return (
         <div className={!details?'polaroid-container non-select':'polaroid-container non-select details-popup '} 
             style={relay?details?{}:{rotate: `${relay.randomStyle.direction * relay.randomStyle.rotation}deg`}:{}} 
@@ -24,7 +26,17 @@ function Polaroids({relay, onClick, details=false, ref}) {
             <div className='tape'></div>
             {relay&&
             <div className='flex flex-col polaroids-text-container'>
-                <img src={relay.details.cover}/>
+                {/* {
+                    loading &&
+                    <div className='loading-placeholder-img'>
+                        <Spinner />
+                    </div>
+                } */}
+                <img 
+                    src={relay.details.cover} 
+                    // onLoad={()=> {setLoading(false)}}
+                    // style={{display: loading? "none": "block"}}
+                />
                 <p>{relay.name}</p>
                 <div className='flex'>
                     <p>{relay.details.date}</p>
@@ -35,11 +47,11 @@ function Polaroids({relay, onClick, details=false, ref}) {
     )
 }
 
-function Details({relay, onClick, ref}){
-    return (
-        <Polaroids className='details-popup non-select' details={true} relay={relay} ref={ref}/>
-    )
-}
+// function Details({relay, onClick, ref}){
+//     return (
+//         <Polaroids className='details-popup non-select' details={true} relay={relay} ref={ref}/>
+//     )
+// }
 
 
 
@@ -54,6 +66,7 @@ function RelayPage({navigateTo}) {
     const isAnimating = useRef(false);
     
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+    const [isImagesLoaded, setIsImagesLoaded] = useState(false);
 
     const randomStyleRef = useRef()
 
@@ -69,8 +82,19 @@ function RelayPage({navigateTo}) {
                         direction: Math.random() > 0.5 ? 1 : -1,
                     },
                     }));
-                setLoading(false)
+                const imagePromises = data.map((relay) => {
+                return new Promise((resolve) => {
+                    const img = new Image();
+                    img.src = relay.details.cover;
+                    img.onload = resolve;
+                    img.onerror = resolve;
+                });
+                });
 
+                Promise.all(imagePromises).then(() => {
+                    setIsImagesLoaded(true);
+                });
+                setLoading(false)
                 setRelays(withStyle)
             }
             catch (err){
@@ -94,7 +118,7 @@ function RelayPage({navigateTo}) {
 
     useGSAP(()=>{
         // gsap.set(detailsRef.current, {yPercent: -100}) //suppose to be for details content. not details. 
-        if(loading) return
+        if(loading || !isImagesLoaded) return
         const tl = gsap.timeline();
         tl.to('.relays-page', { autoAlpha: 1, duration: 0.2})
         tl.from('.relay-grid', {autoAlpha: 0, scale:2, yPercent:20, xPercent:30, stagger: 0.04});
@@ -105,7 +129,7 @@ function RelayPage({navigateTo}) {
                 }
             })
         }
-    }, [loading])
+    }, [loading, isImagesLoaded])
 
     const { contextSafe } = useGSAP()
 
@@ -127,7 +151,7 @@ function RelayPage({navigateTo}) {
             visibility: "visible"});
         gsap.set(relayRefs.current[index], {visibility: "hidden"})
 
-        console.log(detailsRef.current.getBoundingClientRect().bottom)
+        // console.log(detailsRef.current.getBoundingClientRect().bottom)
 
         gsap.to('.memory-button', {
             bottom: 0.95 * window.innerHeight - detailsRef.current.getBoundingClientRect().bottom - 50, //place below the details page
@@ -191,7 +215,7 @@ function RelayPage({navigateTo}) {
             </>
         )
     }
-    if(loading){
+    if(loading || !isImagesLoaded){
         return(
             <div className='relays-page'>
                 <Spinner />
@@ -207,7 +231,13 @@ function RelayPage({navigateTo}) {
                 </div> //TODO animation seems to break if spinner. 
                 : */}
                 <div className='relay-grid' onClick={hideDetails}>
-                   {relays.map((relay, i)=>(<Polaroids relay={relay} key={i} ref={(element) => relayRefs.current[i] = element} onClick={()=>showDetails(i)}/>))}
+                   {relays.map((relay, i)=>(
+                    <Polaroids 
+                        relay={relay} 
+                        key={i} 
+                        ref={(element) => relayRefs.current[i] = element} 
+                        onClick={()=>showDetails(i)}
+                    />))}
                 </div>
             {/* } */}
             <Polaroids relay={relays[selectedRelay]} details={true} ref={detailsRef} onClick={hideDetails}/>

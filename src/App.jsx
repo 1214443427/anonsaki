@@ -65,7 +65,8 @@ function App() {
   };
 
   function collectEasterEgg(id){
-    if (easterEgg.includes(id)){
+    if (!easterEgg.includes(id)){
+      // console.log("collecting", id)
       const collectedEasterEggs = [...easterEgg, id]
       if(collectedEasterEggs.length === NUM_OF_EASTEREGGS){
         //TODO

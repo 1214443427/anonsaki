@@ -39,7 +39,7 @@ const AVE_MYGO = [
     }
 ]
 
-function EmojiBubble({emoji, index}){
+function EmojiBubble({emoji, index, collectEasterEgg}){
     
     const [properties, setProperties] = useState(()=>({
         animationDelay: (index%5) * 2,
@@ -96,7 +96,7 @@ function HeartBullet({timeline, index}){
 }
 
 
-function LandingPage({navigateTo}) {
+function LandingPage({navigateTo, collectEasterEgg}) {
     const [isMobile, setisMobile] = useState(769 > window.innerWidth)
     const [sakiOcto, setSakiOcto ] = useState({
         xCord: INITIAL_POSITION.sakiX * window.innerWidth,
@@ -131,7 +131,7 @@ function LandingPage({navigateTo}) {
         // e.preventDefault(); not needed because passive
         if (isAnimationPlaying) return;
         if(imageNumber == 1){
-            console.log("setting anon")
+            // console.log("setting anon")
             setAnonOcto(prev=>({
                 ...prev,
                 isDragging: true
@@ -271,7 +271,7 @@ function LandingPage({navigateTo}) {
     
     const intersect = (a, b) => {
         const grace = 0.5 * OCTOPUS_SIZE
-        console.log(a, b)
+        // console.log(a, b)
         return (
             a.xCord + grace <= b.xCord + OCTOPUS_SIZE &&
             a.xCord - grace + OCTOPUS_SIZE >= b.xCord &&
@@ -396,7 +396,7 @@ function LandingPage({navigateTo}) {
     
     useGSAP(()=>{
         if(isIdle){
-            console.log("isIdle", isIdle)
+            // console.log("isIdle", isIdle)
             const yoyoTL = gsap.timeline({ repeat: -1, repeatDelay: 2})
             yoyoTL.to( ".octo-image",{
                 x:"+=5", 
@@ -443,6 +443,7 @@ function LandingPage({navigateTo}) {
                 }}
                 onMouseDown={(e)=>handleClickStart(1, e)}
                 onTouchStart={(e)=>handleTouchStart(1, e)}
+                onClick={()=>collectEasterEgg("landing-page-anon")}
                 ref={anonRef}
             >
                 <p className={`drag-me-message dmm--a1`}>拖动我</p>
@@ -469,6 +470,7 @@ function LandingPage({navigateTo}) {
                 }}
                 onMouseDown={(e)=> handleClickStart(2, e)}
                 onTouchStart={(e)=> handleTouchStart(2, e)}
+                onClick={()=>collectEasterEgg("landing-page-saki")}
                 ref={sakiRef}
                 >
                 <p className={`drag-me-message dmm--s1 ${sakiOcto.flipHorizontal?"mirror-horizontal":""}`}>拖动我</p>

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useImperativeHandle } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import gsap from "gsap"
 import ScrollTrigger from 'gsap/ScrollTrigger'
 import { useGSAP } from '@gsap/react';
@@ -50,6 +50,11 @@ function Danmaku({danmaku, timelinesRef, index}){
       x: -window.innerWidth - 300*(1+DANMAKU[index].delay),
       duration: 1,
       ease: "none",
+      keyframes:{
+        "0%": {opacity:1},
+        "90%": {opacity:1},
+        "100%": {opacity:0},
+      }
     });
 
     timelinesRef.current[index] = tl;
@@ -75,7 +80,7 @@ function Danmaku({danmaku, timelinesRef, index}){
 function DanmakuContainer(){
     const timelinesRef = useRef([]);
 
-    console.log("DanmakuContainer called", DANMAKU)
+    // console.log("DanmakuContainer called", DANMAKU)
 
 
     useEffect(()=> {
@@ -112,7 +117,7 @@ function DanmakuContainer(){
   }
 
 
-function CharacterPage({navigateTo}) {
+function CharacterPage({navigateTo, collectEasterEgg}) {
   const [character, setCharacter] = useState("anon")
   const canvasRef = useRef(null)
   const [images, setImages] = useState([]);
@@ -143,7 +148,7 @@ function CharacterPage({navigateTo}) {
         const rect = section.getBoundingClientRect();
         if (rect.top <= window.innerHeight/2 && rect.bottom >= 0){
           setoffsetBottom(document.body.offsetHeight - section.offsetTop - .85 * rect.height + 20)
-          console.log("setting character", index)
+          // console.log("setting character", index)
           setCharacter(index==0? "saki": "anon")
         }
       })
@@ -173,7 +178,7 @@ function CharacterPage({navigateTo}) {
 
     const frameState = { frame: 0 };
 
-    console.log(scale)
+    // console.log(scale)
 
     const render = () => {
       const img = images[frameState.frame];
@@ -246,6 +251,7 @@ function CharacterPage({navigateTo}) {
       <L2dCanvas character={character} offsetBottom={offsetBottom} width={600} height={800}/> 
       <section className='character-section saki-section'>
         <div className='dialog-box saki-border'>
+          <img src="/assets/happy_saki_octo.webp" className='character-page-octo' onClick={()=>collectEasterEgg("character-page-saki")}/>
           <h1>Togawa Sakiko</h1>
           <p>羽丘学院1年b班</p>
           <p>
@@ -285,6 +291,7 @@ function CharacterPage({navigateTo}) {
 
       <section className='character-section anon-section'>
         <div className='dialog-box anon-border'>
+          <img src='/assets/anon_octo.webp' className='character-page-octo' onClick={()=>collectEasterEgg("character-page-anon")}/>
           <h1>Chihaya Anon</h1>
           <p>羽丘学院1年a班</p>
           <p>

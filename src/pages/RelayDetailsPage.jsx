@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Spinner from '../components/Spinner'
 
 function RelayPost({post}){
-    console.log(post)
+    // console.log(post)
     return(
         <div className='post-card'>
             {post.title && <h2 className='post-title'>{post.title}</h2>}
@@ -15,8 +15,8 @@ function RelayPost({post}){
 
 function RelayDetailsPage({filename}) {
     const [relay, setRelay] = useState(null)
-    const [loading, setLoading] = useState(false)
-    const [error, setError] = useState();
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState(null);
 
     useEffect(()=>{
         async function fetchData(){
@@ -28,7 +28,8 @@ function RelayDetailsPage({filename}) {
             }
             catch (err){
                 console.error('Failed to fetch data', err);
-                setError("无法获取接力信息！请联系作者B站。")
+                setLoading(false)
+                setError("404，无法获取接力信息！")
             }
         }
         fetchData();
@@ -39,7 +40,12 @@ function RelayDetailsPage({filename}) {
 
     return (
         <div className='relays-page flex flex-col relay-details-page'>
-            {relay == null || loading? <Spinner/>
+            {loading? <Spinner/>
+            :
+            error!=null?
+            <>
+                <p>{error}</p>
+            </>
             :
             <>
                 <img src='./'></img>

@@ -89,10 +89,10 @@ const ScrollText = ({as: Component = "h2", text, effect, className, offset, inde
                             start: ()=> initialPosition,
                             end: ()=> initialPosition + DISPLAY_DURATION,
                             onEnter: () => {
-                            console.log(word);
-                            console.log("parent?", word.parentElement);
+                            // console.log(word);
+                            // console.log("parent?", word.parentElement);
                             // word.classList.add("show");
-                            console.log("context", context.data.length)
+                            // console.log("context", context.data.length)
                             },
                             // markers:true,
                             
@@ -149,7 +149,7 @@ const ScrollText = ({as: Component = "h2", text, effect, className, offset, inde
 };
 
 
-function InvitationPage() {
+function InvitationPage({collectEasterEgg}) {
 
     const sakiOctoRef = useRef()
     const anonOctoRef = useRef()
@@ -323,8 +323,8 @@ function InvitationPage() {
             }
         })
 
-        gsap.set("#soyo", {right: "-100%", top: "10%"})
-        gsap.to("#soyo", {
+        gsap.set("#chat-mate", {right: "-100%", top: "10%"})
+        gsap.to("#chat-mate", {
             scrollTrigger: {
                 trigger: scrollRef.current,
                 scrub: true,
@@ -454,7 +454,7 @@ function InvitationPage() {
                 trigger: scrollRef.current,
                 scrub: true,
                 start: 28000,
-                end: 30000,
+                end: 32000,
             },
             keyframes: {
                 "0%": { opacity: 0 },
@@ -499,16 +499,28 @@ function InvitationPage() {
                 </div>
                 <div className='bg--transition'></div>
                 <div className='bg--2'>
-                    <img ref={anonOctoRef} src='/assets/anon_octo.webp' className='octo-image invitation-easter-egg non-select'/>
-                    <img ref={sakiOctoRef} src="/assets/happy_saki_octo.webp" className='octo-image invitation-easter-egg non-select' />
-                    <img src="/assets/soyo.jpg" id="soyo" className='invitation-easter-egg non-select' />
+                    <div 
+                        ref={anonOctoRef} 
+                        className='octo-image invitation-easter-egg'
+                        onClick={()=>collectEasterEgg("invitation-anon")}
+                        >
+                       <img src='/assets/anon_octo.webp' className='non-select'/>
+                    </div>
+                    <div 
+                        ref={sakiOctoRef} 
+                        className='octo-image invitation-easter-egg' 
+                        onClick={()=>collectEasterEgg("invitation-saki")}
+                        >
+                        <img src="/assets/happy_saki_octo.webp" className='non-select'/>
+                    </div>
+                    <img src="/assets/chat-mate.jpg" id="chat-mate" className='invitation-easter-egg non-select' />
                     <p  id="saki-heart" className='invitation-heart non-select'>🩵</p>
                     <p  id="anon-heart" className='invitation-heart non-select'>🩷</p>
                     <p className='emoji-bubble non-select' id="keyboard ">🎹</p>
                     <p className='emoji-bubble non-select' id="guitar">🎸</p>
                 </div>
                 <div className='bg--3'></div>
-                <div className='laser-div'>
+                <div className='laser-div' >
                     <img id='saki-laser' src='/assets/saki-laser.webp' className='invitation-easter-egg non-select' />
                     <div id='anon-laser'  className='invitation-easter-egg non-select' >
                         <img src='/assets/anon-laser-edit.webp' className='non-select'/>
