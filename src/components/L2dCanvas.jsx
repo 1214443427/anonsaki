@@ -341,7 +341,7 @@ function L2dCanvas( {character, offsetBottom, width, height} ) {
             <canvas ref={canvasRef} width={width} height={height}
                 //(canvasRef.current? canvasRef.current.offsetHeight:0)
             />
-                <div className='canvas-dialog'>
+                <div className='canvas-dialog non-select'>
                     <p id="live2d-dialog">今天是小爱的生日呢。<br/>
                     Mujica风格的定制蛋糕她肯定会喜欢吧
                     </p>
