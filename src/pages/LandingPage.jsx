@@ -313,6 +313,7 @@ function LandingPage({navigateTo, collectEasterEgg}) {
         function onResize(){
             const mobile = 769 > window.innerWidth
             setisMobile(mobile)
+            if (isFinished) return
             if (mobile){
                 setAnonOcto(prev=>({
                     ...prev,
@@ -342,7 +343,7 @@ function LandingPage({navigateTo, collectEasterEgg}) {
         return ()=>{
             window.removeEventListener('resize', onResize)
         }
-    },[]) //TODO. change to percentages. 
+    },[isFinished]) //TODO. change to percentages. 
     
     
     const emojiBubbles = AVE_MYGO.map((member, index)=>(<EmojiBubble emoji={member} index={index} key={index}/>))
