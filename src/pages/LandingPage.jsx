@@ -92,7 +92,7 @@ function HeartBullet({timeline, index}){
         // timelinesRef.current[index] = tl;
     }, [timeline, index])
 
-    return <div ref={ref} className='heart-bullet'>{selectedHeart}</div>
+    return <div ref={ref} className='heart-bullet non-select'>{selectedHeart}</div>
 }
 
 
@@ -435,7 +435,7 @@ function LandingPage({navigateTo, collectEasterEgg}) {
             >
 
             <div
-                className={`absolute  ${anonOcto.isDragging ? 'z-10 dragging' : 'z-1'}`}
+                className={`octo-container absolute  ${anonOcto.isDragging ? 'z-10 dragging' : 'z-1'}`}
                 data-draggable={true}
                 style={{
                     left: `${anonOcto.xCord}px`,
@@ -447,8 +447,8 @@ function LandingPage({navigateTo, collectEasterEgg}) {
                 onClick={()=>collectEasterEgg("landing-page-anon")}
                 ref={anonRef}
             >
-                <p className={`drag-me-message dmm--a1`}>拖动我</p>
-                <p className={`drag-me-message dmm--a2`}>拖动我</p>
+                <p className={`drag-me-message dmm--a1 non-select`}>拖动我</p>
+                <p className={`drag-me-message dmm--a2 non-select`}>拖动我</p>
                 {heartBullets}
                 <img 
                     className={`octo-image non-select ${anonOcto.isDragging? 'dragging':''}`}
@@ -474,8 +474,8 @@ function LandingPage({navigateTo, collectEasterEgg}) {
                 onClick={()=>collectEasterEgg("landing-page-saki")}
                 ref={sakiRef}
                 >
-                <p className={`drag-me-message dmm--s1 ${sakiOcto.flipHorizontal?"mirror-horizontal":""}`}>拖动我</p>
-                <p className={`drag-me-message dmm--s2 ${sakiOcto.flipHorizontal?"mirror-horizontal":""}`}>拖动我</p>
+                <p className={`drag-me-message dmm--s1 non-select ${sakiOcto.flipHorizontal?"mirror-horizontal":""}`}>拖动我</p>
+                <p className={`drag-me-message dmm--s2 non-select ${sakiOcto.flipHorizontal?"mirror-horizontal":""}`}>拖动我</p>
                 <img 
                     className={`blush`}
                     src='/assets/blushing.png'

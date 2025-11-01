@@ -164,7 +164,7 @@ function InvitationPage({collectEasterEgg}) {
 
         const state = Flip.getState(moonRef.current);
         Flip.fit(moonRef.current, moonInitialRef.current)
-        
+        gsap.set(".hamburger-button span", {background: "white"})
 
         // gsap.set(moonInitialRef.current, {clearProps: true});
         // gsap.set(moonInitialRef.current, {
@@ -208,6 +208,20 @@ function InvitationPage({collectEasterEgg}) {
             opacity: 0,
             immediateRender: false
         })
+
+                // gsap.to("#anon-laser", {
+        //     scrollTrigger: {
+        //         trigger:  scrollRef.current,
+        //         scrub: true,
+        //         start: 8000,
+        //         end: 12000,
+        //     },
+        //     x: "+=20",
+        //     repeat: 20,
+        //     yoyo:true,
+        // })
+
+
         gsap.set(".invitation-curtain", {opacity: 0})
         gsap.to(".invitation-curtain", {
                 scrollTrigger: {
@@ -250,8 +264,15 @@ function InvitationPage({collectEasterEgg}) {
                 scrub: true,
                 start: 7000,
                 end: 8000,
-                onEnter: ()=>{gsap.set("#anon-laser", {opacity:1})},
-                onLeaveBack: ()=>{gsap.set("#anon-laser", {opacity:0})},
+                onEnter: ()=>{
+                    gsap.set("#anon-laser", {opacity:1})
+                    gsap.set(".hamburger-button span", {background:"black"})
+            },
+                onLeaveBack: ()=>{
+                    gsap.set("#anon-laser", {opacity:0})
+                    gsap.set(".hamburger-button span", {background:"white"})
+            },
+            
             },
             left: "0%",
         })
@@ -272,17 +293,7 @@ function InvitationPage({collectEasterEgg}) {
             ease: "power1.inOut",
         })
 
-        // gsap.to("#anon-laser", {
-        //     scrollTrigger: {
-        //         trigger:  scrollRef.current,
-        //         scrub: true,
-        //         start: 8000,
-        //         end: 12000,
-        //     },
-        //     x: "+=20",
-        //     repeat: 20,
-        //     yoyo:true,
-        // })
+
         gsap.set(anonOctoRef.current, {right: "5%"})
 
         gsap.to(anonOctoRef.current, {
@@ -388,7 +399,8 @@ function InvitationPage({collectEasterEgg}) {
                 {right: "50%",bottom: "105%", zIndex: 1}
             ]
         })
-
+        gsap.set("#heart", {
+            scale: 0.175})
         gsap.to("#heart", {
             scrollTrigger: {
                 trigger: scrollRef.current,
@@ -410,7 +422,7 @@ function InvitationPage({collectEasterEgg}) {
                     gsap.set(".laser-div", {opacity:1})
                 },
             },
-            scale: 500,
+            scale: 100,
             rotate: -30,
             ease: "power1.inOut",
         })
@@ -558,9 +570,14 @@ function InvitationPage({collectEasterEgg}) {
             <h3 className='split sign-off'>深秘敬意,</h3> */}
             <div className='disclaimer'>
                 <div className='dialog-box'>
-                    <h1>碎碎念</h1>
-                    <h2>感谢所有看这的人。<br/> 我喜欢你们！🩷🩵</h2>
-                    <p>这个个人小工程花了比想象中多了很多的时间。一开始的企划只有角色展示这一栏。当时只是觉得用第十三集的切片做专场会很酷。凑巧发现了GSAP，于是把里面提供的功能多用了几个。</p>
+                    <div className='disclaimer-title'>
+                        <div>
+                            <h1>碎碎念</h1>
+                            <h2>感谢所有看这的人。<br/> 我喜欢你们！🩷🩵</h2>
+                        </div>
+                        <img src='/assets/logo.jpg'/>
+                    </div>
+                    <p>这个个人小工程花了比想象中多了很多的时间。一开始的企划只有角色展示这一栏。当时只是觉得用第十三集的切片做专场会很酷。</p>
                     <p>前端代码全部为React。Live2D的框架比我期待的难用太多了，研究他浪费了许多时间。</p>
                     <p>如有问题，请联系我<a href="https://space.bilibili.com/14766618" target='_blank'>个人B站</a>。</p>
                     <p>制作邀请函这部分的时候感觉有点燃尽了。很多地方是硬编码。如果在您的设备上不能正确显示的话，致歉。</p>
