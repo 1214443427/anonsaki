@@ -1,6 +1,6 @@
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
-import { Flip } from 'gsap/all';
+import { Flip } from 'gsap/Flip';
 import React, { useMemo, useRef } from 'react'
 import { useEffect, useState } from 'react';
 import Spinner from "../components/Spinner"
