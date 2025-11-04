@@ -95,13 +95,6 @@ h1, h2, h3, h4, h5, h6 {
   /* background-color: rgb(var(--combined-color)); */
 }
 
-.octo-shower-img{
-  position: fixed;
-  opacity: 1;
-  translate: -50% -100%;
-  z-index: 100;
-}
-
 .menu-bar{
   position: fixed;
   justify-content: space-between;
@@ -148,7 +141,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .menu-button{
   background-color: rgb(var(--combined-color));
-  min-width: 100px;
+  width: 100px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -501,19 +494,6 @@ h1, h2, h3, h4, h5, h6 {
   background: linear-gradient(rgb(var(--anon-color-alpha)), rgb(var(--saki-color-alpha)))
 }
 
-.scroll-hint{
-  /* position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%); */
-  /* opacity: 0; */
-  display: flex;
-  justify-content: center;
-  padding-top: 50px;
-  font-size: 2rem;
-  display: flex;
-}
-
 .animation-canvas{
   position: fixed;
   /* left: calc(50% - (75vw/2));
@@ -863,7 +843,6 @@ h1, h2, h3, h4, h5, h6 {
   position: fixed;
   pointer-events: none;
   z-index: 10;
-  /* -webkit-text-stroke: 0.1px white; */
 }
 
 .moon-initial{
@@ -990,9 +969,9 @@ h1, h2, h3, h4, h5, h6 {
 
 .qr-code-container{
   pointer-events: none;
-  height: 60%;
+  width: 25%;
   position: fixed;
-  top: 60%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%,-50%);
   opacity: 0;
@@ -1003,9 +982,6 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .qr-code-image{
-  height: auto;
-  max-height: 500px;
-  flex-shrink: none;
   pointer-events: none;
 }
 
@@ -1081,10 +1057,8 @@ h1, h2, h3, h4, h5, h6 {
   z-index: 9;
   bottom: -15vw;
   width: 15vw;
-  height: 15vw;
   cursor: default;
 }
-
 
 .invitation-heart{
   position: fixed;
@@ -1163,14 +1137,6 @@ h1, h2, h3, h4, h5, h6 {
   .menu-button{
     width: 200px;
     font-size: 1.5rem;
-  }
-
-  .scroll-text--2{
-      -webkit-text-stroke: 1px black;
-  }
-
-  .scroll-text--4{
-      -webkit-text-stroke: 1px white;
   }
 
 }

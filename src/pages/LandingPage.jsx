@@ -3,7 +3,6 @@ import gsap from "gsap";
 import Physics2DPlugin from 'gsap/Physics2DPlugin';
 import { useGSAP } from '@gsap/react';
 import { useIdle } from '../hooks/useIdle';
-import { prefetchContentAssets } from '../utils/preFetchData';
 
 gsap.registerPlugin(Physics2DPlugin) 
 gsap.registerPlugin(useGSAP);
@@ -131,10 +130,8 @@ function LandingPage({navigateTo, collectEasterEgg}) {
     const handleDragStart = (imageNumber, clientX, clientY) => {
         // e.preventDefault(); not needed because passive
         if (isAnimationPlaying) return;
-        prefetchContentAssets()
         if(imageNumber == 1){
             // console.log("setting anon")
-            collectEasterEgg("landing-page-anon")
             setAnonOcto(prev=>({
                 ...prev,
                 isDragging: true
@@ -144,7 +141,6 @@ function LandingPage({navigateTo, collectEasterEgg}) {
                 offsetY: clientY - anonOcto.yCord
             })
         }else{
-            collectEasterEgg("landing-page-saki")
             setSakiOcto(prev=>({
                 ...prev,
                 isDragging: true
@@ -414,7 +410,7 @@ function LandingPage({navigateTo, collectEasterEgg}) {
                 duration: 1
             })
         }
-    },{dependencies: [isIdle], revertOnUpdate:true, scope: ".landing-page"})
+    },{dependencies: [isIdle], revertOnUpdate:true})
 
     // useEffect(()=>{
     //     if (heartBullets.length > 0){
@@ -456,9 +452,7 @@ function LandingPage({navigateTo, collectEasterEgg}) {
                 {heartBullets}
                 <img 
                     className={`octo-image non-select ${anonOcto.isDragging? 'dragging':''}`}
-                    fetchPriority='high'
                     src="/assets/anon_octo.webp" 
-                    sizes='(width <= 768px) 155px, 600px'
                     alt="Pink Octopus" 
                     draggable="false"
                 />
@@ -483,7 +477,7 @@ function LandingPage({navigateTo, collectEasterEgg}) {
                 <p className={`drag-me-message dmm--s1 non-select ${sakiOcto.flipHorizontal?"mirror-horizontal":""}`}>拖动我</p>
                 <p className={`drag-me-message dmm--s2 non-select ${sakiOcto.flipHorizontal?"mirror-horizontal":""}`}>拖动我</p>
                 <img 
-                    className={`blush non-select`}
+                    className={`blush`}
                     src='/assets/blushing.png'
                     ref={blushRef}
                 />
@@ -491,10 +485,8 @@ function LandingPage({navigateTo, collectEasterEgg}) {
                 <img 
                     className={`octo-image non-select ${sakiOcto.isDragging? 'dragging':''}`}
                     src="/assets/saki_octo.webp" 
-                    fetchPriority='high'
                     alt="Blue Octopus" 
                     draggable="false"
-                    sizes='(width <= 768px) 155px, 600px'
                 />
             </div>
             <div ref={curtainRef} className='curtain'></div>

@@ -6,42 +6,6 @@ import MenuBar from './components/MenuBar';
 import RelayPage from './pages/RelayPage';
 import RelayDetailsPage from './pages/RelayDetailsPage';
 import InvitationPage from './pages/InvitationPage';
-import PhotoBoothPage from './pages/PhotoBoothPage';
-import { useGSAP } from '@gsap/react';
-import gsap from 'gsap';
-
-
-gsap.registerPlugin(useGSAP);
-
-function OctopusShowerElement({index, tl}){
-  const source = index%2 == 0? "/assets/happy_saki_octo_matching.webp":"/assets/anon_octo.webp"
-  const ref = useRef(null)
-  const rotation = gsap.utils.random(-360,360)
-  const delay = gsap.utils.random(0,50)
-  const xOffset = gsap.utils.random(0,100)
-  const speed = gsap.utils.random(1,1.5)
-  useGSAP(()=>{
-    if(ref.current == null|| tl == null) return
-    tl.set(
-      ref.current, {
-        opacity: 1,
-        x: `${xOffset}vw`,
-        top: `-${delay}vh`
-      },"<")
-    .to(ref.current, 
-      {
-        y: "150vh",
-        duration: ()=>5/speed,
-        onComplete: ()=>{gsap.set(ref.current, {opacity: 0})},
-        // delay: delay,
-        rotate: rotation,
-        ease: "none"
-      },"<")
-  }, [tl])
-  return(
-    <img className='octo-image non-select octo-shower-img' loading='lazy' src={source} ref={ref}/>
-  )
-}
 
 function App() {
 
@@ -92,12 +56,8 @@ function App() {
   const [currentRoute, setCurrentRoute] = useState('landing');
   const [currentRelayId, setCurrentRelayId] = useState(null); //to be implemented as record.
   const [easterEgg, setEasterEgg] = useState([])
-  const timelineRef = useRef(null)
 
-  const {contextSafe} = useGSAP(()=>{
-      timelineRef.current = gsap.timeline({paused: true})
-    }
-  )
+
 
   //Example: navigateTo('/character')
   const navigateTo = (path) => {
@@ -109,14 +69,11 @@ function App() {
       // console.log("collecting", id)
       const collectedEasterEggs = [...easterEgg, id]
       if(collectedEasterEggs.length === NUM_OF_EASTEREGGS){
-        playOctopusShower()
+        //TODO
       }
       setEasterEgg(collectedEasterEggs)
     }
   }
-
-  const octopusShower = Array.from({ length: 50 }).map((_, i)=>(<OctopusShowerElement key={i} index={i} tl={timelineRef.current}/>))
-  const playOctopusShower = contextSafe(() => {timelineRef.current.play()})
 
   const parseRoute = () => {
     const hash = window.location.hash.slice(1);
@@ -132,8 +89,6 @@ function App() {
       return {route: 'relays', relayId: relayId}
     }else if (hash === '/invitation'){
       return {route: 'invitation', relayId: null}
-    }else if (hash === '/photo-booth'){
-      return {route: 'photo-booth', relayId: null}
     }
     return {route: 'landing', relayId: null}
   }
@@ -154,7 +109,6 @@ function App() {
 
   return (
     <div className='layout'>
-      {octopusShower}
       <MenuBar navigateTo={navigateTo}/>
       {(()=>{ 
         switch(currentRoute){
@@ -169,8 +123,6 @@ function App() {
             return <RelayDetailsPage filename={decodeURI(currentRelayId)}></RelayDetailsPage>
         case "invitation":
             return <InvitationPage collectEasterEgg={collectEasterEgg}/>
-        case "photo-booth":
-            return <PhotoBoothPage />
         }
       })()}
     </div>

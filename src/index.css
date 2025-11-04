@@ -74,8 +74,7 @@ button:focus-visible {
 
 @font-face {
   font-family: "KuaiLe";
-  src: url('/assets/ZCOOLKuaiLe-Regular.woff2');
+  src: url('/assets/ZCOOLKuaiLe-Regular.ttf');
   font-weight: normal;
   font-style: normal;
-  font-display: swap;
 }

@@ -8,8 +8,8 @@ import L2dCanvas from '../components/L2dCanvas';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export const TOTAL_FRAMES = 180;
-export const IMG_OFFSET = 3;
+const TOTAL_FRAMES = 180;
+const IMG_OFFSET = 3;
 const ANIMAION_DURATION = 3000;
 const DANMAKU = [
   {text: "爱祥99", speed: 0.85, yPos: 10, color: "#881144", delay: 0},  //ave mujica
@@ -194,20 +194,6 @@ function CharacterPage({navigateTo, collectEasterEgg}) {
       }
     } //use decode.
 
-    // gsap.to(".scroll-hint", {
-    //   scrollTrigger:{
-    //     trigger: ".animation-container",
-    //     start: "top bottom",
-    //     end: "+50vh",
-    //     marker: true,
-    //   },
-    //   keyframes:{
-    //     0: {opacity: 0},
-    //     10: {opacity: 1},
-    //     90: {opacity: 1},
-    //     100: {opacity: 0}
-    //   }
-    // })
 
     gsap.to(frameState, {
       frame: TOTAL_FRAMES - 1,
@@ -265,7 +251,7 @@ function CharacterPage({navigateTo, collectEasterEgg}) {
       <L2dCanvas character={character} offsetBottom={offsetBottom} width={600} height={800}/> 
       <section className='character-section saki-section'>
         <div className='dialog-box saki-border'>
-          <img src="/assets/happy_saki_octo_matching.webp" className='character-page-octo' onClick={()=>collectEasterEgg("character-page-saki")}/>
+          <img src="/assets/happy_saki_octo.webp" className='character-page-octo' onClick={()=>collectEasterEgg("character-page-saki")}/>
           <h1>Togawa Sakiko</h1>
           <p>羽丘学院1年b班</p>
           <p>
@@ -285,16 +271,10 @@ function CharacterPage({navigateTo, collectEasterEgg}) {
               link={"https://sakikoblivionis.lofter.com/post/8a3fd737_2bf77668e"}
               style = "spoiler"
               />
-            <ToolTips displayText={"爱音的宿敌"} 
-              content={"如千早爱音和丰川祥子是宿敌"} 
-              link={"https://www.bilibili.com/video/BV1SpKWzjEdx"}
-              style = "spoiler"
-              />
         </div>
       </section>
 
       <div className='animation-container' style={{height: `${ANIMAION_DURATION}px`}}>
-        <div className='scroll-hint'><p>匀速下滑以播放</p></div>
         <DanmakuContainer />
         <canvas
           ref={canvasRef}
@@ -321,7 +301,7 @@ function CharacterPage({navigateTo, collectEasterEgg}) {
               link={"https://ngabbs.com/read.php?tid=41989465"}
               content={"丰川祥子、为了人类的未来而战……真的能战吗？"}
               /> */}
-            <ToolTips displayText={"霍格沃茨，拉文克劳学院学生"} 
+            <ToolTips displayText={"霍格沃茨魔法学校，拉文克劳学院学生"} 
               content={"迷子和人偶们在破坏霍格沃茨的世界观。"} 
               link={"https://ngabbs.com/read.php?tid=40811445"}
               style = "spoiler"
@@ -329,11 +309,6 @@ function CharacterPage({navigateTo, collectEasterEgg}) {
             <ToolTips displayText={"AnonTokyo Auto Repair店长"} 
               content={"修车粉毛"} 
               link={"https://www.bilibili.com/video/BV1D13qziEgG"}
-              style = "spoiler"
-              />
-            <ToolTips displayText={"早起健将"} 
-              content={"千早爱音在6：50醒来"} 
-              link={"https://www.bilibili.com/video/BV1qtUtYME6v"}
               style = "spoiler"
               />
         </div>
