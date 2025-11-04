@@ -1,7 +1,7 @@
 var LAppDefine = {
     
     
-    DEBUG_LOG : false,
+    DEBUG_LOG : true,
     DEBUG_MOUSE_LOG : false, 
     // DEBUG_DRAW_HIT_AREA : false, 
     // DEBUG_DRAW_ALPHA_MODEL : false, 
@@ -39,6 +39,8 @@ var LAppDefine = {
 
     MODEL_SAKI : "assets/l2d/saki/model.json",
     MODEL_ANON : "assets/l2d/anon/model.json",
+    MODEL_ANON_MATCHING_OUTFIT : "assets/l2d/anon-matching-outfit/model.json",
+    MODEL_SAKI_MATCHING_OUTFIT : "assets/l2d/saki-matching-outfit/model.json",
     
     MOTION_GROUP_IDLE : "idle01", 
     MOTION_GROUP_TAP_BODY : "tap_body", 

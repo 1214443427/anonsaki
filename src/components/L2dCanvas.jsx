@@ -3,13 +3,41 @@ import gsap from "gsap";
 import SplitText from "gsap/SplitText";
 import { useIdle } from "../hooks/useIdle";
 import { useGSAP } from "@gsap/react";
+import useSplit from "../hooks/useSplit";
 
 gsap.registerPlugin(SplitText)
+
+function SplitedText({children, model}){
+    const splitRef = useRef(null)
+    // useGSAP((context, contextSafe)=>{
+    //     document.fonts.ready.then(()=>{
+    //         // SplitText.create(".live2d-dialog", {
+    //         //     type: "chars, lines",
+    //         //     charsClass: "char",
+    //         //     linesClass: "line++",
+    //         // })
+    //         contextSafe(()=>
+                useSplit(".live2d-dialog", "word",
+                    {
+                        type: "chars",
+                        charsClass: "char",
+                    }
+                )
+    //         )()
+    //     })
+    // },[])
+
+    return(
+        <p className={`live2d-dialog ${model}-dialog`}>
+            {children}
+        </p>
+    )
+}
 
 function L2dCanvas( {character, offsetBottom, width, height} ) {
     const live2DMgrRef = useRef(null)
     
-    const model = character == "anon" ? 1 : 0 ; //saki = 0
+    const model = character == "anon" ? 1 : character == "saki"? 0 : 2 ; //saki = 0
 
     const [isDrawStart, setIsDrawStart] = useState(false)
     
@@ -31,6 +59,8 @@ function L2dCanvas( {character, offsetBottom, width, height} ) {
     const {isIdle, resetTimer} = useIdle(20000)
     
     const timeoutId = useRef(null);
+    let brithdayAnimationTriggered = false;
+    const date = new Date()
     useEffect(() => {
         const canvas = canvasRef.current;
         if (!canvas) return;
@@ -53,7 +83,11 @@ function L2dCanvas( {character, offsetBottom, width, height} ) {
 
         //   console.log(vx,vy)
         //   dragMgrRef.current.setPoint(vx, vy)
-
+        if (date.getMonth()==1 && date.getDate()==14 && !brithdayAnimationTriggered && model == 0){
+            playBrithdayAnimation(0)
+        }else if(date.getMonth()==8 && date.getDate()==8 && !brithdayAnimationTriggered && model == 1){
+            playBrithdayAnimation(1)
+        }
         live2DMgrRef.current.tapEvent(adjustedX, adjustedY)
         const id = setTimeout(()=>{
             live2DMgrRef.current.idelExpression()
@@ -84,7 +118,7 @@ function L2dCanvas( {character, offsetBottom, width, height} ) {
         canvas.removeEventListener("touchend", touchHandler);
         canvas.removeEventListener("touchmove", touchHandler);
         };
-    }, []);
+    }, [model]);
     useEffect(() => {
         const canvas = canvasRef.current
         // console.log(canvas)
@@ -135,7 +169,7 @@ function L2dCanvas( {character, offsetBottom, width, height} ) {
 
         changeModel(model);
         return(()=>{
-        Live2D.dispose();
+            Live2D.dispose();
         })
     }, [])
     
@@ -147,8 +181,8 @@ function L2dCanvas( {character, offsetBottom, width, height} ) {
             setIsDrawStart(true);
             // console.log("num of model on draw", live2DMgrRef.current.numModels())
             function tick(){
-            draw();
-            animationFrameId  = requestAnimationFrame(tick, canvasRef.current)
+                draw();
+                animationFrameId  = requestAnimationFrame(tick, canvasRef.current)
             }
             tick()
         }
@@ -187,29 +221,31 @@ function L2dCanvas( {character, offsetBottom, width, height} ) {
     const splitRef = useRef(null)
     const timelineRef = useRef(null)
     const {contextSafe} = useGSAP(()=>{
-        document.fonts.ready.then(()=>{
-            splitRef.current = SplitText.create("#live2d-dialog", {
-                type: "chars, lines",
-                charsClass: "char",
-                linesClass: "line++",
-                })
-            })
         timelineRef.current = gsap.timeline()
-        },[]
-    )
-    const playBrithdayAnimation =  contextSafe(()=>{
-        if(model == 0){
-            // console.log("testing timeoutID", timeoutId.current)
+        return (()=>{
+            timelineRef.current.revert()
             if(timeoutId.current){
                 clearTimeout(timeoutId.current)
                 timeoutId.current = null
             }
-            const tl = timelineRef.current
-            tl.clear()
-            gsap.set(".canvas-dialog", {opacity: 0})
+        })
+        },[model]
+    )
+    const playBrithdayAnimation = contextSafe((character)=>{
+        brithdayAnimationTriggered = true
+        console.log("triggered")
+        if(timeoutId.current){
+            clearTimeout(timeoutId.current)
+            timeoutId.current = null
+        }
+        const tl = timelineRef.current
+        tl.clear()
+        gsap.set(".canvas-dialog", {opacity: 0})
+        if(character == 0){
+            // console.log("testing timeoutID", timeoutId.current)
             tl.to(".canvas-dialog", {
                 duration: 1,
-                onStart: thinking,
+                onStart: ()=>playMotionExpression("thinking01", "shame02", 3, 4200),
                 opacity: 1
                 // keyframes:{
                 //     "0%": {opacity: 0},
@@ -224,25 +260,57 @@ function L2dCanvas( {character, offsetBottom, width, height} ) {
                 stagger: 0.05,
             }, "<0.25")
             .fromTo(".line2 .char", {opacity:0}, {
-                duration: 0.5,
+                duration: 2.25,
                 opacity: 1,
                 stagger: 0.05,
-            }, "+=1")
+                onStart: ()=>playMotionExpression("kime01", "kime01", 3, 2250),
+                onComplete: ()=>playMotionExpression("smile05", "smile01", 3, 3000),
+            }, "+=2.2")
             .to(".canvas-dialog , .line1 .char", {
                 duration: 1,
                 opacity: 0,
-                delay: 5
+                delay: 4
             })
             // console.log(splitRef.current)
+        }else if(character==1){
+            tl.to(".canvas-dialog", {
+                duration: 1,
+                onStart: ()=>playMotionExpression("kime01", "kime01", 3, 4200),
+                opacity: 1
+            })
+            .fromTo(".line1 .char", {opacity:0}, {
+                duration: 0.5,
+                opacity: 1,
+                stagger: 0.05,
+            }, "<0.25")
+            .fromTo(".line2 .char", {opacity:0}, {
+                duration: 4.25,
+                opacity: 1,
+                stagger: {
+                    amount: 1.5
+                },
+                onStart: ()=>playMotionExpression("smile04", "smile04", 3, 5000),
+                onComplete: ()=>playMotionExpression("idle01", "idle01", 3, 1000),
+            }, "+=2.2")
+            .to(".canvas-dialog", {
+                duration: 1,
+                opacity: 0,
+                // onStart: ()=>playMotionExpression("idle01", "idle01", 3, 1000),
+                delay: 2
+            })
         }
     })
 
-    function thinking(){
-        live2DMgrRef.current.startMotionExpressionPair("thinking01", "shame02")
+    function playMotionExpression(motion, expression, priority, timeout){
+        if(timeoutId){
+            clearTimeout(timeoutId)
+            timeoutId.current = null;
+        }
+        live2DMgrRef.current.startMotionExpressionPair(motion, expression, priority)
         timeoutId.current = setTimeout(()=>{
             live2DMgrRef.current.idelExpression()
             timeoutId.current = null
-        }, 5000)
+        }, timeout)
     }
 
   // useImperativeHandle(ref, ()=>{
@@ -342,11 +410,17 @@ function L2dCanvas( {character, offsetBottom, width, height} ) {
                 //(canvasRef.current? canvasRef.current.offsetHeight:0)
             />
                 <div className='canvas-dialog non-select'>
-                    <p id="live2d-dialog">今天是小爱的生日呢。<br/>
-                    Mujica风格的定制蛋糕她肯定会喜欢吧
-                    </p>
+                    {model==0?
+                    <SplitedText model="saki"  key="dialog-1">
+                    <span className="line1">今天是小爱的生日呢。</span><br/>
+                    <span className="line2">Mujica风格的定制蛋糕她肯定会喜欢吧！</span>
+                    </SplitedText>:
+                    <SplitedText model="anon"  key="dialog-2">
+                    <span className="line1">又到了我最喜欢的一天！</span><br/>
+                    <span className="line2">祥祥生日和情人节的双倍约会！</span>
+                    </SplitedText>}
                 </div>
-            {/* <button onClick={playBrithdayAnimation}>test</button> */}
+            {/*  <button onClick={playBrithdayAnimation}>test</button>  */}
         </div>
     )
 

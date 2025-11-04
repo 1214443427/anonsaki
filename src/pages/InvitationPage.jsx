@@ -587,7 +587,7 @@ function InvitationPage({collectEasterEgg}) {
                 </div>
             </div>
             <div className='qr-code-container'>
-                <img className='qr-code-image non-select' src='/assets/qr-code.png'/>
+                <img className='qr-code-image non-select' src='/assets/qr-code.webp'/>
                 <button 
                     className='qr-code-button menu-button' 
                     onClick={()=>{window.open(URL, '_blank')}}>
