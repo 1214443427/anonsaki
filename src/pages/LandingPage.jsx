@@ -3,7 +3,6 @@ import gsap from "gsap";
 import Physics2DPlugin from 'gsap/Physics2DPlugin';
 import { useGSAP } from '@gsap/react';
 import { useIdle } from '../hooks/useIdle';
-import { prefetchContentAssets } from '../utils/preFetchData';
 
 gsap.registerPlugin(Physics2DPlugin) 
 gsap.registerPlugin(useGSAP);
@@ -131,7 +130,6 @@ function LandingPage({navigateTo, collectEasterEgg}) {
     const handleDragStart = (imageNumber, clientX, clientY) => {
         // e.preventDefault(); not needed because passive
         if (isAnimationPlaying) return;
-        prefetchContentAssets()
         if(imageNumber == 1){
             // console.log("setting anon")
             collectEasterEgg("landing-page-anon")

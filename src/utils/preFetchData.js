@@ -12,11 +12,13 @@ export function prefetchContentAssets() {
     ];
     images.forEach(src => {
       const img = new Image();
+      img.fetchPriority = "low"
       img.src = src; // browser caches automatically
   });
 
     for ( let i = 1; i <= TOTAL_FRAMES; i++) {
       const img = new Image();
+      img.fetchPriority = "low"
       img.src = `/frames/webp_frames/frame_${String(i+IMG_OFFSET).padStart(4, "0")}.webp`;
     }
 
@@ -37,7 +39,7 @@ export function prefetchContentAssets() {
       'saki',
     ];
     models.forEach(model=>{
-        fetch(`/assets/l2d/${model}/data/model.moc`)
+        fetch(`/assets/l2d/${model}/data/model.moc`, {priority: "low"})
         .then(res => {
             if (!res.ok) throw new Error('Failed to fetch XML');
             return res.text(); // parse as text for now

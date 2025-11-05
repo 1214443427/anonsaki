@@ -9,6 +9,7 @@ import InvitationPage from './pages/InvitationPage';
 import PhotoBoothPage from './pages/PhotoBoothPage';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
+import { prefetchContentAssets } from './utils/preFetchData';
 
 
 gsap.registerPlugin(useGSAP);
@@ -147,6 +148,7 @@ function App() {
   useEffect(()=>{
       // loadAllScripts();
       handleRouteChange();
+      prefetchContentAssets();
       addEventListener('hashchange', handleRouteChange)
       return ()=>{removeEventListener('hashchange', handleRouteChange);}
   },[])
@@ -154,7 +156,7 @@ function App() {
 
   return (
     <div className='layout'>
-      {octopusShower}
+      {/* {octopusShower} */}
       <MenuBar navigateTo={navigateTo}/>
       {(()=>{ 
         switch(currentRoute){
