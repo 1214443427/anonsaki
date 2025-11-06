@@ -18,14 +18,14 @@ function Polaroids({relay, onClick, details=false, ref}) {
     // const [loading, setLoading] = useState(true)
 
     return (
-        <div className={!details?'polaroid-container non-select':'polaroid-container non-select details-popup '} 
+        <div className={!details?'polaroid-container non-select':'polaroid-container details-popup '} 
             style={relay?details?{}:{rotate: `${relay.randomStyle.direction * relay.randomStyle.rotation}deg`}:{}} 
             onClick={onClick}
             ref={ref}
             >
             <div className='tape'></div>
             {relay&&
-            <div className='flex flex-col polaroids-text-container'>
+            <div className='flex flex-col polaroids-content-container'>
                 {/* {
                     loading &&
                     <div className='loading-placeholder-img'>
@@ -40,7 +40,14 @@ function Polaroids({relay, onClick, details=false, ref}) {
                 <p>{relay.name}</p>
                 <div className='flex'>
                     <p>{relay.details.date}</p>
-                    <p>cr@{relay.details.cover_author}</p>
+                    <p>cr@<span className='link' onClick={
+                        (e)=>{
+                            e.stopPropagation()
+                            open(relay.details.cover_link, "_blank")    
+                            }
+                        }>{relay.details.cover_author}
+                        <ExternalLink />
+                    </span></p>
                 </div>
             </div>}
         </div>

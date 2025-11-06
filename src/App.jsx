@@ -110,7 +110,7 @@ function App() {
       // console.log("collecting", id)
       const collectedEasterEggs = [...easterEgg, id]
       if(collectedEasterEggs.length === NUM_OF_EASTEREGGS){
-        playOctopusShower()
+        // playOctopusShower()
       }
       setEasterEgg(collectedEasterEggs)
     }

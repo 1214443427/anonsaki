@@ -284,7 +284,7 @@ function LandingPage({navigateTo, collectEasterEgg}) {
 
 
     useEffect(()=> {
-        if (intersect(sakiOcto, anonOcto)){
+        if (intersect(sakiOcto, anonOcto) && !isFinished){
             setSakiOcto(prev=>({
                 ...prev,
                 isDragging: false
@@ -412,7 +412,7 @@ function LandingPage({navigateTo, collectEasterEgg}) {
                 duration: 1
             })
         }
-    },{dependencies: [isIdle], revertOnUpdate:true, scope: ".landing-page"})
+    },{dependencies: [isIdle], revertOnUpdate:true, scope: containerRef.current})
 
     // useEffect(()=>{
     //     if (heartBullets.length > 0){

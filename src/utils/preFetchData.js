@@ -4,14 +4,15 @@ import { IMG_OFFSET, TOTAL_FRAMES } from "../pages/CharacterPage";
 export function prefetchContentAssets() {
   // 1. Prefetch images44
     const images = [
-      '/assets/l2d/anon/data/texture_00.png',
-      '/assets/l2d/saki/data/texture_00.png',      
-      '/assets/l2d/anon/data/texture_01.png',
-      '/assets/l2d/saki/data/texture_02.png',
+      '/assets/l2d/anon/data/texture/texture_00.png',
+      '/assets/l2d/saki/data/texture/texture_00.png',      
+      '/assets/l2d/anon/data/texture/texture_01.png',
+      '/assets/l2d/saki/data/texture/texture_02.png',
       '/assets/moon.webp',
     ];
     images.forEach(src => {
       const img = new Image();
+      img.decoding = "async";
       img.fetchPriority = "low"
       img.src = src; // browser caches automatically
   });
@@ -49,4 +50,4 @@ export function prefetchContentAssets() {
         })
         .catch(err => console.warn('XML prefetch failed:', err));
     })
-  }
+}

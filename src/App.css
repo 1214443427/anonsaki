@@ -639,6 +639,23 @@ h1, h2, h3, h4, h5, h6 {
     vertical-align: middle;
 }
 
+.link{
+  display: inline;
+  color: #646cff;
+  pointer-events: all;
+  align-content: baseline;
+}
+
+.link:hover{
+  color: #535bf2;
+}
+
+.link .external-links{
+  display: inline;
+  height: 1rem;
+  vertical-align: text-top;
+}
+
 @keyframes spin {
   0% {
     transform: rotate(0deg); 
@@ -677,7 +694,7 @@ h1, h2, h3, h4, h5, h6 {
           mask: var(--m);
 }
 
-.polaroid-container img, .polaroid-container .loading-placeholder-img{
+.polaroids-content-container>img, .polaroid-container .loading-placeholder-img{
   width: 315px;
   height: 350px;
   border: 1px solid rgba(169, 169, 169, 0.5);
@@ -687,15 +704,15 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 
-.polaroids-text-container{
+.polaroids-content-container{
   place-items: center;
 }
 
-.polaroids-text-container div{
+.polaroids-content-container div{
   gap: 10px;
 }
 
-.details-popup{
+.polaroid-container.details-popup{
   position: fixed;
   top: 50%;
   left: 50%;
@@ -707,6 +724,7 @@ h1, h2, h3, h4, h5, h6 {
   visibility: hidden;
   cursor: pointer; 
   pointer-events: none;
+  z-index: 100;
 }
 
 /* .details-popup .polaroid-container{
@@ -921,14 +939,13 @@ h1, h2, h3, h4, h5, h6 {
   right: 10%;
   color: white;
 }
-
-
-
+  
 .scroll-text--2{
   bottom: 20%;
   left: 10%;
   width: 50%;
   color: white;
+  -webkit-text-stroke: 1px black;
 }
 
 .scroll-text--3{
@@ -941,6 +958,7 @@ h1, h2, h3, h4, h5, h6 {
   bottom: 20%;
   right: 5%;
   width: 50%;
+  -webkit-text-stroke: 1px white;
 }
 
 .scroll-text--5{
@@ -1081,8 +1099,12 @@ h1, h2, h3, h4, h5, h6 {
   z-index: 9;
   bottom: -15vw;
   width: 15vw;
-  height: 15vw;
   cursor: default;
+}
+
+.invitation-easter-egg img, .octo-image.invitation-easter-egg{
+  height: 15vw;
+  width: 15vw;
 }
 
 
@@ -1165,14 +1187,6 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 1.5rem;
   }
 
-  .scroll-text--2{
-      -webkit-text-stroke: 1px black;
-  }
-
-  .scroll-text--4{
-      -webkit-text-stroke: 1px white;
-  }
-
 }
 
 .polaroid-container{
@@ -1208,6 +1222,7 @@ h1, h2, h3, h4, h5, h6 {
     transform: translateX(0);
     transition: transform 1s ease, opacity 1s ease;
     align-items: center;
+    z-index: 101;
   }
 
   .menu-left-side{
@@ -1326,6 +1341,10 @@ h1, h2, h3, h4, h5, h6 {
     translate: -50% -50%
   }
 
+  .scroll-hint{
+    font-size: 1.25rem;
+  }
+
   .relay-grid{
     grid-template-columns: 1fr 1fr;
     gap: 5px;
@@ -1360,13 +1379,25 @@ h1, h2, h3, h4, h5, h6 {
             mask: var(--m);
   }
 
-  .polaroid-container img{
+  .polaroids-content-container>img{
     width: 157.5px;
     height: 175px;
     border: 1px solid rgba(169, 169, 169, 0.5);
     object-fit: cover;
     flex-shrink: 0;
     pointer-events: none; 
+  }
+
+  .polaroids-content-container .external-links{
+    height: 0.5rem;
+  }
+
+  .scroll-text--2{
+    -webkit-text-stroke: none;
+  }
+  
+  .scroll-text--4{
+    -webkit-text-stroke: none;
   }
 
   #chat-mate{
