@@ -96,7 +96,7 @@ function App() {
   const timelineRef = useRef(null)
 
   const {contextSafe} = useGSAP(()=>{
-      timelineRef.current = gsap.timeline({paused: true})
+      timelineRef.current = gsap.timeline({paused: false, onComplete:()=>{setEasterEgg([])}})
     }
   )
 
@@ -110,7 +110,7 @@ function App() {
       // console.log("collecting", id)
       const collectedEasterEggs = [...easterEgg, id]
       if(collectedEasterEggs.length === NUM_OF_EASTEREGGS){
-        // playOctopusShower()
+        
       }
       setEasterEgg(collectedEasterEggs)
     }
@@ -156,7 +156,7 @@ function App() {
 
   return (
     <div className='layout'>
-      {/* {octopusShower} */}
+      {easterEgg.length == NUM_OF_EASTEREGGS && octopusShower}
       <MenuBar navigateTo={navigateTo}/>
       {(()=>{ 
         switch(currentRoute){

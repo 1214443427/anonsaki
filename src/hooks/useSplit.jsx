@@ -22,7 +22,7 @@ function useSplit(target, granularity, options) {
                     for (const segment of segmented){
                     if (segment === "," || segment === "。" || segment === "?" || segment === "！"|| segment === "!"){
                         joined[joined.length - 1] += segment;
-                        console.log(joined)
+                        // console.log(joined)
                     }else{
                         joined.push(segment)
                     }
@@ -34,8 +34,8 @@ function useSplit(target, granularity, options) {
                 // onSplit: (self)=>{},
                 }
             )
-                        console.log(context)
-})()
+                        // console.log(context)
+            })()
         })
     },[])
   return split

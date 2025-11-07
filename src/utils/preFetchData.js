@@ -7,7 +7,7 @@ export function prefetchContentAssets() {
       '/assets/l2d/anon/data/textures/texture_00.png',
       '/assets/l2d/saki/data/textures/texture_00.png',      
       '/assets/l2d/anon/data/textures/texture_01.png',
-      '/assets/l2d/saki/data/textures/texture_02.png',
+      '/assets/l2d/saki/data/textures/texture_01.png',
       '/assets/moon.webp',
     ];
     images.forEach(src => {
