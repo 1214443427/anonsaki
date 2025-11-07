@@ -331,7 +331,7 @@ function CharacterPage({navigateTo, collectEasterEgg}) {
               link={"https://www.bilibili.com/video/BV1D13qziEgG"}
               style = "spoiler"
               />
-            <ToolTips displayText={"早起健将"} 
+            <ToolTips displayText={`"下一个我，也应该遇到的美好"`} 
               content={"千早爱音在6：50醒来"} 
               link={"https://www.bilibili.com/video/BV1qtUtYME6v"}
               style = "spoiler"

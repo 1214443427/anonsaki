@@ -29,7 +29,8 @@
 }
 
 .link-content{
-    display:block;       
+    display:block;      
+    overflow-wrap: anywhere; 
 }
 
 .tooltip-body.display{

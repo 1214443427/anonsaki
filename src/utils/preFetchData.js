@@ -4,10 +4,10 @@ import { IMG_OFFSET, TOTAL_FRAMES } from "../pages/CharacterPage";
 export function prefetchContentAssets() {
   // 1. Prefetch images44
     const images = [
-      '/assets/l2d/anon/data/texture/texture_00.png',
-      '/assets/l2d/saki/data/texture/texture_00.png',      
-      '/assets/l2d/anon/data/texture/texture_01.png',
-      '/assets/l2d/saki/data/texture/texture_02.png',
+      '/assets/l2d/anon/data/textures/texture_00.png',
+      '/assets/l2d/saki/data/textures/texture_00.png',      
+      '/assets/l2d/anon/data/textures/texture_01.png',
+      '/assets/l2d/saki/data/textures/texture_02.png',
       '/assets/moon.webp',
     ];
     images.forEach(src => {
@@ -17,11 +17,11 @@ export function prefetchContentAssets() {
       img.src = src; // browser caches automatically
   });
 
-    for ( let i = 1; i <= TOTAL_FRAMES; i++) {
-      const img = new Image();
-      img.fetchPriority = "low"
-      img.src = `/frames/webp_frames/frame_${String(i+IMG_OFFSET).padStart(4, "0")}.webp`;
-    }
+  // for ( let i = 1; i <= TOTAL_FRAMES; i++) {
+  //   const img = new Image();
+  //   img.fetchPriority = "low"
+  //   img.src = `/frames/webp_frames/frame_${String(i+IMG_OFFSET).padStart(4, "0")}.webp`;
+  // }
 
   // 2. Prefetch JSON file
 //   fetch('/assets/data/relays.json')
