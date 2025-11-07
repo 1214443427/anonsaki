@@ -26,7 +26,7 @@ function OctopusShowerElement({index, tl}){
     tl.set(
       ref.current, {
         opacity: 1,
-        x: `${xOffset}vw`,
+        left: `${xOffset}vw`,
         top: `-${delay}vh`
       },"<")
     .to(ref.current, 
@@ -40,7 +40,7 @@ function OctopusShowerElement({index, tl}){
       },"<")
   }, [tl])
   return(
-    <img className='octo-image non-select octo-shower-img' loading='lazy' src={source} ref={ref}/>
+    <img className='octo-image non-select octo-shower-img' src={source} ref={ref}/>
   )
 }
 
@@ -157,6 +157,7 @@ function App() {
   return (
     <div className='layout'>
       {easterEgg.length == NUM_OF_EASTEREGGS && octopusShower}
+      <OctopusShowerElement />
       <MenuBar navigateTo={navigateTo}/>
       {(()=>{ 
         switch(currentRoute){

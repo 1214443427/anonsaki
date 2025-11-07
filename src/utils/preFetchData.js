@@ -9,6 +9,7 @@ export function prefetchContentAssets() {
       '/assets/l2d/anon/data/textures/texture_01.png',
       '/assets/l2d/saki/data/textures/texture_01.png',
       '/assets/moon.webp',
+      '/assets/happy_saki_octo_matching.webp',
     ];
     images.forEach(src => {
       const img = new Image();
