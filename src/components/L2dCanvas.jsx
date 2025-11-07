@@ -83,9 +83,9 @@ function L2dCanvas( {character, offsetBottom, width, height} ) {
 
         //   console.log(vx,vy)
         //   dragMgrRef.current.setPoint(vx, vy)
-        if (date.getMonth()==1 && date.getDate()==14 && !brithdayAnimationTriggered && model == 0){
+        if (date.getMonth()==8 && date.getDate()==8 && !brithdayAnimationTriggered && model == 0){
             playBrithdayAnimation(0)
-        }else if(date.getMonth()==8 && date.getDate()==8 && !brithdayAnimationTriggered && model == 1){
+        }else if(date.getMonth()==1 && date.getDate()==14 && !brithdayAnimationTriggered && model == 1){
             playBrithdayAnimation(1)
         }
         live2DMgrRef.current.tapEvent(adjustedX, adjustedY)
@@ -233,7 +233,7 @@ function L2dCanvas( {character, offsetBottom, width, height} ) {
     )
     const playBrithdayAnimation = contextSafe((character)=>{
         brithdayAnimationTriggered = true
-        console.log("triggered")
+        // console.log("triggered")
         if(timeoutId.current){
             clearTimeout(timeoutId.current)
             timeoutId.current = null
@@ -245,7 +245,7 @@ function L2dCanvas( {character, offsetBottom, width, height} ) {
             // console.log("testing timeoutID", timeoutId.current)
             tl.to(".canvas-dialog", {
                 duration: 1,
-                onStart: ()=>playMotionExpression("thinking01", "shame02", 3, 4200),
+                onStart: ()=>playMotionExpression("thinking01", "shame02", 3, 5000),
                 opacity: 1
                 // keyframes:{
                 //     "0%": {opacity: 0},
