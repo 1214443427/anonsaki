@@ -1,0 +1,38 @@
+.confirmation-modal-back-drop{
+    position: fixed;
+    z-index: 102;
+    display: flex;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.confirmation-modal{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: white;
+    border-radius: 12px;
+    width: 275px;
+    height: 120px;
+    padding: 10px;
+    position: absolute;
+    border: 6px solid rgb(var(--anon-color));
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.confirmation-button-container{
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.confirmation-link-div.hidden .link{
+    pointer-events: none;
+}

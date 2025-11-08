@@ -38,6 +38,10 @@
     opacity: 1;
 }
 
+.display .link-content{
+    cursor: pointer;
+}
+
 .tooltip-content{
     display: -webkit-box; /* Required for -webkit-line-clamp */
     -webkit-box-orient: vertical; /* Required for -webkit-line-clamp */

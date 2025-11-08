@@ -5,6 +5,7 @@ import React, { useMemo, useRef } from 'react'
 import { useEffect, useState } from 'react';
 import Spinner from "../components/Spinner"
 import ExternalLink from '../components/ExternalLink';
+import ConfrimationModal from '../components/ConfirmationModal';
 
 gsap.registerPlugin(Flip) 
 
@@ -40,14 +41,18 @@ function Polaroids({relay, onClick, details=false, ref}) {
                 <p>{relay.name}</p>
                 <div className='flex'>
                     <p>{relay.details.date}</p>
-                    <p>cr@<span className='link' onClick={
-                        (e)=>{
-                            e.stopPropagation()
-                            open(relay.details.cover_link, "_blank")    
-                            }
-                        }>{relay.details.cover_author}
+                    <ConfrimationModal url={relay.details.cover_link}>
+                        <p>cr@<span className='link' 
+                            // onClick={
+                            //     (e)=>{
+                            //         e.stopPropagation()
+                            //         open(relay.details.cover_link, "_blank")    
+                            //     }
+                            // }
+                            >{relay.details.cover_author}
                         <ExternalLink />
-                    </span></p>
+                        </span></p>
+                    </ConfrimationModal>
                 </div>
             </div>}
         </div>
@@ -249,14 +254,17 @@ function RelayPage({navigateTo}) {
             {/* } */}
             <Polaroids relay={relays[selectedRelay]} details={true} ref={detailsRef} onClick={hideDetails}/>
             {/* <Details relay={relays[selectedRelay]} ref={detailsRef} onClick={hideDetails}/> onClick={()=>setSelectedRelay(null)} change to a modal that hides this. */}
-            <button className='memory-button menu-button' 
-                onClick={()=>{
-                        // navigateTo(`/relays/${relays[selectedRelay].name}`)
-                        open(relays[selectedRelay].details.link, "_blank")
-                    }}>
-                        <ExternalLink />
-                        浏览回忆
-            </button>
+            <ConfrimationModal url={selectedRelay!= null ? relays[selectedRelay].details.link: ""}>
+                <button className='memory-button menu-button' 
+                    // onClick={()=>{
+                         // navigateTo(`/relays/${relays[selectedRelay].name}`)
+                         // open(relays[selectedRelay].details.link, "_blank")
+                    // }}
+                    >
+                            <ExternalLink />
+                            浏览回忆
+                </button>
+            </ConfrimationModal>
         </div>
     )
 }

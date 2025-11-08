@@ -96,7 +96,7 @@ function App() {
   const timelineRef = useRef(null)
 
   const {contextSafe} = useGSAP(()=>{
-      timelineRef.current = gsap.timeline({paused: false, onComplete:()=>{setEasterEgg([])}})
+      timelineRef.current = gsap.timeline({paused: false, onComplete:()=>{setEasterEgg([]);timelineRef.current.revert()}})
     }
   )
 

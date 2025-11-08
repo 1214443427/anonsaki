@@ -6,6 +6,7 @@ import { SplitText } from 'gsap/SplitText';
 import React, { useRef, useState } from 'react'
 import ExternalLink from '../components/ExternalLink';
 import MotionPathPlugin from 'gsap/MotionPathPlugin';
+import ConfrimationModal from '../components/ConfirmationModal';
 
 const TEXT = [
 `Epistula Invitatoria`,
@@ -121,7 +122,6 @@ const ScrollText = ({as: Component = "h2", text, effect, className, offset, inde
         })
     
         return()=>{
-            window.scrollTo(0, 0)
         }
     }, { scope: ref, dependencies:[] }
     )
@@ -158,6 +158,7 @@ function InvitationPage({collectEasterEgg}) {
 
     const scrollRef = useRef()
 
+    scrollTo(0,0)
     useGSAP(()=>{
 
         // ScrollTrigger.normalizeScroll(true)
@@ -579,7 +580,7 @@ function InvitationPage({collectEasterEgg}) {
                     </div>
                     <p>这个个人小工程花了比想象中多了很多的时间。一开始的企划只有角色展示这一栏。当时只是觉得用第十三集的切片做专场会很酷。</p>
                     <p>前端代码全部为React。Live2D的框架比我期待的难用太多了，研究他浪费了许多时间。</p>
-                    <p>如有问题，请联系我<a href="https://space.bilibili.com/14766618" target='_blank'>个人B站</a>。</p>
+                    <p>如有问题，请联系我<ConfrimationModal url={"https://space.bilibili.com/14766618"} className='link'><span>个人B站。</span></ConfrimationModal></p>
                     <p>制作邀请函这部分的时候感觉有点燃尽了。很多地方是硬编码。如果在您的设备上不能正确显示的话，致歉。</p>
                     
                     <p>至此。<span></span></p>
@@ -588,11 +589,15 @@ function InvitationPage({collectEasterEgg}) {
             </div>
             <div className='qr-code-container'>
                 <img className='qr-code-image non-select' src='/assets/qr-code.webp'/>
-                <button 
-                    className='qr-code-button menu-button' 
-                    onClick={()=>{window.open(URL, '_blank')}}>
-                        <ExternalLink />
-                        加入舞会</button>
+                <ConfrimationModal url={URL}>
+                    <button 
+                        className='qr-code-button menu-button' 
+                        // onClick={()=>{window.open(URL, '_blank')}}
+                        >
+                            <ExternalLink />
+                            加入舞会
+                    </button>
+                </ConfrimationModal>
             </div>
         </div>
     )
