@@ -360,7 +360,8 @@ function InvitationPage({collectEasterEgg}) {
                 end: 27000
             },
             keyframes: {
-                "0%": { opacity: 1 },
+                "0%": { opacity: 0 },
+                "10%": { opacity: 1 },
                 "90%": { opacity: 1 },
                 "100%": { opacity: 0 }, 
             },
@@ -386,7 +387,8 @@ function InvitationPage({collectEasterEgg}) {
                 end: 27000
             },
             keyframes: {
-                "0%": { opacity: 1 },
+                "0%": { opacity: 0 },
+                "10%": { opacity: 1 },
                 "90%": { opacity: 1 },
                 "100%": { opacity: 0 }, 
             },
@@ -473,7 +475,8 @@ function InvitationPage({collectEasterEgg}) {
                 "0%": { opacity: 0 },
                 "20%": { opacity: 1 },  // fade in
                 "50%": { translateY: 0 },  // hold visible
-                "100%": { translateY: "-100vh"}, // fade out
+                "70%": { opacity: 1 },  // fade in
+                "100%": { translateY: "-100vh", opacity: 0}, // fade out
             },
             pointerEvents: "auto",
         })
@@ -581,7 +584,6 @@ function InvitationPage({collectEasterEgg}) {
                     <p>这个个人小工程花了比想象中多了很多的时间。一开始的企划只有角色展示这一栏。当时只是觉得用第十三集的切片做专场会很酷。</p>
                     <p>前端代码全部为React。Live2D的框架比我期待的难用太多了，研究他浪费了许多时间。</p>
                     <p>如有问题，请联系我<ConfrimationModal url={"https://space.bilibili.com/14766618"} className='link'><span>个人B站。</span></ConfrimationModal></p>
-                    <p>制作邀请函这部分的时候感觉有点燃尽了。很多地方是硬编码。如果在您的设备上不能正确显示的话，致歉。</p>
                     
                     <p>至此。<span></span></p>
                     <p>（PS，虽然我是祥1，但是代码里祥子是0。）</p>

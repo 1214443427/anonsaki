@@ -157,7 +157,6 @@ function App() {
   return (
     <div className='layout'>
       {easterEgg.length == NUM_OF_EASTEREGGS && octopusShower}
-      <OctopusShowerElement />
       <MenuBar navigateTo={navigateTo}/>
       {(()=>{ 
         switch(currentRoute){

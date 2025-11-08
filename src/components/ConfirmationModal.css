@@ -1,19 +1,21 @@
 .confirmation-modal-back-drop{
     position: fixed;
     z-index: 102;
+    pointer-events: none;
     display: flex;
     top: 0;
     left: 0;
     height: 100vh;
     width: 100vw;
     background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
 }
 
 .confirmation-modal{
     display: flex;
     flex-direction: column;
     gap: 10px;
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.85);
     border-radius: 12px;
     width: 275px;
     height: 120px;

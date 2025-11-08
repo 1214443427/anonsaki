@@ -34,7 +34,7 @@ function SplitedText({children, model}){
     )
 }
 
-function L2dCanvas( {character, offsetBottom, width, height} ) {
+function L2dCanvas( {character, offsetBottom, width, height, pausedCharacter} ) {
     const live2DMgrRef = useRef(null)
     
     const model = character == "anon" ? 1 : character == "saki"? 0 : 2 ; //saki = 0
@@ -55,7 +55,6 @@ function L2dCanvas( {character, offsetBottom, width, height} ) {
     const [lastMouseY, setLastMouseY] = useState(0)
 
 //   const [isModelShown, setIsModelShown] = useState(false)  
-    
     const {isIdle, resetTimer} = useIdle(20000)
     
     const timeoutId = useRef(null);
@@ -185,11 +184,12 @@ function L2dCanvas( {character, offsetBottom, width, height} ) {
                 animationFrameId  = requestAnimationFrame(tick, canvasRef.current)
             }
             tick()
-        }
+            }
         }
         drawLoop();
         return(()=>{
-        cancelAnimationFrame(animationFrameId)
+            cancelAnimationFrame(animationFrameId)
+            setIsDrawStart(false)
         })
     }, [])
 
@@ -344,16 +344,18 @@ function L2dCanvas( {character, offsetBottom, width, height} ) {
             if(model == null) return;
             // viewMatrix.translateX(-0.5)
             
-        if(model.initialized && !model.updating){
+            if(model.initialized && !model.updating){
+                if(pausedCharacter){
+                    if(pausedCharacter.include(i)) continue;
+                }
+                model.update();
+                model.draw(gl);
 
-            model.update();
-            model.draw(gl);
-
-            // if(!isModelShown && i == live2DMgr.numModels()-1){
-            //   setIsModelShown((prev)=>!prev)  
-            //   //(prev)=>!prev
-            // }
-        }
+                // if(!isModelShown && i == live2DMgr.numModels()-1){
+                //   setIsModelShown((prev)=>!prev)  
+                //   //(prev)=>!prev
+                // }
+            }
 
         }
         MatrixStack.pop();

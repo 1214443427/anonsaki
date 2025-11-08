@@ -1244,7 +1244,7 @@ h1, h2, h3, h4, h5, h6 {
   .hamburger-button{
     opacity: 1;
     position: fixed;
-    z-index: 100;
+    z-index: 102;
     cursor: pointer;
     top: 25px;
     right: 20px;
