@@ -136,7 +136,8 @@ const ScrollText = ({as: Component = "h2", text, effect, className, offset, inde
                             <img 
                                 className='moon-final non-select' 
                                 src='/assets/moon.webp' 
-                                ref={moonRef}/>
+                                ref={moonRef}
+                                alt='月亮'/>
                         </div>
                     </span>
                     的相恋乃是禁忌。
@@ -149,7 +150,7 @@ const ScrollText = ({as: Component = "h2", text, effect, className, offset, inde
 };
 
 
-function InvitationPage({collectEasterEgg}) {
+function InvitationPage({collectEasterEgg, easterEggProgress}) {
 
     const sakiOctoRef = useRef()
     const anonOctoRef = useRef()
@@ -158,11 +159,10 @@ function InvitationPage({collectEasterEgg}) {
 
     const scrollRef = useRef()
 
-    scrollTo(0,0)
     useGSAP(()=>{
 
         // ScrollTrigger.normalizeScroll(true)
-
+        scrollTo(0,0)
         const state = Flip.getState(moonRef.current);
         Flip.fit(moonRef.current, moonInitialRef.current)
         gsap.set(".hamburger-button span", {background: "white"})
@@ -511,7 +511,7 @@ function InvitationPage({collectEasterEgg}) {
                     <div className="arrow"></div>
                 </div>
                 <div className='bg--1'>
-                    <img className='moon-initial non-select' src='/assets/moon.webp' ref={moonInitialRef}/>
+                    <img className='moon-initial non-select' src='/assets/moon.webp' ref={moonInitialRef} alt='月亮'/>
                 </div>
                 <div className='bg--transition'></div>
                 <div className='bg--2'>
@@ -520,27 +520,27 @@ function InvitationPage({collectEasterEgg}) {
                         className='octo-image invitation-easter-egg'
                         onClick={()=>collectEasterEgg("invitation-anon")}
                         >
-                       <img src='/assets/anon_octo.webp' className='non-select'/>
+                       <img src='/assets/anon_octo.webp' className='non-select' alt='爱音章鱼'/>
                     </div>
                     <div 
                         ref={sakiOctoRef} 
                         className='octo-image invitation-easter-egg' 
                         onClick={()=>collectEasterEgg("invitation-saki")}
                         >
-                        <img src="/assets/happy_saki_octo.webp" className='non-select'/>
+                        <img src="/assets/happy_saki_octo.webp" className='non-select' alt='开心小祥章鱼'/>
                     </div>
                     <img src="/assets/chat-mate.jpg" id="chat-mate" className='invitation-easter-egg non-select' />
-                    <p  id="saki-heart" className='invitation-heart non-select'>🩵</p>
-                    <p  id="anon-heart" className='invitation-heart non-select'>🩷</p>
+                    <img  id="saki-heart" className='invitation-heart non-select' src='/assets/blue_heart.png'/>
+                    <img  id="anon-heart" className='invitation-heart non-select' src='/assets/pink_heart.png'/>
                     <p className='emoji-bubble non-select' id="keyboard ">🎹</p>
                     <p className='emoji-bubble non-select' id="guitar">🎸</p>
                 </div>
                 <div className='bg--3'></div>
                 <div className='laser-div' >
-                    <img id='saki-laser' src='/assets/saki-laser.webp' className='invitation-easter-egg non-select' />
+                    <img id='saki-laser' src='/assets/saki-laser.webp' className='invitation-easter-egg non-select' alt='章鱼激光'/>
                     <div id='anon-laser'  className='invitation-easter-egg non-select' >
-                        <img src='/assets/anon-laser-edit.webp' className='non-select'/>
-                        <img id='heart' src='/assets/heart.webp' className='non-select'/>
+                        <img src='/assets/anon-laser-edit.webp' className='non-select' alt='奶龙激光'/>
+                        <img id='heart' src='/assets/heart.webp' className='non-select' alt='小心心'/>
                     </div>
                 </div>
             </div>
@@ -579,7 +579,7 @@ function InvitationPage({collectEasterEgg}) {
                             <h1>碎碎念</h1>
                             <h2>感谢所有看这的人。<br/> 我喜欢你们！🩷🩵</h2>
                         </div>
-                        <img src='/assets/logo.jpg'/>
+                        <img src='/assets/logo.jpg' alt='logo'/>
                     </div>
                     <p>这个个人小工程花了比想象中多了很多的时间。一开始的企划只有角色展示这一栏。当时只是觉得用第十三集的切片做专场会很酷。</p>
                     <p>前端代码全部为React。Live2D的框架比我期待的难用太多了，研究他浪费了许多时间。</p>
@@ -587,10 +587,42 @@ function InvitationPage({collectEasterEgg}) {
                     
                     <p>至此。<span></span></p>
                     <p>（PS，虽然我是祥1，但是代码里祥子是0。）</p>
+                    <div className='flex'>
+                        <img 
+                            src='assets/anon_octo.webp'
+                            alt='章鱼彩蛋'
+                            title={`${easterEggProgress.includes("landing-page-anon")?"找到你了！":"好像在哪里见过的章鱼?"}`}
+                            className={`octo-easteregg ${easterEggProgress.includes("landing-page-anon")? "" : "pink-silhouette"}`}/>
+                        <img 
+                            src='assets/saki_octo.webp' 
+                            alt='章鱼彩蛋'
+                            title={`${easterEggProgress.includes("landing-page-saki")?"找到你了！":"好像在哪里见过的不开心章鱼?"}`}
+                            className={`octo-easteregg ${easterEggProgress.includes("landing-page-saki")? "" : "blue-silhouette"}`}/>
+                        <img 
+                            src='assets/happy_saki_octo_matching.webp' 
+                            alt='章鱼彩蛋'
+                            title={`${easterEggProgress.includes("character-page-saki")?"找到你了！":"好像在哪里见过的章鱼?"}`}
+                            className={`octo-easteregg ${easterEggProgress.includes("character-page-saki")? "" : "blue-silhouette"}`}/>
+                        <img 
+                            src='assets/anon_octo.webp' 
+                            alt='章鱼彩蛋'
+                            title={`${easterEggProgress.includes("character-page-anon")?"找到你了！":"好像在哪里见过的章鱼?"}`}
+                            className={`octo-easteregg ${easterEggProgress.includes("character-page-anon")? "" : "pink-silhouette"}`}/>
+                        <img 
+                            src='assets/happy_saki_octo.webp' 
+                            alt='章鱼彩蛋'
+                            title={`${easterEggProgress.includes("invitation-saki")?"找到你了！":"好像在哪里见过的章鱼?"}`}
+                            className={`octo-easteregg ${easterEggProgress.includes("invitation-saki")? "" : "blue-silhouette"}`}/>
+                        <img 
+                            src='assets/anon_octo.webp' 
+                            alt='章鱼彩蛋'
+                            title={`${easterEggProgress.includes("invitation-anon")?"找到你了！":"好像在哪里见过的章鱼?"}`}
+                            className={`octo-easteregg ${easterEggProgress.includes("invitation-anon")? "" : "pink-silhouette"}`}/>
+                    </div>
                 </div>
             </div>
             <div className='qr-code-container'>
-                <img className='qr-code-image non-select' src='/assets/qr-code.webp'/>
+                <img alt = "爱祥大群二维码 171680996" className='qr-code-image non-select' src='/assets/qr-code.webp'/>
                 <ConfrimationModal url={URL}>
                     <button 
                         className='qr-code-button menu-button' 

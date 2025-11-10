@@ -1138,6 +1138,7 @@ h1, h2, h3, h4, h5, h6 {
   top: 0%;
   transform: translateX(100%);
   opacity: 0;
+  height: 15vw;
 }
 
 #heart{
@@ -1147,6 +1148,18 @@ h1, h2, h3, h4, h5, h6 {
   /* width: 5000px; */
   /* width: 17.5%; */
   rotate: 180deg;
+}
+
+.octo-easteregg{
+  width: 3rem;
+}
+
+.octo-easteregg.pink-silhouette{
+  filter: contrast(0) saturate(100%) invert(84%) sepia(17%) saturate(3663%) hue-rotate(312deg) brightness(103%) contrast(97%); 
+}
+
+.octo-easteregg.blue-silhouette{
+  filter: contrast(0) sepia(100%) hue-rotate(190deg) saturate(300%) brightness(100%);
 }
 
 /* larger screen */

@@ -170,7 +170,7 @@ function App() {
           else
             return <RelayDetailsPage filename={decodeURI(currentRelayId)}></RelayDetailsPage>
         case "invitation":
-            return <InvitationPage collectEasterEgg={collectEasterEgg}/>
+            return <InvitationPage collectEasterEgg={collectEasterEgg} easterEggProgress={easterEgg}/>
         case "photo-booth":
             return <PhotoBoothPage />
         }

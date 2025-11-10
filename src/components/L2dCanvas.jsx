@@ -36,10 +36,7 @@ function SplitedText({children, model}){
 
 function L2dCanvas( {character, offsetBottom, width, height, pausedCharacter} ) {
     const live2DMgrRef = useRef(null)
-    
     const model = character == "anon" ? 1 : character == "saki"? 0 : 2 ; //saki = 0
-
-    const [isDrawStart, setIsDrawStart] = useState(false)
     
     const glRef = useRef(null)
     const canvasRef = useRef(null);
@@ -172,26 +169,27 @@ function L2dCanvas( {character, offsetBottom, width, height, pausedCharacter} ) 
         })
     }, [])
     
+    const isDrawStartRef = useRef(false);
+    const animationFrameIdRef = useRef(null);
 
     useEffect(()=>{
-        let animationFrameId;
         const drawLoop = () => {
-        if(!isDrawStart && glRef.current && live2DMgrRef.current){
-            setIsDrawStart(true);
+        if(!isDrawStartRef.current && glRef.current && live2DMgrRef.current){
+            isDrawStartRef.current=true;
             // console.log("num of model on draw", live2DMgrRef.current.numModels())
             function tick(){
                 draw();
-                animationFrameId  = requestAnimationFrame(tick, canvasRef.current)
+                animationFrameIdRef.current  = requestAnimationFrame(tick, canvasRef.current)
             }
             tick()
             }
         }
         drawLoop();
         return(()=>{
-            cancelAnimationFrame(animationFrameId)
-            setIsDrawStart(false)
+            cancelAnimationFrame(animationFrameIdRef.current)
+            isDrawStartRef.current=false
         })
-    }, [])
+    }, [pausedCharacter])
 
     useEffect(()=>{
         if(glRef.current && live2DMgrRef.current){
@@ -345,9 +343,14 @@ function L2dCanvas( {character, offsetBottom, width, height, pausedCharacter} ) 
             // viewMatrix.translateX(-0.5)
             
             if(model.initialized && !model.updating){
-                if(pausedCharacter){
-                    if(pausedCharacter.include(i)) continue;
-                }
+                // if(pausedCharacter){
+                //     if(!pausedCharacter.includes(i)){
+                //         model.update();
+                //     }else{
+                //         model.eyeBlink.setInterval(Number.MAX_SAFE_INTEGER)
+                //     }
+                // }else{
+                    // }
                 model.update();
                 model.draw(gl);
 
