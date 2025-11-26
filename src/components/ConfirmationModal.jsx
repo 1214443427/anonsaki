@@ -5,7 +5,7 @@ import { useGSAP } from '@gsap/react';
 import { gsap } from 'gsap/gsap-core';
 
 
-function ConfrimationModal({url, children, className}) {
+function ConfirmationModal({url, children, className}) {
     const [showModal, setShowModal] = useState(false);
     const modalRef = useRef(null)
     const handleClick = (e) =>{
@@ -75,4 +75,4 @@ function ConfrimationModal({url, children, className}) {
   )
 }
 
-export default ConfrimationModal
+export default ConfirmationModal

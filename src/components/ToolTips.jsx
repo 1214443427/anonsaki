@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import './ToolTips.css'
 import ExternalLink from './ExternalLink';
-import ConfrimationModal from './ConfirmationModal';
+import ConfirmationModal from './ConfirmationModal';
 
 function ToolTips({displayText, content, link, style}) {
 
@@ -75,12 +75,12 @@ function ToolTips({displayText, content, link, style}) {
                 onMouseLeave={handleMouseLeave}
                >
                 {link?
-                <ConfrimationModal url={link} className={isVisible?"":"hidden"}>
+                <ConfirmationModal url={link} className={isVisible?"":"hidden"}>
                     <p className='link-content link'>
                         <ExternalLink />
                         {content}
                     </p>
-                </ConfrimationModal>
+                </ConfirmationModal>
                 :
                 <p className='tooltip-content'>
                     {content}

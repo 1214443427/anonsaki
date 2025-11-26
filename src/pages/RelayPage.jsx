@@ -5,7 +5,7 @@ import React, { useMemo, useRef } from 'react'
 import { useEffect, useState } from 'react';
 import Spinner from "../components/Spinner"
 import ExternalLink from '../components/ExternalLink';
-import ConfrimationModal from '../components/ConfirmationModal';
+import ConfirmationModal from '../components/ConfirmationModal';
 
 gsap.registerPlugin(Flip) 
 
@@ -41,7 +41,7 @@ function Polaroids({relay, onClick, details=false, ref}) {
                 <p>{relay.name}</p>
                 <div className='flex'>
                     <p>{relay.details.date}</p>
-                    <ConfrimationModal url={relay.details.cover_link}>
+                    <ConfirmationModal url={relay.details.cover_link}>
                         <p>cr@<span className='link' 
                             // onClick={
                             //     (e)=>{
@@ -52,7 +52,7 @@ function Polaroids({relay, onClick, details=false, ref}) {
                             >{relay.details.cover_author}
                         <ExternalLink />
                         </span></p>
-                    </ConfrimationModal>
+                    </ConfirmationModal>
                 </div>
             </div>}
         </div>
@@ -254,7 +254,7 @@ function RelayPage({navigateTo}) {
             {/* } */}
             <Polaroids relay={relays[selectedRelay]} details={true} ref={detailsRef} onClick={hideDetails}/>
             {/* <Details relay={relays[selectedRelay]} ref={detailsRef} onClick={hideDetails}/> onClick={()=>setSelectedRelay(null)} change to a modal that hides this. */}
-            <ConfrimationModal url={selectedRelay!= null ? relays[selectedRelay].details.link: ""}>
+            <ConfirmationModal url={selectedRelay!= null ? relays[selectedRelay].details.link: ""}>
                 <button className='memory-button menu-button' 
                     // onClick={()=>{
                          // navigateTo(`/relays/${relays[selectedRelay].name}`)
@@ -264,7 +264,7 @@ function RelayPage({navigateTo}) {
                             <ExternalLink />
                             浏览回忆
                 </button>
-            </ConfrimationModal>
+            </ConfirmationModal>
         </div>
     )
 }

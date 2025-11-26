@@ -10,9 +10,11 @@ import PhotoBoothPage from './pages/PhotoBoothPage';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { prefetchContentAssets } from './utils/preFetchData';
+import ChallengePage from './pages/ChallengePage';
+import MotionPathPlugin from 'gsap/MotionPathPlugin';
 
 
-gsap.registerPlugin(useGSAP);
+gsap.registerPlugin(useGSAP, MotionPathPlugin);
 
 function OctopusShowerElement({index, tl}){
   const source = index%2 == 0? "/assets/happy_saki_octo_matching.webp":"/assets/anon_octo.webp"
@@ -135,6 +137,8 @@ function App() {
       return {route: 'invitation', relayId: null}
     }else if (hash === '/photo-booth'){
       return {route: 'photo-booth', relayId: null}
+    }else if (hash === '/challenge'){
+      return {route: 'challenge', relayId: null}
     }
     return {route: 'landing', relayId: null}
   }
@@ -157,7 +161,7 @@ function App() {
   return (
     <div className='layout'>
       {easterEgg.length == NUM_OF_EASTEREGGS && octopusShower}
-      <MenuBar navigateTo={navigateTo}/>
+      <MenuBar navigateTo={navigateTo} currentlyActive={currentRoute}/>
       {(()=>{ 
         switch(currentRoute){
         case 'landing':
@@ -173,6 +177,8 @@ function App() {
             return <InvitationPage collectEasterEgg={collectEasterEgg} easterEggProgress={easterEgg}/>
         case "photo-booth":
             return <PhotoBoothPage />
+        case "challenge":
+            return <ChallengePage />
         }
       })()}
     </div>

@@ -286,7 +286,7 @@ function CharacterPage({navigateTo, collectEasterEgg}) {
               style = "spoiler"
               />
             <ToolTips displayText={"爱音的宿敌"} 
-              content={"如千早爱音和丰川祥子是宿敌"} 
+              content={"假如千早爱音和丰川祥子是宿敌"} 
               link={"https://www.bilibili.com/video/BV1SpKWzjEdx"}
               style = "spoiler"
               />

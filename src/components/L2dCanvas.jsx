@@ -83,14 +83,15 @@ function L2dCanvas( {character, offsetBottom, width, height, pausedCharacter} ) 
             playBrithdayAnimation(0)
         }else if(date.getMonth()==1 && date.getDate()==14 && !brithdayAnimationTriggered && model == 1){
             playBrithdayAnimation(1)
+        }else{
+            live2DMgrRef.current.tapEvent(adjustedX, adjustedY)
+            const id = setTimeout(()=>{
+                live2DMgrRef.current.idelExpression()
+                // console.log("timeout triggered")
+                timeoutId.current = null
+            }, 2000)
+            timeoutId.current = id
         }
-        live2DMgrRef.current.tapEvent(adjustedX, adjustedY)
-        const id = setTimeout(()=>{
-            live2DMgrRef.current.idelExpression()
-            // console.log("timeout triggered")
-            timeoutId.current = null
-        }, 2000)
-        timeoutId.current = id
         };
         const touchHandler = (e) => { /* handle touch */ };
 

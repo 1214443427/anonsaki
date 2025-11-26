@@ -6,7 +6,7 @@ import { SplitText } from 'gsap/SplitText';
 import React, { useRef, useState } from 'react'
 import ExternalLink from '../components/ExternalLink';
 import MotionPathPlugin from 'gsap/MotionPathPlugin';
-import ConfrimationModal from '../components/ConfirmationModal';
+import ConfirmationModal from '../components/ConfirmationModal';
 
 const TEXT = [
 `Epistula Invitatoria`,
@@ -583,7 +583,7 @@ function InvitationPage({collectEasterEgg, easterEggProgress}) {
                     </div>
                     <p>这个个人小工程花了比想象中多了很多的时间。一开始的企划只有角色展示这一栏。当时只是觉得用第十三集的切片做专场会很酷。</p>
                     <p>前端代码全部为React。Live2D的框架比我期待的难用太多了，研究他浪费了许多时间。</p>
-                    <p>如有问题，请联系我<ConfrimationModal url={"https://space.bilibili.com/14766618"} className='link'><span>个人B站。</span></ConfrimationModal></p>
+                    <p>如有问题，请联系我<ConfirmationModal url={"https://space.bilibili.com/14766618"} className='link'><span>个人B站。</span></ConfirmationModal></p>
                     
                     <p>至此。<span></span></p>
                     <p>（PS，虽然我是祥1，但是代码里祥子是0。）</p>
@@ -623,7 +623,7 @@ function InvitationPage({collectEasterEgg, easterEggProgress}) {
             </div>
             <div className='qr-code-container'>
                 <img alt = "爱祥大群二维码 171680996" className='qr-code-image non-select' src='/assets/qr-code.webp'/>
-                <ConfrimationModal url={URL}>
+                <ConfirmationModal url={URL}>
                     <button 
                         className='qr-code-button menu-button' 
                         // onClick={()=>{window.open(URL, '_blank')}}
@@ -631,7 +631,7 @@ function InvitationPage({collectEasterEgg, easterEggProgress}) {
                             <ExternalLink />
                             加入舞会
                     </button>
-                </ConfrimationModal>
+                </ConfirmationModal>
             </div>
         </div>
     )
