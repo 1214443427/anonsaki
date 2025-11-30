@@ -37,9 +37,9 @@ function ConfirmationModal({url, children, className}) {
       )
     })
   
-  function openURL(urlLink){
+  function openURL(urlLink, e){
     open(urlLink,"_blank")
-    setShowModal(false)
+    closeModal(e)
   }
 
   const closeModal = contextSafe((e)=>{
@@ -66,7 +66,7 @@ function ConfirmationModal({url, children, className}) {
             <p>即将打开外部网站, 请确定转跳</p>
             <div className='confirmation-button-container'>
                 <button className='menu-button' onClick={(e)=>closeModal(e)}>取消</button>
-                <button className='menu-button' onClick={()=>openURL(url)}>打开</button>
+                <button className='menu-button' onClick={(e)=>openURL(url, e)}>打开</button>
             </div>
           </div>
         </div>, document.getElementById('root')

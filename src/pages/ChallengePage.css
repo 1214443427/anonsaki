@@ -1,4 +1,5 @@
 .challenge-page{
+    --line-height: 1.5rem;
     display: flex;
     background-color: rgb(var(--saki-color-alpha));
     height: 100dvh;
@@ -8,7 +9,7 @@
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    transform: translateZ(0)
+    transform: translateZ(0);
 }
 
 .notebook-header{
@@ -27,7 +28,6 @@
 }
 
 .notebook-pages{
-    --line-height: 1.5rem;
     position: absolute;
     display: flex;
     flex-direction: column;
@@ -40,6 +40,7 @@
     line-height: var(--line-height);
     font-size: calc(var(--line-height) * 5/9);
     overflow: visible;
+    perspective: 2100px;
 }
 
 .notebook-page-front,
@@ -57,12 +58,17 @@
     margin-top: 0.25rem;
     flex-grow: 1;
     padding-inline: 0.5rem;
-    overflow: scroll;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 .notebook-items{
     gap: 1rem;
     justify-content: space-between;
+}
+
+.notebook-items *{
+    cursor: pointer;
 }
 
 .work-index{
@@ -129,7 +135,7 @@
 .challenge-page-nav{
     position: absolute;
     display: flex;
-    bottom: 3px;
+    bottom: 2%;
     height: 6%;
     max-height: 50px;
 }
@@ -156,8 +162,95 @@
   box-shadow: 0 4px 8px rgba(0,0,0,0.10);
 } */
 
+.front-cover{
+    transform-origin: 0% 0%;
+    transform-style: preserve-3d;
+    overflow: visible;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+}
+
+.notebook-cover{
+    border-left: 2rem solid rgb(var(--anon-color));
+    background-color: #ffe3ef;
+    background-image: url(/assets/notebook-bg.webp);
+    background-size: cover;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.notebook-cover p, .notebook-cover h1, .notebook-cover span{
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    color: rgb(var(--anon-color));
+    text-align: center;
+}
+
+.notebook-cover h1{
+    font-size: 1.65rem;
+}
+
+.cloud-container{
+    align-items: center;
+}
+
+.cloud {
+    width: 90%;
+    aspect-ratio: 1;
+    background: rgb(var(--anon-color));
+    clip-path: url(#clip-path);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notebook-cover-image{
+    width: 90%;
+    height: 90%;
+    clip-path: url(#clip-path);
+    object-fit: cover;
+}
+
+.notebook-cover-image{
+    background-color: rgb(var(--saki-color));
+}
+
+#anosaki-text{
+    align-self: flex-end;
+    padding-inline: 1rem;
+}
+
+.nameplate-container{
+    border: 2px solid rgb(var(--anon-color));
+    width: 85%;
+    border-radius: 10px;
+    background-color: #fcf3e8;
+}
+
+.nameplate-top{
+    height: 2.5rem;
+    border-bottom: 2px solid rgb(var(--anon-color));
+    justify-content: space-between;
+    align-items:baseline;
+    padding-top: 0.5rem;
+    padding-inline: 0.25rem;
+}
+
+.nameplate-top *:last-child{
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.nameplate-bottom{
+    justify-content: space-evenly;
+}
+
+.nameplate-bottom > *:last-child{
+    font-family: "KuaiLe";
+    color: #3f3f3f;
+}
+
 .back-page{
-    translate: -100% 0;
     border-right: 0.5px solid gray;
 }
 
@@ -200,6 +293,13 @@
 
 .icons{
     width: var(--line-height);
+}
+
+.close-button{
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    cursor: pointer;
 }
 
 .sticky-note-popup-backdrop{
@@ -246,16 +346,147 @@
     background-image: linear-gradient(to right bottom in oklab, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 50%, rgb(0, 0, 0) 100%)
 }
 
+.check-box{
+    position: relative;
+    fill: transparent;
+}
+
+.draw-check{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: calc( var(--line-height) * 1.5 );
+    max-width: unset;
+    transform: translate(-50%, -50%);
+}
+
+.draw-check path{
+    stroke: rgb(var(--anon-color));
+    stroke-width: 2px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.draw-check path.animate{
+    stroke-dasharray: 25; 
+    stroke-dashoffset: 25;
+    animation: draw  700ms ease-in-out forwards;
+}
+
+@keyframes draw {
+    0% {
+    stroke-dashoffset: 100%;
+  }
+
+  100% {
+    stroke-dashoffset: 0px;
+  }
+}
+
+.navigation-popup-container{
+    z-index: 10;
+    opacity: 0;
+}
+
+.navigation-popup{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 300px;
+    aspect-ratio: 1;
+    background-color: #fff6df;
+    z-index: 100;
+    justify-content: space-between;
+    /* align-items: center; */
+    padding-top: 1rem;
+    padding-left: 0.5rem;
+}
+
+.page-input-container{
+    align-items: center;
+}
+
+.page-input-container button{
+    color: #423d35;
+    background-color: #eacfbb;
+    padding: 0 0.5rem;
+}
+
+.page-input-container button:hover, .page-input-container button:active{
+    outline: 0.166rem solid #591804;
+    border-color: unset;
+}
+
+.navigation-popup input, .navigation-popup select{
+    border: 1px solid #e6c3a8;
+    background-color: #fffcee;
+    color: #10273f;
+    border-radius: 5px;
+    padding: 0.14rem;
+    margin: 0.2rem 0.4rem;
+}
+
+.navigation-popup input::-webkit-outer-spin-button,
+.navigation-popup input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0; /* Important to remove any default margin */
+}
+
+/* For Firefox */
+.navigation-popup input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.page-selectors{
+    width: 90%;
+    height: 70%;
+    gap: 4px;
+    column-count: 5;
+    flex-wrap: wrap;
+}
+
+.page-selector{
+    background-color: #eacfbb;
+    width: 2.0rem;
+    height: 2.0rem;
+    /* font-size: 1.166em; */
+    flex-shrink: 0;
+    cursor: pointer;
+    text-align: right;
+    padding: 0em 1em 1.25em 0.5em;
+}
+
+.page-selector:first-of-type, .page-selector:last-of-type{
+    padding: unset
+}
+
+.page-selector.active{
+    background-color: #e6c3a8;
+}
+
+.page-select{
+}
+
+.page-select option{
+    color: #10273f;
+}
+
 @media screen and (min-width: 768px){
-    .notebook-pages{
+    
+    .challenge-page{
         --line-height: 1.75rem;
+    }
+
+    .notebook-pages{
         height: 70%;
         width: auto
     }
 
     .sticky-note{
         width: 500px;
-        padding: 1rem;
+        padding: 2rem;
         font-size: 1.5rem;
         gap: 10px;
         box-shadow: -2px 2px 15px 0 rgba(0, 0, 0, 0.5);
@@ -274,7 +505,7 @@
 }
 
 @media screen and (min-width: 1079px){
-        .notebook-pages{
+    .notebook-pages{
         --line-height: 2rem;
             height: 70%;
             width: auto
@@ -291,5 +522,6 @@
     .challenge-page-nav{
         max-height: 100px;
         font-size: 2rem;
+        bottom: 1%;
     }
 }

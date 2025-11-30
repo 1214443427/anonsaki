@@ -637,6 +637,7 @@ h1, h2, h3, h4, h5, h6 {
   aspect-ratio: 1;
   display: inline-block;
   vertical-align: middle;
+  cursor: pointer;
 }
 
 .link{
@@ -644,6 +645,7 @@ h1, h2, h3, h4, h5, h6 {
   color: #646cff;
   pointer-events: all;
   align-content: baseline;
+  cursor: pointer;
 }
 
 .link:hover{

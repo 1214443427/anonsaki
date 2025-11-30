@@ -1,6 +1,11 @@
 {
     "days": [
     {
+        "day": -3,
+        "category":"封面",
+        "items":[]
+    },
+    {
         "day": -2,
         "category":"目录",
         "items":[
@@ -464,6 +469,11 @@
         "day": 100,
         "category": "后记",
         "message":"本推荐集收录于爱祥吧吧群的群友，欢迎来玩！"
+    },
+    {
+        "day": -3,
+        "category":"封底",
+        "items":[]
     }
 ],
     "works":{
@@ -562,8 +572,8 @@
             "bilibili":"https://www.bilibili.com/video/BV1Y77uzCEqF/"
         },
         "千早爱音疯狂回归":{
-            "author":"",
-            "error":"not found"
+            "author":"灵",
+            "lofter":"https://ling488123.lofter.com/post/7f3aedf1_2be50e470"
         },
         "三条涨水的心脏":{
             "author":"叁水合甘草糖",
@@ -1046,7 +1056,7 @@
         "上色":{
             "author":"Eamlry",
             "lofter":"https://eamlry.lofter.com/post/79055233_2bb23f1b6",
-            "error":"potential? guess"
+            "error":"不确定"
         },
         "畏光效应":{
             "author":"安临漾原",
@@ -1170,7 +1180,8 @@
         "BanG Dream! Ave Mujica":{
             "author":"武士道",
             "author_link":"https://space.bilibili.com/1459104794",
-            "bilibili":"https://www.bilibili.com/bangumi/play/ss73081"
+            "bilibili":"https://www.bilibili.com/bangumi/play/ss73081",
+            "spoiler": "原作"
         },
         "奔向黑夜":{
             "author":"就叫白鸟千羽",

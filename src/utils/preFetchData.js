@@ -10,6 +10,9 @@ export function prefetchContentAssets() {
       '/assets/l2d/saki/data/textures/texture_01.png',
       '/assets/moon.webp',
       '/assets/happy_saki_octo_matching.webp',
+      '/assets/bilibili-icon.webp',
+      '/assets/nga-icon.webp',
+      '/assets/lofter-icon.webp',
     ];
     images.forEach(src => {
       const img = new Image();
