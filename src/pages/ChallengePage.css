@@ -442,7 +442,7 @@
 .draw-check path.animate{
     stroke-dasharray: 25; 
     stroke-dashoffset: 25;
-    animation: draw  700ms ease-in-out forwards;
+    animation: draw 700ms ease-in-out forwards;
 }
 
 @keyframes draw {
@@ -451,7 +451,7 @@
   }
 
   100% {
-    stroke-dashoffset: 0px;
+    stroke-dashoffset: 0%;
   }
 }
 
