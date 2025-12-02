@@ -61,6 +61,9 @@ function MenuBar({navigateTo, currentlyActive}) { //, isOpen, setIsOpen
               className={`menu-button ${currentlyActive=="relays"?"active":""}`} 
               onClick={()=>buttonOnClick("/relays")}>接力记录</button>
             <button 
+              className={`menu-button ${currentlyActive=="challenge"?"active":""}`} 
+              onClick={()=>buttonOnClick("/challenge")}>粉蓝笔记</button>
+            <button 
               className={`menu-button ${currentlyActive=="invitation"?"active":""}`} 
               onClick={()=>buttonOnClick("/invitation")}>邀请函</button>
         </div>
