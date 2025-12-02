@@ -13,9 +13,10 @@ import { prefetchContentAssets } from './utils/preFetchData';
 import ChallengePage from './pages/ChallengePage';
 import MotionPathPlugin from 'gsap/MotionPathPlugin';
 import MorphSVGPlugin from 'gsap/src/MorphSVGPlugin';
+import DrawSVGPlugin from 'gsap/src/DrawSVGPlugin';
 
 
-gsap.registerPlugin(useGSAP, MotionPathPlugin, MorphSVGPlugin);
+gsap.registerPlugin(useGSAP, MotionPathPlugin, MorphSVGPlugin, DrawSVGPlugin);
 
 function OctopusShowerElement({index, tl}){
   const source = index%2 == 0? "/assets/happy_saki_octo_matching.webp":"/assets/anon_octo.webp"

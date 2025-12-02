@@ -10,6 +10,29 @@ import ExternalLink from '../components/ExternalLink';
 
 const PASTEL_COLORS = ["#FEF08A", "#FBCFE8", "#BFDBFE", "#BBF7D0", "#FED7AA"]
 
+function CheckMarkSVG({animate}){
+    
+    const pathRef = useRef(null)
+
+    useGSAP(()=>{
+        if(animate){
+            gsap.fromTo(pathRef.current, {drawSVG: "0%"}, {drawSVG: "100%", duration: 0.7, ease:"power1.inOut"})
+        }
+    }, [animate])
+
+    return(
+        <span>
+            <svg className="draw-check" 
+            stroke="currentColor" strokeWidth="2" 
+            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path ref={pathRef}
+                    d="M3.4 13.2L 3.4 13.2 9.2 19l11.4-11.4"/>                                    
+            </svg>
+        </span>
+    )
+}
+
+
 function NotebookPages({title, list, className, pageNum, setSelectedWork, works, flipPage, completedWork, setCompletedWork}){
     
     const [newlyAdded, setNewlyAdded] = useState([])
@@ -117,15 +140,18 @@ function NotebookPages({title, list, className, pageNum, setSelectedWork, works,
                                     className={`check-box`}
                                     onClick={()=>toggleWork(item)}
                                     >
-                                    {completedWork.includes(item)&&
-                                        <span>
-                                            <svg className="draw-check" 
-                                            stroke="currentColor" strokeWidth="2" 
-                                            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                <path className={newlyAdded.includes(item)?"animate":""}
-                                                    d="M3.4 13.2L 3.4 13.2 9.2 19l11.4-11.4"/>                                    
-                                            </svg>
-                                        </span>}
+                                    {
+                                    completedWork.includes(item)&&
+                                        // <span>
+                                        //     <svg className="draw-check" 
+                                        //     stroke="currentColor" strokeWidth="2" 
+                                        //     viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        //         <path className={newlyAdded.includes(item)?"animate":""}
+                                        //             d="M3.4 13.2L 3.4 13.2 9.2 19l11.4-11.4"/>                                    
+                                        //     </svg>
+                                        // </span>
+                                        <CheckMarkSVG animate={newlyAdded.includes(item)}/>
+                                    }
                                 </div>
                             </div>
                             :
@@ -166,7 +192,6 @@ function ChallengePage( {pageHash} ) {
     const [pageInput, setPageInput] = useState(1)
     const [animationPlaying, setAnimationPlaying] = useState(false)
     
-    console.log(pageHash)
 
     function selectWork(work){
         if(selectedWork) return
