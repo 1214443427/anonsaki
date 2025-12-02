@@ -140,6 +140,9 @@ function App() {
       return {route: 'photo-booth', relayId: null}
     }else if (hash === '/challenge'){
       return {route: 'challenge', relayId: null}
+    }else if (hash.startsWith('/challenge/')){
+      const relayId = hash.replace('/challenge/', '');
+      return {route: 'challenge', relayId: relayId}
     }
     return {route: 'landing', relayId: null}
   }
@@ -179,7 +182,7 @@ function App() {
         case "photo-booth":
             return <PhotoBoothPage />
         case "challenge":
-            return <ChallengePage />
+            return <ChallengePage pagehash={currentRelayId}/>
         }
       })()}
     </div>

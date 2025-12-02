@@ -119,7 +119,9 @@ function NotebookPages({title, list, className, pageNum, setSelectedWork, works,
                                     >
                                     {completedWork.includes(item)&&
                                         <span>
-                                            <svg className="draw-check" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <svg className="draw-check" 
+                                            stroke="currentColor" strokeWidth="2" 
+                                            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                 <path className={newlyAdded.includes(item)?"animate":""}
                                                     d="M3.4 13.2L 3.4 13.2 9.2 19l11.4-11.4"/>                                    
                                             </svg>
@@ -147,7 +149,7 @@ function NotebookPages({title, list, className, pageNum, setSelectedWork, works,
 }
 
 
-function ChallengePage() {
+function ChallengePage( {pageHash} ) {
     const animationPageRef = useRef(null)
     const contentPageRef = useRef(null)
     const [recommendations, setRecommendations] = useState([])
@@ -156,13 +158,15 @@ function ChallengePage() {
     const [error, setError] = useState(null)
     const [bottomPage, setBottomPage] = useState(0)
     const [topPage, setTopPage] = useState(0)
-    const [currentPage, setCurrentPage] = useState(0)
+    const [currentPage, setCurrentPage] = useState(pageHash||0)
     const [selectedWork, setSelectedWork] = useState(null)
     const [completedWork, setCompletedWork] = useState([])
     const [lastVisited, setLastVisited] = useState(0)
     const [showNavigation, setShowNavigation] = useState(false)
-    const [pageInput, setPageInput] = useState()
-    const animationPlayingRef = useRef(false)
+    const [pageInput, setPageInput] = useState(1)
+    const [animationPlaying, setAnimationPlaying] = useState(false)
+    
+    console.log(pageHash)
 
     function selectWork(work){
         if(selectedWork) return
@@ -195,13 +199,13 @@ function ChallengePage() {
         if(completedWork?.length > 0){
             localStorage.setItem("completedWorks", JSON.stringify(completedWork))
         }
-        if(currentPage > lastVisited){
+        if(currentPage > 0){
             localStorage.setItem("lastVisited", JSON.stringify(currentPage))
         }
     }, [completedWork, currentPage])
 
     useGSAP(()=>{
-        const tl = gsap.timeline({paused:true, onComplete:()=>animationPlayingRef.current = false})
+        const tl = gsap.timeline({paused:true, onComplete:()=> setAnimationPlaying(false)})
         console.log(currentPage, bottomPage, topPage)
         if(currentPage == bottomPage){
             // console.log("forward")
@@ -381,7 +385,7 @@ function ChallengePage() {
     
 
     const flipPage = (pageNumber)=>{
-        if(pageNumber<0 || pageNumber>34 || animationPlayingRef.current) return
+        if(pageNumber<0 || pageNumber>34 || animationPlaying || pageNumber == currentPage) return
         setShowNavigation(false)
         const current = currentPage
         console.log(pageNumber, current)
@@ -396,8 +400,33 @@ function ChallengePage() {
             setTopPage(pageNumber)
         }
         // }
-        animationPlayingRef.current = true
+        setAnimationPlaying(true)
         setCurrentPage(pageNumber); 
+    }
+
+    function pageInputOnChange(num){
+        const intValue = parseInt(num)
+        if(!Number.isNaN(intValue)){
+            setPageInput(intValue)
+        }
+        else
+            setPageInput(1)
+    }
+
+    function getPageDisplayText(pageNumber){
+        switch (pageNumber){
+            case 0:
+                return "封面"
+            case 34: 
+                return "封底"
+            case 1:
+            case 2:
+                return "目录"
+            case 33: 
+                return "后记"
+            default:
+                return pageNumber - 2
+        }
     }
 
     return (
@@ -514,7 +543,7 @@ function ChallengePage() {
                 </div>
             </div>
             }
-            <div className='challenge-page-nav'>
+            <div className={`challenge-page-nav ${animationPlaying?"inactive":""}`}>
                 <div 
                     className='direction-buttons'
                     onClick={()=>flipPage(currentPage-1)}>
@@ -522,7 +551,8 @@ function ChallengePage() {
                 </div>
                 <button 
                     onClick={()=>setShowNavigation(true)}>
-                        {currentPage==0?"封面":currentPage==34?"封底": currentPage + " / 33" }
+                        {getPageDisplayText(currentPage)}
+                        {/* {currentPage==0?"封面":currentPage==34?"封底": currentPage + " / 33" } */}
                     </button>
                 <div 
                     className='direction-buttons'
@@ -621,28 +651,43 @@ function ChallengePage() {
                         <div className='page-selectors flex'>
                             {Array.from({ length: 35 }).map((_, index)=>(
                                 <div className={'page-selector' + (index == currentPage ? ' active':'')} key={index} onClick={()=>flipPage(index)}>
-                                    {index==0?"封面":index==34?"封底":index}
+                                    {getPageDisplayText(index)}
                                 </div>
                             ))}
                         </div>
-                        <div className='flex page-input-container'>到
-                            <input type='number' min={1} max={33} onChange={(e)=>setPageInput(e.target.value)} defaultValue={0}></input>
-                            <button onClick={()=>flipPage(pageInput)}>页</button>
-                        </div>
-                        <div>到
-                            <select 
-                                name="page-number" 
-                                id="page-number" 
-                                className='page-select'
-                                onChange={(e)=>flipPage(e.target.value)}
-                                >
-                                {Array.from({ length: 35 }).map((_, index)=>(
-                                <option className='page-select-options' key={index} value={index}>
-                                    {index==0?"封面":index==34?"封底":index}
-                                </option>
-                                ))}
-                            </select>
-                            页
+                        <div className='flex pop-up-buttons-container'>
+                            <div>
+                                <div className='flex page-input-container'>到
+                                    <input 
+                                        type='number' 
+                                        min={1} max={30} 
+                                        onChange={(e)=>pageInputOnChange(e.target.value)} 
+                                        value={pageInput}
+                                        ></input>
+                                    <button 
+                                        className='pop-up-buttons'
+                                        onClick={()=>flipPage(pageInput + 2)}>页</button>
+                                </div>
+                                <div>到
+                                    <select 
+                                        name="page-number" 
+                                        id="page-number" 
+                                        className='page-select'
+                                        onChange={(e)=>flipPage(parseInt(e.target.value))}
+                                        >
+                                        {Array.from({ length: 35 }).map((_, index)=>(
+                                            <option className='page-select-options' key={index} value={index}>
+                                            {getPageDisplayText(index)}
+                                        </option>
+                                        ))}
+                                    </select>
+                                    页
+                                </div>
+                            </div>
+                            <button 
+                                className='pop-up-buttons last-visted-button'
+                                onClick={()=>{flipPage(lastVisited)}}
+                                >上次阅览</button>
                         </div>
                     </div>
             </div>
