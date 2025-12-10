@@ -515,7 +515,7 @@
             "bilibili":"https://www.bilibili.com/video/BV1stKczyE5a"
         },
         "至无哀叹所照之处":{
-            "author":"",
+            "author": "",
             "error":"not found"
         },
         "少女们的私欲":{
@@ -597,7 +597,8 @@
         "千早爱音和丰川祥子的百日百合":{
             "author":"小梢太烧了",
             "author_link":"https://xinjinjumin399300614048.lofter.com/",
-            "lofter_collection":"https://www.lofter.com/front/blog/collection/share?collectionId=23906383"
+            "lofter_collection":"https://www.lofter.com/front/blog/collection/share?collectionId=23906383",
+            "spoiler":"含祥喵"
         },
         "假如千早爱音是键盘手":{
             "author":"宿旅遥",
@@ -934,12 +935,12 @@
         "超能事务所":{
             "author":"栖冕挽沉璧",
             "author_link":"https://bbs.nga.cn/nuke.php?func=ucp&uid=66300921",
-            "lofter":"https://bbs.nga.cn/read.php?tid=43860561"
+            "nga":"https://bbs.nga.cn/read.php?tid=43860561"
         },
         "爱祥的一千零一夜":{
             "author":"栖冕挽沉璧",
             "author_link":"https://bbs.nga.cn/nuke.php?func=ucp&uid=66300921",
-            "lofter":"https://bbs.nga.cn/read.php?tid=43617966"
+            "nga":"https://bbs.nga.cn/read.php?tid=43617966"
         },
         "捉鬼敢死队":{
             "author":"失温围巾",
@@ -1085,8 +1086,7 @@
         "余像协奏":{
             "author":"温雨瞳",
             "lofter":"https://blazehitomi.lofter.com/post/866accac_2bde3d23d",
-            "bilibili":"https://www.bilibili.com/video/BV1bCenzVEys",
-            "note":"完整版视频隐藏了"
+            "bilibili":"https://www.bilibili.com/video/BV1bCenzVEys"
         },
         "这一次不会再肘开":{
             "author":"打捞鼠",
@@ -1165,8 +1165,8 @@
             "lofter":"https://nacho33343.lofter.com/post/7713d82c_2bacc83a1"
         },
         "名喚未來的無間地獄":{
-            "author":"",
-            "error":"not found"
+            "author":"風律",
+            "lofter":"https://kazamiritune.lofter.com/post/8444d76f_2bf58cd77"
         },
         "伪阳映月-月耀残阳":{
             "author":"与羽衣共眠",

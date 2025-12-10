@@ -67,9 +67,9 @@ LAppLive2DManager.prototype.changeModel = function(gl, model)
             case 2: 
                 this.releaseModel(0, gl);
                 this.createModel();
-                this.models[0].load(gl, LAppDefine.MODEL_SAKI_MATCHING_OUTFIT, ()=>{
+                this.models[0].load(gl, LAppDefine.MODEL_ANON_MATCHING_OUTFIT, ()=>{
                     this.createModel();
-                    this.models[1].load(gl, LAppDefine.MODEL_ANON_MATCHING_OUTFIT)
+                    this.models[1].load(gl, LAppDefine.MODEL_SAKI_MATCHING_OUTFIT)
                 });
                 break;
             default:
@@ -193,10 +193,15 @@ LAppLive2DManager.prototype.thinking = function(){
     }
 }
 
-LAppLive2DManager.prototype.startMotionExpressionPair = function(motion, expression, priority = LAppDefine.PRIORITY_NORMAL){
+LAppLive2DManager.prototype.startMotionExpressionPair = function(motion, expression, priority = LAppDefine.PRIORITY_NORMAL, modelNumber){
+    if(modelNumber != null){
+        this.models[modelNumber].startMotion(motion, 0, priority)
+        this.models[modelNumber].setExpression(expression)
+    }else{
         for (var i = 0; i < this.models.length; i++){
-        this.models[i].startMotion(motion, 0, priority)
-        this.models[i].setExpression(expression)
+            this.models[i].startMotion(motion, 0, priority)
+            this.models[i].setExpression(expression)
+        }
     }
 }
 

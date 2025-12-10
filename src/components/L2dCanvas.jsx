@@ -34,7 +34,27 @@ function SplitedText({children, model}){
     )
 }
 
-function L2dCanvas( {character, offsetBottom, width, height, pausedCharacter} ) {
+function L2dCanvas( {character, offsetBottom, width, height, className="",
+    live2DConfigs = [{
+        paused: false,  
+        faceDirectionX: 0,
+        faceDirectionY: 0,
+        motion: "idle01",
+        expression: "default",
+        motionPlayback: 0,
+        positionX: -1,
+        positionY: 1.25,
+    },{
+        paused: false,  
+        faceDirectionX: 0,
+        faceDirectionY: 0,
+        motion: "idle01",
+        expression: "default",
+        motionPlayback: 0,
+        positionX: -1,
+        positionY: 1.25,
+    }]
+    }) {
     const live2DMgrRef = useRef(null)
     const model = character == "anon" ? 1 : character == "saki"? 0 : 2 ; //saki = 0
     
@@ -42,7 +62,7 @@ function L2dCanvas( {character, offsetBottom, width, height, pausedCharacter} ) 
     const canvasRef = useRef(null);
     const containerRef = useRef(null);
 
-    const dragMgrRef = useRef(null);
+    const dragMgrRef = useRef([]);
     const viewMatrixRef = useRef(null);
     const projMatrixRef = useRef(null);
     const deviceToScreenRef = useRef(null);
@@ -69,10 +89,7 @@ function L2dCanvas( {character, offsetBottom, width, height, pausedCharacter} ) 
 
         const rect = e.target.getBoundingClientRect();
         // console.log("rect", rect)
-        var sx = transformScreenX((e.clientX - rect.left)/rect.width*width);
-        var sy = transformScreenY((e.clientY - rect.top)/rect.height*height);
-        var vx = transformViewX((e.clientX - rect.left)/rect.width*width);
-        var vy = transformViewY((e.clientY - rect.top)/rect.height*height);
+
         // smile()
         const adjustedX = (e.clientX - rect.left)/rect.width
         const adjustedY = (e.clientY - rect.top)/rect.height
@@ -126,7 +143,8 @@ function L2dCanvas( {character, offsetBottom, width, height, pausedCharacter} ) 
         const width = canvas.width
         const height = canvas.height
 
-        dragMgrRef.current  = new L2DTargetPoint();
+        dragMgrRef.current[0]  = new L2DTargetPoint();
+        dragMgrRef.current[1]  = new L2DTargetPoint();
     
         const ratio = height/width;
         const left = LAppDefine.VIEW_LOGICAL_LEFT;
@@ -190,7 +208,7 @@ function L2dCanvas( {character, offsetBottom, width, height, pausedCharacter} ) 
             cancelAnimationFrame(animationFrameIdRef.current)
             isDrawStartRef.current=false
         })
-    }, [pausedCharacter])
+    }, [])
 
     useEffect(()=>{
         if(glRef.current && live2DMgrRef.current){
@@ -199,6 +217,59 @@ function L2dCanvas( {character, offsetBottom, width, height, pausedCharacter} ) 
             gsap.set(".canvas-dialog", {opacity:0})
         }
     }, [model])
+
+    useEffect(()=>{
+        // console.log(live2DConfigs)
+        if(dragMgrRef.current && live2DMgrRef.current){
+            const live2DMgr = live2DMgrRef.current
+            const dragMgr = dragMgrRef.current
+            for (let i = 0; i < live2DMgr.numModels(); i++){
+                const config = live2DConfigs[i]
+                if(config.paused){
+                    live2DMgr.getModel(i).paused = true
+                }else{
+                    live2DMgr.getModel(i).paused = false
+                }
+                dragMgr[i].setPoint(config.faceDirectionX, config.faceDirectionY)
+                const modelMatrix = live2DMgr.getModel(i).modelMatrix
+                if(modelMatrix){
+                    modelMatrix.setX(config.positionX)
+                    modelMatrix.setY(config.positionY)
+                }
+            }
+        }
+    }, [live2DConfigs])
+
+    useEffect(()=>{
+        const config = live2DConfigs[0]
+        playMotionExpression(config.motion, config.expression, 3, 5000, 0)
+    }, [live2DConfigs[0].motion, live2DConfigs?.[0].motionPlayback])
+
+    useEffect(()=>{
+        if(live2DMgrRef.current && live2DMgrRef.current.numModels() > 1){
+            const config = live2DConfigs[1]
+            playMotionExpression(config.motion, config.expression, 3, 5000, 1)
+        }
+    }, [live2DConfigs?.[1]?.motion, live2DConfigs?.[1]?.motionPlayback])
+
+    useEffect(()=>{
+        const config = live2DConfigs[0]
+        live2DMgrRef.current.models[0].setExpression(config.expression)
+    }, [live2DConfigs[0].expression])
+
+    useEffect(()=>{
+        if(live2DMgrRef.current && live2DMgrRef.current.numModels() > 1){
+            const config = live2DConfigs[1]
+            live2DMgrRef.current.models[1].setExpression(config.expression)
+        }
+    }, [live2DConfigs?.[1]?.expression])
+
+    // useEffect(()=>{
+    //         for(let i = 0; i < live2DMgrRef.current.numModels(); i++){
+    //             dragMgrRef.current[i]. 
+    //         }
+    //         // live2DMgrRef.current.getModel(0).setDrag(1,1)
+    // }, [live2DConfigs])
 
     
     // useGSAP(()=>{
@@ -300,12 +371,12 @@ function L2dCanvas( {character, offsetBottom, width, height, pausedCharacter} ) 
         }
     })
 
-    function playMotionExpression(motion, expression, priority, timeout){
-        if(timeoutId){
-            clearTimeout(timeoutId)
+    function playMotionExpression(motion, expression, priority, timeout, modelNumber){
+        if(timeoutId.current){
+            clearTimeout(timeoutId.current)
             timeoutId.current = null;
         }
-        live2DMgrRef.current.startMotionExpressionPair(motion, expression, priority)
+        live2DMgrRef.current.startMotionExpressionPair(motion, expression, priority, modelNumber)
         timeoutId.current = setTimeout(()=>{
             live2DMgrRef.current.idelExpression()
             timeoutId.current = null
@@ -323,17 +394,15 @@ function L2dCanvas( {character, offsetBottom, width, height, pausedCharacter} ) 
     function draw(){
         MatrixStack.reset();
         MatrixStack.loadIdentity();
-        const dragMgr = dragMgrRef.current
-        dragMgr.update()  
-        const live2DMgr = live2DMgrRef.current
-        live2DMgr.setDrag(dragMgr.getX(), dragMgr.getY())
-
+        
+        
         const gl = glRef.current
         gl.clear(gl.COLOR_BUFFER_BIT)
-
+        
         const projMatrix = projMatrixRef.current
         const viewMatrix = viewMatrixRef.current;
-
+        const live2DMgr = live2DMgrRef.current
+        
         MatrixStack.multMatrix(projMatrix.getArray());
         MatrixStack.multMatrix(viewMatrix.getArray());
         MatrixStack.push();
@@ -344,14 +413,21 @@ function L2dCanvas( {character, offsetBottom, width, height, pausedCharacter} ) 
             // viewMatrix.translateX(-0.5)
             
             if(model.initialized && !model.updating){
+
+                const dragMgr = dragMgrRef.current[i]
+                dragMgr.update()  
+                live2DMgr.setDrag(dragMgr.getX(), dragMgr.getY())
                 // if(pausedCharacter){
                 //     if(!pausedCharacter.includes(i)){
-                //         model.update();
+                //         model.paused = false;
+                //         model.draw(gl);
                 //     }else{
-                //         model.eyeBlink.setInterval(Number.MAX_SAFE_INTEGER)
+                //         model.mainMotionManager.stopAllMotions()
+                //         model.update();
+                //         model.draw(gl)
                 //     }
                 // }else{
-                    // }
+                // }
                 model.update();
                 model.draw(gl);
 
@@ -366,31 +442,7 @@ function L2dCanvas( {character, offsetBottom, width, height, pausedCharacter} ) 
 
     }
 
-    function transformViewX(deviceX)
-    {
-        var screenX = deviceToScreenRef.current.transformX(deviceX); 
-        return viewMatrixRef.current.invertTransformX(screenX); 
-    }
-
-
-    function transformViewY(deviceY)
-    {
-        var screenY = deviceToScreenRef.current.transformY(deviceY); 
-        return  viewMatrixRef.current.invertTransformY(screenY); 
-    }
-
-
-    function transformScreenX(deviceX)
-    {
-        return deviceToScreenRef.current.transformX(deviceX);
-    }
-
-
-    function transformScreenY(deviceY)
-    {
-        return deviceToScreenRef.current.transformY(deviceY);
-    }
-
+    
     function createModel(character)
     {
         live2DMgrRef.current.createModel(glRef.current, character)
@@ -411,7 +463,7 @@ function L2dCanvas( {character, offsetBottom, width, height, pausedCharacter} ) 
 
 
     return (
-        <div id={'gl_canvas'} style={{bottom: offsetBottom }} ref={containerRef}>
+        <div id={'gl_canvas'} className={className} style={{bottom: offsetBottom }} ref={containerRef}>
             <canvas ref={canvasRef} width={width} height={height}
                 //(canvasRef.current? canvasRef.current.offsetHeight:0)
             />

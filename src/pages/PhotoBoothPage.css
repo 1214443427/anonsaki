@@ -1,0 +1,222 @@
+.photobooth-page{
+    width: 100vw;
+    height: 100dvh;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgb(var(--anon-color-alpha));
+    padding-top: 15%;
+    gap: 10px;
+}
+
+.tools-section{
+    width: 100%;
+    height: 40%;
+    /* background-color: rgb(var(--saki-color-alpha)); */
+    /* background-color: white; */
+    /* border-top: 2px solid rgb(var(--saki-color)); */
+    border-top: 1px solid gray;
+    border-radius: 10px 10px 0px 0px;
+    /* padding-inline: 10px; */
+    padding-top: 10px;
+    background-color: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(5px);
+}
+
+
+.tools-section button{
+    all: unset;
+    text-align: center;
+    cursor: pointer;
+    box-sizing:border-box;
+    text-align: center;
+}
+
+.tab-selector{
+    margin-top: auto;
+    width: 100%;
+    justify-content: space-evenly;
+    /* border-radius: 25px; */
+}
+
+.tabs-container{
+    overflow: hidden;
+    overflow-x: hidden;
+    width: 100%;
+}
+
+.tabs{
+    width: 100%;
+    flex-shrink: 0;
+    padding-inline: 10px;
+    position: relative;
+}
+
+.character-selection, .input-container{
+    width: 100%;
+    gap: 20px;
+    justify-content: space-between;
+}
+
+.back-button{
+    width: 38px;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.back-button-svg{
+    position: absolute;
+    width: 28px;
+}
+
+#back{
+    opacity: 0;
+}
+
+.character-selection{
+    position: sticky;
+    padding-bottom: 7.5px;
+    border-bottom: 1px solid gray;
+    top: 0px;
+}
+
+.character-toggle{
+    border-radius: 25px;
+    border: 2px solid rgb(var(--saki-color));
+    flex-grow: 1;
+    position: relative;
+}
+
+.character-toggle button{
+    padding-inline: auto;
+    width: 50%;
+}
+
+.subsection-container{
+    overflow-y: scroll;
+}
+
+.tools-subsections{
+    padding: 5px 15px 5px 0px;
+    gap: 10px;
+    min-height: 100px;
+}
+
+.pill{
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    background-color: rgb(var(--saki-color-alpha));
+    z-index: -1;
+    border-radius: 25px;
+    transition-property: background-color
+}
+
+.home-subsection{
+    gap: 20px;
+    padding: 10px;
+}
+
+.home-subsection-icon{
+    height: 68px;
+    width: 68px;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    border: 1.5px solid gray;
+    background-color: rgb(var(--anon-color-alpha));
+    border-radius: 15px;
+}
+
+.tools-subsections .home-subsection-icon svg{
+    width: 32px;
+    height: 32px;
+}
+
+
+.input-container input{
+    flex-grow: 1;
+    accent-color: rgb(var(--saki-color-alpha));
+      
+}
+
+/* input[type="range"]::-moz-range-progress, {
+    
+} */
+
+.tab-selector-button{
+    padding: 5px;
+    flex-grow: 1;
+    border-top: 1px solid gray;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 50px;
+    transition: all 0.25s ease-in-out;
+    cursor: pointer;
+}
+
+.tools-subsections svg{
+    width: 15px;
+    height: 15px;
+    fill: currentColor;
+    flex-shrink: 0;
+    vertical-align: text-top;
+}
+
+.tools-section .tools-section-buttons{
+    border-radius: 5px;
+    background-color: rgb(var(--combined-color));
+    padding: 5px;
+}
+
+.tools-section .tools-section-buttons:active{
+    border: 2px solid rgb(var(--saki-color))
+}
+
+.tools-section-buttons svg{
+    display: inline;
+}
+
+.tab-selector-button.active{
+    color: rgb(var(--combined-color));
+    background-color: rgb(var(--anon-color-alpha));
+    border-top: 2px solid rgb(var(--combined-color));
+}
+
+/* .tab-selector-button:nth-child(2){
+    border-inline: 1px solid gray;
+}
+
+.tab-selector-button:nth-child(3){
+    border-right: 1px solid gray;
+} */
+
+.photo-booth-canvas{
+    --background-image: url(/assets/photobooth-assets/mall.webp);
+    width: 80%;
+    max-width: 600px;
+    border: 5px solid rgb(var(--combined-color));
+    background: var(--background-image);
+    background-size: cover;
+}
+
+.photo-booth-canvas-container{
+    width: 80%;
+    max-width: 600px;
+    aspect-ratio: 6/7;
+    justify-content: center;
+}
+
+.cat-whisker{
+    background-image: url(/assets/photobooth-assets/cat-whiskers.webp);
+    background-size: cover;
+    width: 100px;
+    height: 40px;
+}
+
+.prop-container{
+    background-color: white;
+    height: 100px;
+    width: 100px;
+}

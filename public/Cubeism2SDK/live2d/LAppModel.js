@@ -198,6 +198,13 @@ LAppModel.prototype.update = function()
 {
     // console.log("--> LAppModel.update()");
 
+    if (this.paused) { //new
+        // Freeze parameters exactly where they are
+        // Only call live2DModel.update() so that drawing works
+        this.live2DModel.update();
+        return;
+    }
+
     if(this.live2DModel == null) 
     {
         if (LAppDefine.DEBUG_LOG) console.error("Failed to update.");
@@ -459,4 +466,10 @@ LAppModel.prototype.hitTest = function(id, testX, testY)
     }
     
     return false; 
+}
+
+
+LAppModel.prototype.setXYPosition = function(x, y){
+    this.modelMatrix.setX(x)
+    this.modelMatrix.setY(y)
 }

@@ -2,7 +2,7 @@
     "version": "Sample 1.0.0",
     "layout": {
         "center_x": 0.35,
-        "center_y": 0,
+        "center_y": -0.1,
         "width": 2
     },
     "hit_areas_custom": {
@@ -32,7 +32,8 @@
     "motions": {
         "tap_body":[
             {
-                "file": "live2d/chara/341_general_rip/angry03.mtn"
+                "file": "live2d/chara/341_general_rip/angry03.mtn",
+                "image": ""
             }
         ],
         "angry03": [

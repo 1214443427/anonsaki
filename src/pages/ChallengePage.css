@@ -80,6 +80,26 @@
     height: var(--line-height);
 }
 
+.sticker-container{
+    padding-left: 20%;
+}
+
+.sticker{
+    position: relative;
+    padding: 20px;
+    background-color: #FED7AA;
+    box-shadow: -0.5px 0.5px 2px 0 rgba(0, 0, 0, 0.5);
+}
+
+.sticker-container svg{
+    width: 50px;
+    fill: rgb(var(--saki-color));
+}
+
+.sticker .tape{
+    left: 25%;
+}
+
 .notebook-page{
     background-color: #e4e4e4;
     border: 1px solid gray;
@@ -561,6 +581,19 @@
         --line-height: 1.5rem;
     }
 
+    .challenge-page .tape{
+        width: 100px;
+        height: 20px;
+        --m:
+        conic-gradient(from   45deg at left,  #0000,#000 1deg 89deg,#0000 90deg) left /51% 10px repeat-y,
+        conic-gradient(from -135deg at right, #0000,#000 1deg 89deg,#0000 90deg) right/51% 10px repeat-y;
+    }
+
+    .sticker .tape{
+        width: 150px;
+        height: 30px;
+    }
+
     .notebook-pages{
         height: 70%;
         width: auto
@@ -577,7 +610,6 @@
         gap: 10px;
         box-shadow: -2px 2px 15px 0 rgba(0, 0, 0, 0.5);
     }
-    
     
     .sticky-note .tape:nth-child(2){
         transform: translate(-30%, 75%);

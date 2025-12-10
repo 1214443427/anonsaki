@@ -92,7 +92,7 @@ function NotebookPages({title, list, className, pageNum, setSelectedWork, works,
                     <div>
                         本推荐集收录于爱祥吧吧群的群友，欢迎来玩！<br/>
                         <span className='flex'>
-                            群号👉 462035074
+                            群号🐧 462035074
                             <svg 
                                 id='copy-icon' 
                                 xmlns="http://www.w3.org/2000/svg" 
@@ -106,7 +106,11 @@ function NotebookPages({title, list, className, pageNum, setSelectedWork, works,
                                     <path id='copy' d="M192 0c-35.3 0-64 28.7-64 64l0 256c0 35.3 28.7 64 64 64l192 0c35.3 0 64-28.7 64-64l0-200.6c0-17.4-7.1-34.1-19.7-46.2L370.6 17.8C358.7 6.4 342.8 0 326.3 0L192 0zM64 128c-35.3 0-64 28.7-64 64L0 448c0 35.3 28.7 64 64 64l192 0c35.3 0 64-28.7 64-64l0-16-64 0 0 16-192 0 0-256 16 0 0-64-16 0z"/>
                             </svg><br/>
                         </span> 
-                        特别鸣谢黑洞老师的主持。<br />
+                        特别鸣谢
+                         <ConfirmationModal url={"https://tieba.baidu.com/home/main/?id=tb.1.35920242.mqYFfUu1nNU8iWRXiG6MdA&fr=frs"}>
+                            <span className='link'>昵称暂无法保存</span>
+                         </ConfirmationModal>
+                        老师的主持。<br />
                         封面图来自
                         <ConfirmationModal url={"https://yuhong01.lofter.com/post/77b6c044_34c80349d"}>
                             <span className='link'>千羽.鸿漪 </span>
@@ -159,9 +163,20 @@ function NotebookPages({title, list, className, pageNum, setSelectedWork, works,
                                 <p onClick={()=>flipPage(i + 3 + (pageNum-1)*list.length)}>{item}</p>
                             </div>
                     )}
+                    {
+                        title == "来自《Ave Mujica》播出之前的作品" && 
+                        <div className='sticker-container'>
+                            <svg viewBox="-13 0 148 148" xmlns="http://www.w3.org/2000/svg" transform="rotate(180)matrix(1, 0, 0, 1, 0, 0)">
+                                <path d="M0 2.65037C6.14938 -1.37392 12.2988 -0.103094 17.812 1.80315C25.4458 4.55662 32.8674 8.1573 39.6529 12.3934C70.3998 32.7267 88.8479 61.744 96.4816 97.539C98.39 106.647 99.0262 116.178 100.299 126.556C108.78 121.685 113.233 112.154 121.715 106.647C122.776 110.883 120.655 113.636 118.959 115.966C111.961 125.497 104.752 135.028 97.3299 144.348C93.725 148.796 90.9684 149.219 87.1515 145.407C79.0937 137.57 74.2167 128.039 72.7323 117.025C72.7323 116.601 73.3684 115.966 74.2166 114.907C83.3347 117.237 81.2142 128.886 89.06 133.122C92.4527 118.508 89.9082 104.529 86.0913 90.973C82.0624 76.7821 76.7612 63.2266 68.2793 51.1537C60.0095 39.2926 49.6191 29.7614 38.1686 20.8656C26.93 11.758 14.2072 6.03925 0 2.65037Z"></path>
+                            </svg>
+                            <div className='sticker'>
+                                <div className='tape'></div>
+                                点击以打开转跳界面
+                            </div>
+                        </div>
+                    }
                 </div>
                 <div className='notebook-footer'>
-
                 </div>
         </div>
 
