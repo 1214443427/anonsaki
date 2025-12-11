@@ -96,6 +96,10 @@
     fill: rgb(var(--saki-color));
 }
 
+#sticker-arrow{
+    transform: rotate(180deg);
+}
+
 .sticker .tape{
     left: 25%;
 }
