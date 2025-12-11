@@ -17,32 +17,43 @@ const subsections = [
         name: "expression",
         path: "M464 256a208 208 0 1 0 -416 0 208 208 0 1 0 416 0zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0zm372.2 46.3c11.8-3.6 23.7 6.1 19.6 17.8-19.8 55.9-73.1 96-135.8 96-62.7 0-116-40-135.8-95.9-4.1-11.6 7.8-21.4 19.6-17.8 34.7 10.6 74.2 16.5 116.1 16.5 42 0 81.5-6 116.3-16.6zM144 208a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm164 8c0 11-9 20-20 20s-20-9-20-20c0-33.1 26.9-60 60-60l16 0c33.1 0 60 26.9 60 60 0 11-9 20-20 20s-20-9-20-20-9-20-20-20l-16 0c-11 0-20 9-20 20z",
         display: "表情"
-    }]
+}]
 
-function transformViewX(deviceX)
-{
-    var screenX = deviceToScreenRef.current.transformX(deviceX); 
-    return viewMatrixRef.current.invertTransformX(screenX); 
+// function transformViewX(deviceX)
+// {
+//     var screenX = deviceToScreenRef.current.transformX(deviceX); 
+//     return viewMatrixRef.current.invertTransformX(screenX); 
+// }
+
+
+// function transformViewY(deviceY)
+// {
+//     var screenY = deviceToScreenRef.current.transformY(deviceY); 
+//     return  viewMatrixRef.current.invertTransformY(screenY); 
+// }
+
+
+// function transformScreenX(deviceX)
+// {
+//     return deviceToScreenRef.current.transformX(deviceX);
+// }
+
+
+// function transformScreenY(deviceY)
+// {
+//     return deviceToScreenRef.current.transformY(deviceY);
+// }
+
+function SectionButtons({onClick, displayText, image}){
+
+    return(
+        <div className='subsection-buttons' onClick={onClick}>
+            <img className='button-background-images' src={image}></img>
+            {displayText}
+        </div>
+    )
 }
 
-
-function transformViewY(deviceY)
-{
-    var screenY = deviceToScreenRef.current.transformY(deviceY); 
-    return  viewMatrixRef.current.invertTransformY(screenY); 
-}
-
-
-function transformScreenX(deviceX)
-{
-    return deviceToScreenRef.current.transformX(deviceX);
-}
-
-
-function transformScreenY(deviceY)
-{
-    return deviceToScreenRef.current.transformY(deviceY);
-}
 
 function PhotoBoothPage() {
     const [character, setCharacter] = useState("both")
@@ -152,16 +163,25 @@ function PhotoBoothPage() {
 
     const selectCharacter = contextSafe((character) => {
         if (character == selectedCharacter) return;
-        console.log("toggling")
+        if (activeSubsection == "home"){
+            return setSelectedCharacter(character)
+        }
+        const direction = character? -1 : 1
         const tl = gsap.timeline()
         tl.to(".subsection-container", {
-            opacity: 0,
+            xPercent: direction * 100,
             duration: 0.25,
+            ease: "power1.out",
             onComplete: 
             ()=> setSelectedCharacter(character)
-        })
+        }).set(
+            ".subsection-container",{
+                xPercent: (-direction) * 100,
+            }
+        )
         .to(".subsection-container", {
-            opacity: 1,
+            xPercent: 0,
+            ease: "power1.out",
             duration: 0.25, //replace with x-transition
         }, ">")
     })
@@ -199,7 +219,7 @@ function PhotoBoothPage() {
                 </div>
                 <L2dCanvas 
                     character={character} 
-                    width={600} height={700} 
+                    width={1200} height={1400} 
                     className='photo-booth-canvas'
                     live2DConfigs={live2DConfigs}
                 />
@@ -300,17 +320,16 @@ function PhotoBoothPage() {
                                 </div>
                             }
                             {activeSubsection == "motion" && 
-                                <div className='tools-subsections flex flex-col motion-subsection'>
-                                    <div className='motion-main-panel'>
+                                <div className='tools-subsections flex motion-subsection'>
                                         {Object.keys(modelData[selectedCharacter].motions).map((motion, index)=>(
-                                            <div key={index} onClick={()=>changeCharacterConfig(selectedCharacter, "motion", motion)}>
-                                                {modelData[selectedCharacter].motions[motion][0].display_name}
-                                            </div>
+                                            <SectionButtons 
+                                                key={index} 
+                                                onClick={()=>changeCharacterConfig(selectedCharacter, "motion", motion)} 
+                                                displayText={modelData[selectedCharacter].motions[motion][0].display_name}
+                                                image = {modelData[selectedCharacter].motions[motion][0].image}
+                                                />
                                         ))}
-                                    </div>
-                                    <div className='motion-side-panel'>
-                                        <button className={""} onClick={()=>{toggleCharacter(selectedCharacter)}}>暂停</button>
-                                    </div>
+                                    
                                 </div>}
                         </div>
                     </div>

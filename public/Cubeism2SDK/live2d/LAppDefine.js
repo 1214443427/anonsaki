@@ -43,7 +43,7 @@ var LAppDefine = {
     MODEL_SAKI_MATCHING_OUTFIT : "assets/l2d/saki-matching-outfit/model.json",
     
     MOTION_GROUP_IDLE : "idle01", 
-    MOTION_GROUP_TAP_BODY : "tap_body", 
+    MOTION_GROUP_TAP_BODY : "idle01", 
     MOTION_GROUP_FLICK_HEAD : "angry01", 
     MOTION_GROUP_PINCH_IN : "pinch_in", 
     MOTION_GROUP_PINCH_OUT : "pinch_out", 

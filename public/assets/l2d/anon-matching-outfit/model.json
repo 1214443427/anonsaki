@@ -29,373 +29,496 @@
         "live2d/chara/037_general_rip/texture_00.png",
         "live2d/chara/037_school_winter-2023_rip/texture_01.png"
     ],
-    "motions": {
-        "tap_body": [
-            {
-                "file": "live2d/chara/037_general_rip/angry02.mtn",
-                "display_name": "点击身体/生气02"
-            }
-        ],
-        "bye01": [
-            {
-                "file": "live2d/chara/037_general_rip/bye01.mtn",
-                "display_name": "再见01"
-            }
-        ],
-        "cry02": [
-            {
-                "file": "live2d/chara/037_general_rip/cry02.mtn",
-                "display_name": "哭泣02"
-            }
-        ],
-        "nf02": [
-            {
-                "file": "live2d/chara/037_general_rip/nf02.mtn",
-                "display_name": "普通表情02"
-            }
-        ],
-        "angry04": [
-            {
-                "file": "live2d/chara/037_general_rip/angry04.mtn",
-                "display_name": "生气04"
-            }
-        ],
-        "nf01": [
-            {
-                "file": "live2d/chara/037_general_rip/nf01.mtn",
-                "display_name": "普通表情01"
-            }
-        ],
-        "nf05": [
-            {
-                "file": "live2d/chara/037_general_rip/nf05.mtn",
-                "display_name": "普通表情05"
-            }
-        ],
-        "nnf04": [
-            {
-                "file": "live2d/chara/037_general_rip/nnf04.mtn",
-                "display_name": "新普通表情04"
-            }
-        ],
-        "nnf02": [
-            {
-                "file": "live2d/chara/037_general_rip/nnf02.mtn",
-                "display_name": "新普通表情02"
-            }
-        ],
-        "thinking01": [
-            {
-                "file": "live2d/chara/037_general_rip/thinking01.mtn",
-                "display_name": "思考01"
-            }
-        ],
-        "idle01": [
-            {
-                "file": "live2d/chara/037_general_rip/idle01.mtn",
-                "display_name": "待机01"
-            }
-        ],
-        "angry02": [
-            {
-                "file": "live2d/chara/037_general_rip/angry02.mtn",
-                "display_name": "生气02"
-            }
-        ],
-        "kime02": [
-            {
-                "file": "live2d/chara/037_general_rip/kime02.mtn",
-                "display_name": "决断02"
-            }
-        ],
-        "nnf05": [
-            {
-                "file": "live2d/chara/037_general_rip/nnf05.mtn",
-                "display_name": "新普通表情05"
-            }
-        ],
-        "nf04": [
-            {
-                "file": "live2d/chara/037_general_rip/nf04.mtn",
-                "display_name": "普通表情04"
-            }
-        ],
-        "shame01": [
-            {
-                "file": "live2d/chara/037_general_rip/shame01.mtn",
-                "display_name": "害羞01"
-            }
-        ],
-        "thinking03": [
-            {
-                "file": "live2d/chara/037_general_rip/thinking03.mtn",
-                "display_name": "思考03"
-            }
-        ],
-        "thinking02": [
-            {
-                "file": "live2d/chara/037_general_rip/thinking02.mtn",
-                "display_name": "思考02"
-            }
-        ],
-        "serious02": [
-            {
-                "file": "live2d/chara/037_general_rip/serious02.mtn",
-                "display_name": "认真02"
-            }
-        ],
-        "sad02": [
-            {
-                "file": "live2d/chara/037_general_rip/sad02.mtn",
-                "display_name": "难过02"
-            }
-        ],
-        "smile04": [
-            {
-                "file": "live2d/chara/037_general_rip/smile04.mtn",
-                "display_name": "微笑04"
-            }
-        ],
-        "shame02": [
-            {
-                "file": "live2d/chara/037_general_rip/shame02.mtn",
-                "display_name": "害羞02"
-            }
-        ],
-        "kime01": [
-            {
-                "file": "live2d/chara/037_general_rip/kime01.mtn",
-                "display_name": "决断01"
-            }
-        ],
-        "nnf_left01": [
-            {
-                "file": "live2d/chara/037_general_rip/nnf_left01.mtn",
-                "display_name": "新普通表情 左01"
-            }
-        ],
-        "nf03": [
-            {
-                "file": "live2d/chara/037_general_rip/nf03.mtn",
-                "display_name": "普通表情03"
-            }
-        ],
-        "smile03": [
-            {
-                "file": "live2d/chara/037_general_rip/smile03.mtn",
-                "display_name": "微笑03"
-            }
-        ],
-        "kandou01": [
-            {
-                "file": "live2d/chara/037_general_rip/kandou01.mtn",
-                "display_name": "感动01"
-            }
-        ],
-        "nf_left01": [
-            {
-                "file": "live2d/chara/037_general_rip/nf_left01.mtn",
-                "display_name": "普通表情 左01"
-            }
-        ],
-        "nnf01": [
-            {
-                "file": "live2d/chara/037_general_rip/nnf01.mtn",
-                "display_name": "新普通表情01"
-            }
-        ],
-        "angry03": [
-            {
-                "file": "live2d/chara/037_general_rip/angry03.mtn",
-                "display_name": "生气03"
-            }
-        ],
-        "sad01": [
-            {
-                "file": "live2d/chara/037_general_rip/sad01.mtn",
-                "display_name": "难过01"
-            }
-        ],
-        "wink01": [
-            {
-                "file": "live2d/chara/037_general_rip/wink01.mtn",
-                "display_name": "眨眼01"
-            }
-        ],
-        "serious01": [
-            {
-                "file": "live2d/chara/037_general_rip/serious01.mtn",
-                "display_name": "认真01"
-            }
-        ],
-        "angry01": [
-            {
-                "file": "live2d/chara/037_general_rip/angry01.mtn",
-                "display_name": "生气01"
-            }
-        ],
-        "cry01": [
-            {
-                "file": "live2d/chara/037_general_rip/cry01.mtn",
-                "display_name": "哭泣01"
-            }
-        ],
-        "nnf03": [
-            {
-                "file": "live2d/chara/037_general_rip/nnf03.mtn",
-                "display_name": "新普通表情03"
-            }
-        ],
-        "smile01": [
-            {
-                "file": "live2d/chara/037_general_rip/smile01.mtn",
-                "display_name": "微笑01"
-            }
-        ],
-        "kandou02": [
-            {
-                "file": "live2d/chara/037_general_rip/kandou02.mtn",
-                "display_name": "感动02"
-            }
-        ],
-        "smile02": [
-            {
-                "file": "live2d/chara/037_general_rip/smile02.mtn",
-                "display_name": "微笑02"
-            }
-        ],
-        "nnf_right01": [
-            {
-                "file": "live2d/chara/037_general_rip/nnf_right01.mtn",
-                "display_name": "新普通表情 右01"
-            }
-        ],
-        "surprised01": [
-            {
-                "file": "live2d/chara/037_general_rip/surprised01.mtn",
-                "display_name": "惊讶01"
-            }
-        ],
-        "nf_right01": [
-            {
-                "file": "live2d/chara/037_general_rip/nf_right01.mtn",
-                "display_name": "普通表情 右01"
-            }
-        ]
-    }
-    ,
-    "expressions": [
-        {
-            "name": "shame01",
-            "file": "live2d/chara/037_general_rip/shame01.exp.json"
-        },
-        {
-            "name": "bye01",
-            "file": "live2d/chara/037_general_rip/bye01.exp.json"
-        },
-        {
-            "name": "kime02",
-            "file": "live2d/chara/037_general_rip/kime02.exp.json"
-        },
-        {
-            "name": "serious02",
-            "file": "live2d/chara/037_general_rip/serious02.exp.json"
-        },
-        {
-            "name": "kandou02",
-            "file": "live2d/chara/037_general_rip/kandou02.exp.json"
-        },
-        {
-            "name": "smile02",
-            "file": "live2d/chara/037_general_rip/smile02.exp.json"
-        },
-        {
-            "name": "kandou01",
-            "file": "live2d/chara/037_general_rip/kandou01.exp.json"
-        },
-        {
-            "name": "shame02",
-            "file": "live2d/chara/037_general_rip/shame02.exp.json"
-        },
-        {
-            "name": "thinking01",
-            "file": "live2d/chara/037_general_rip/thinking01.exp.json"
-        },
-        {
-            "name": "sad02",
-            "file": "live2d/chara/037_general_rip/sad02.exp.json"
-        },
-        {
-            "name": "surprised01",
-            "file": "live2d/chara/037_general_rip/surprised01.exp.json"
-        },
-        {
-            "name": "thinking02",
-            "file": "live2d/chara/037_general_rip/thinking02.exp.json"
-        },
-        {
-            "name": "smile04",
-            "file": "live2d/chara/037_general_rip/smile04.exp.json"
-        },
-        {
-            "name": "smile01",
-            "file": "live2d/chara/037_general_rip/smile01.exp.json"
-        },
-        {
-            "name": "sad01",
-            "file": "live2d/chara/037_general_rip/sad01.exp.json"
-        },
-        {
-            "name": "angry01",
-            "file": "live2d/chara/037_general_rip/angry01.exp.json"
-        },
-        {
-            "name": "wink01",
-            "file": "live2d/chara/037_general_rip/wink01.exp.json"
-        },
-        {
-            "name": "serious01",
-            "file": "live2d/chara/037_general_rip/serious01.exp.json"
-        },
-        {
-            "name": "smile03",
-            "file": "live2d/chara/037_general_rip/smile03.exp.json"
-        },
-        {
-            "name": "cry02",
-            "file": "live2d/chara/037_general_rip/cry02.exp.json"
-        },
-        {
-            "name": "angry02",
-            "file": "live2d/chara/037_general_rip/angry02.exp.json"
-        },
-        {
-            "name": "idle01",
-            "file": "live2d/chara/037_general_rip/idle01.exp.json"
-        },
-        {
-            "name": "kime01",
-            "file": "live2d/chara/037_general_rip/kime01.exp.json"
-        },
-        {
-            "name": "thinking03",
-            "file": "live2d/chara/037_general_rip/thinking03.exp.json"
-        },
-        {
-            "name": "angry04",
-            "file": "live2d/chara/037_general_rip/angry04.exp.json"
-        },
-        {
-            "name": "angry03",
-            "file": "live2d/chara/037_general_rip/angry03.exp.json"
-        },
-        {
-            "name": "cry01",
-            "file": "live2d/chara/037_general_rip/cry01.exp.json"
-        },
-        {
-            "name": "default",
-            "file": "live2d/chara/037_general_rip/default.exp.json"
-        }
+
+  "motions": {
+    "smile01": [
+      {
+        "file": "live2d/chara/037_general_rip/smile01.mtn",
+        "display_name": "微笑01",
+        "image": "/assets/photobooth-assets/0/motion/smile01.webp"
+      }
+    ],
+    "smile02": [
+      {
+        "file": "live2d/chara/037_general_rip/smile02.mtn",
+        "display_name": "微笑02",
+        "image": "/assets/photobooth-assets/0/motion/smile02.webp"
+      }
+    ],
+    "smile03": [
+      {
+        "file": "live2d/chara/037_general_rip/smile03.mtn",
+        "display_name": "微笑03",
+        "image": "/assets/photobooth-assets/0/motion/smile03.webp"
+      }
+    ],
+    "smile04": [
+      {
+        "file": "live2d/chara/037_general_rip/smile04.mtn",
+        "display_name": "微笑04",
+        "image": "/assets/photobooth-assets/0/motion/smile04.webp"
+      }
+    ],
+
+    "wink01": [
+      {
+        "file": "live2d/chara/037_general_rip/wink01.mtn",
+        "display_name": "眨眼01",
+        "image": "/assets/photobooth-assets/0/motion/wink01.webp"
+      }
+    ],
+
+    "kandou01": [
+      {
+        "file": "live2d/chara/037_general_rip/kandou01.mtn",
+        "display_name": "感动01",
+        "image": "/assets/photobooth-assets/0/motion/kandou01.webp"
+      }
+    ],
+    "kandou02": [
+      {
+        "file": "live2d/chara/037_general_rip/kandou02.mtn",
+        "display_name": "感动02",
+        "image": "/assets/photobooth-assets/0/motion/kandou02.webp"
+      }
+    ],
+
+    "idle01": [
+      {
+        "file": "live2d/chara/037_general_rip/idle01.mtn",
+        "display_name": "待机01",
+        "image": "/assets/photobooth-assets/0/motion/idle01.webp"
+      }
+    ],
+    "tap_body": [
+      {
+        "file": "live2d/chara/037_general_rip/angry02.mtn",
+        "display_name": "点击身体/生气02",
+        "image": "/assets/photobooth-assets/0/motion/tap_body.webp"
+      }
+    ],
+
+    "nf01": [
+      {
+        "file": "live2d/chara/037_general_rip/nf01.mtn",
+        "display_name": "普通表情01",
+        "image": "/assets/photobooth-assets/0/motion/nf01.webp"
+      }
+    ],
+    "nf02": [
+      {
+        "file": "live2d/chara/037_general_rip/nf02.mtn",
+        "display_name": "普通表情02",
+        "image": "/assets/photobooth-assets/0/motion/nf02.webp"
+      }
+    ],
+    "nf03": [
+      {
+        "file": "live2d/chara/037_general_rip/nf03.mtn",
+        "display_name": "普通表情03",
+        "image": "/assets/photobooth-assets/0/motion/nf03.webp"
+      }
+    ],
+    "nf04": [
+      {
+        "file": "live2d/chara/037_general_rip/nf04.mtn",
+        "display_name": "普通表情04",
+        "image": "/assets/photobooth-assets/0/motion/nf04.webp"
+      }
+    ],
+    "nf05": [
+      {
+        "file": "live2d/chara/037_general_rip/nf05.mtn",
+        "display_name": "普通表情05",
+        "image": "/assets/photobooth-assets/0/motion/nf05.webp"
+      }
+    ],
+    "nf_left01": [
+      {
+        "file": "live2d/chara/037_general_rip/nf_left01.mtn",
+        "display_name": "普通表情 左01",
+        "image": "/assets/photobooth-assets/0/motion/nf_left01.webp"
+      }
+    ],
+    "nf_right01": [
+      {
+        "file": "live2d/chara/037_general_rip/nf_right01.mtn",
+        "display_name": "普通表情 右01",
+        "image": "/assets/photobooth-assets/0/motion/nf_right01.webp"
+      }
+    ],
+
+    "nnf01": [
+      {
+        "file": "live2d/chara/037_general_rip/nnf01.mtn",
+        "display_name": "新普通表情01",
+        "image": "/assets/photobooth-assets/0/motion/nnf01.webp"
+      }
+    ],
+    "nnf02": [
+      {
+        "file": "live2d/chara/037_general_rip/nnf02.mtn",
+        "display_name": "新普通表情02",
+        "image": "/assets/photobooth-assets/0/motion/nnf02.webp"
+      }
+    ],
+    "nnf03": [
+      {
+        "file": "live2d/chara/037_general_rip/nnf03.mtn",
+        "display_name": "新普通表情03",
+        "image": "/assets/photobooth-assets/0/motion/nnf03.webp"
+      }
+    ],
+    "nnf04": [
+      {
+        "file": "live2d/chara/037_general_rip/nnf04.mtn",
+        "display_name": "新普通表情04",
+        "image": "/assets/photobooth-assets/0/motion/nnf04.webp"
+      }
+    ],
+    "nnf05": [
+      {
+        "file": "live2d/chara/037_general_rip/nnf05.mtn",
+        "display_name": "新普通表情05",
+        "image": "/assets/photobooth-assets/0/motion/nnf05.webp"
+      }
+    ],
+    "nnf_left01": [
+      {
+        "file": "live2d/chara/037_general_rip/nnf_left01.mtn",
+        "display_name": "新普通表情 左01",
+        "image": "/assets/photobooth-assets/0/motion/nnf_left01.webp"
+      }
+    ],
+    "nnf_right01": [
+      {
+        "file": "live2d/chara/037_general_rip/nnf_right01.mtn",
+        "display_name": "新普通表情 右01",
+        "image": "/assets/photobooth-assets/0/motion/nnf_right01.webp"
+      }
+    ],
+
+    "thinking01": [
+      {
+        "file": "live2d/chara/037_general_rip/thinking01.mtn",
+        "display_name": "思考01",
+        "image": "/assets/photobooth-assets/0/motion/thinking01.webp"
+      }
+    ],
+    "thinking02": [
+      {
+        "file": "live2d/chara/037_general_rip/thinking02.mtn",
+        "display_name": "思考02",
+        "image": "/assets/photobooth-assets/0/motion/thinking02.webp"
+      }
+    ],
+    "thinking03": [
+      {
+        "file": "live2d/chara/037_general_rip/thinking03.mtn",
+        "display_name": "思考03",
+        "image": "/assets/photobooth-assets/0/motion/thinking03.webp"
+      }
+    ],
+
+    "kime01": [
+      {
+        "file": "live2d/chara/037_general_rip/kime01.mtn",
+        "display_name": "觉悟01",
+        "image": "/assets/photobooth-assets/0/motion/kime01.webp"
+      }
+    ],
+    "kime02": [
+      {
+        "file": "live2d/chara/037_general_rip/kime02.mtn",
+        "display_name": "觉悟02",
+        "image": "/assets/photobooth-assets/0/motion/kime02.webp"
+      }
+    ],
+
+    "serious01": [
+      {
+        "file": "live2d/chara/037_general_rip/serious01.mtn",
+        "display_name": "认真01",
+        "image": "/assets/photobooth-assets/0/motion/serious01.webp"
+      }
+    ],
+    "serious02": [
+      {
+        "file": "live2d/chara/037_general_rip/serious02.mtn",
+        "display_name": "认真02",
+        "image": "/assets/photobooth-assets/0/motion/serious02.webp"
+      }
+    ],
+
+    "surprised01": [
+      {
+        "file": "live2d/chara/037_general_rip/surprised01.mtn",
+        "display_name": "惊讶01",
+        "image": "/assets/photobooth-assets/0/motion/surprised01.webp"
+      }
+    ],
+
+    "bye01": [
+      {
+        "file": "live2d/chara/037_general_rip/bye01.mtn",
+        "display_name": "再见01",
+        "image": "/assets/photobooth-assets/0/motion/bye01.webp"
+      }
+    ],
+
+    "shame01": [
+      {
+        "file": "live2d/chara/037_general_rip/shame01.mtn",
+        "display_name": "害羞01",
+        "image": "/assets/photobooth-assets/0/motion/shame01.webp"
+      }
+    ],
+    "shame02": [
+      {
+        "file": "live2d/chara/037_general_rip/shame02.mtn",
+        "display_name": "害羞02",
+        "image": "/assets/photobooth-assets/0/motion/shame02.webp"
+      }
+    ],
+
+    "sad01": [
+      {
+        "file": "live2d/chara/037_general_rip/sad01.mtn",
+        "display_name": "难过01",
+        "image": "/assets/photobooth-assets/0/motion/sad01.webp"
+      }
+    ],
+    "sad02": [
+      {
+        "file": "live2d/chara/037_general_rip/sad02.mtn",
+        "display_name": "难过02",
+        "image": "/assets/photobooth-assets/0/motion/sad02.webp"
+      }
+    ],
+
+    "cry01": [
+      {
+        "file": "live2d/chara/037_general_rip/cry01.mtn",
+        "display_name": "哭泣01",
+        "image": "/assets/photobooth-assets/0/motion/cry01.webp"
+      }
+    ],
+    "cry02": [
+      {
+        "file": "live2d/chara/037_general_rip/cry02.mtn",
+        "display_name": "哭泣02",
+        "image": "/assets/photobooth-assets/0/motion/cry02.webp"
+      }
+    ],
+
+    "angry01": [
+      {
+        "file": "live2d/chara/037_general_rip/angry01.mtn",
+        "display_name": "生气01",
+        "image": "/assets/photobooth-assets/0/motion/angry01.webp"
+      }
+    ],
+    "angry02": [
+      {
+        "file": "live2d/chara/037_general_rip/angry02.mtn",
+        "display_name": "生气02",
+        "image": "/assets/photobooth-assets/0/motion/angry02.webp"
+      }
+    ],
+    "angry03": [
+      {
+        "file": "live2d/chara/037_general_rip/angry03.mtn",
+        "display_name": "生气03",
+        "image": "/assets/photobooth-assets/0/motion/angry03.webp"
+      }
+    ],
+    "angry04": [
+      {
+        "file": "live2d/chara/037_general_rip/angry04.mtn",
+        "display_name": "生气04",
+        "image": "/assets/photobooth-assets/0/motion/angry04.webp"
+      }
     ]
+  },
+
+  "expressions": [
+    {
+      "name": "smile01",
+      "file": "live2d/chara/037_general_rip/smile01.exp.json",
+      "display_name": "微笑01",
+      "image": "/assets/photobooth-assets/0/expression/smile01.webp"
+    },
+    {
+      "name": "smile02",
+      "file": "live2d/chara/037_general_rip/smile02.exp.json",
+      "display_name": "微笑02",
+      "image": "/assets/photobooth-assets/0/expression/smile02.webp"
+    },
+    {
+      "name": "smile03",
+      "file": "live2d/chara/037_general_rip/smile03.exp.json",
+      "display_name": "微笑03",
+      "image": "/assets/photobooth-assets/0/expression/smile03.webp"
+    },
+    {
+      "name": "smile04",
+      "file": "live2d/chara/037_general_rip/smile04.exp.json",
+      "display_name": "微笑04",
+      "image": "/assets/photobooth-assets/0/expression/smile04.webp"
+    },
+    {
+      "name": "wink01",
+      "file": "live2d/chara/037_general_rip/wink01.exp.json",
+      "display_name": "眨眼01",
+      "image": "/assets/photobooth-assets/0/expression/wink01.webp"
+    },
+    {
+      "name": "bye01",
+      "file": "live2d/chara/037_general_rip/bye01.exp.json",
+      "display_name": "再见01",
+      "image": "/assets/photobooth-assets/0/expression/bye01.webp"
+    },
+    {
+      "name": "kandou01",
+      "file": "live2d/chara/037_general_rip/kandou01.exp.json",
+      "display_name": "感动01",
+      "image": "/assets/photobooth-assets/0/expression/kandou01.webp"
+    },
+    {
+      "name": "kandou02",
+      "file": "live2d/chara/037_general_rip/kandou02.exp.json",
+      "display_name": "感动02",
+      "image": "/assets/photobooth-assets/0/expression/kandou02.webp"
+    },
+
+    {
+      "name": "default",
+      "file": "live2d/chara/037_general_rip/default.exp.json",
+      "display_name": "默认",
+      "image": "/assets/photobooth-assets/0/expression/default.webp"
+    },
+    {
+      "name": "idle01",
+      "file": "live2d/chara/037_general_rip/idle01.exp.json",
+      "display_name": "待机01",
+      "image": "/assets/photobooth-assets/0/expression/idle01.webp"
+    },
+
+    {
+      "name": "thinking01",
+      "file": "live2d/chara/037_general_rip/thinking01.exp.json",
+      "display_name": "思考01",
+      "image": "/assets/photobooth-assets/0/expression/thinking01.webp"
+    },
+    {
+      "name": "thinking02",
+      "file": "live2d/chara/037_general_rip/thinking02.exp.json",
+      "display_name": "思考02",
+      "image": "/assets/photobooth-assets/0/expression/thinking02.webp"
+    },
+    {
+      "name": "thinking03",
+      "file": "live2d/chara/037_general_rip/thinking03.exp.json",
+      "display_name": "思考03",
+      "image": "/assets/photobooth-assets/0/expression/thinking03.webp"
+    },
+
+    {
+      "name": "serious01",
+      "file": "live2d/chara/037_general_rip/serious01.exp.json",
+      "display_name": "认真01",
+      "image": "/assets/photobooth-assets/0/expression/serious01.webp"
+    },
+    {
+      "name": "serious02",
+      "file": "live2d/chara/037_general_rip/serious02.exp.json",
+      "display_name": "认真02",
+      "image": "/assets/photobooth-assets/0/expression/serious02.webp"
+    },
+
+    {
+      "name": "surprised01",
+      "file": "live2d/chara/037_general_rip/surprised01.exp.json",
+      "display_name": "惊讶01",
+      "image": "/assets/photobooth-assets/0/expression/surprised01.webp"
+    },
+
+    {
+      "name": "shame01",
+      "file": "live2d/chara/037_general_rip/shame01.exp.json",
+      "display_name": "害羞01",
+      "image": "/assets/photobooth-assets/0/expression/shame01.webp"
+    },
+    {
+      "name": "shame02",
+      "file": "live2d/chara/037_general_rip/shame02.exp.json",
+      "display_name": "害羞02",
+      "image": "/assets/photobooth-assets/0/expression/shame02.webp"
+    },
+
+    {
+      "name": "kime01",
+      "file": "live2d/chara/037_general_rip/kime01.exp.json",
+      "display_name": "觉悟01",
+      "image": "/assets/photobooth-assets/0/expression/kime01.webp"
+    },
+    {
+      "name": "kime02",
+      "file": "live2d/chara/037_general_rip/kime02.exp.json",
+      "display_name": "觉悟02",
+      "image": "/assets/photobooth-assets/0/expression/kime02.webp"
+    },
+
+    {
+      "name": "sad01",
+      "file": "live2d/chara/037_general_rip/sad01.exp.json",
+      "display_name": "难过01",
+      "image": "/assets/photobooth-assets/0/expression/sad01.webp"
+    },
+    {
+      "name": "sad02",
+      "file": "live2d/chara/037_general_rip/sad02.exp.json",
+      "display_name": "难过02",
+      "image": "/assets/photobooth-assets/0/expression/sad02.webp"
+    },
+
+    {
+      "name": "cry01",
+      "file": "live2d/chara/037_general_rip/cry01.exp.json",
+      "display_name": "哭泣01",
+      "image": "/assets/photobooth-assets/0/expression/cry01.webp"
+    },
+    {
+      "name": "cry02",
+      "file": "live2d/chara/037_general_rip/cry02.exp.json",
+      "display_name": "哭泣02",
+      "image": "/assets/photobooth-assets/0/expression/cry02.webp"
+    },
+
+    {
+      "name": "angry01",
+      "file": "live2d/chara/037_general_rip/angry01.exp.json",
+      "display_name": "生气01",
+      "image": "/assets/photobooth-assets/0/expression/angry01.webp"
+    },
+    {
+      "name": "angry02",
+      "file": "live2d/chara/037_general_rip/angry02.exp.json",
+      "display_name": "生气02",
+      "image": "/assets/photobooth-assets/0/expression/angry02.webp"
+    },
+    {
+      "name": "angry03",
+      "file": "live2d/chara/037_general_rip/angry03.exp.json",
+      "display_name": "生气03",
+      "image": "/assets/photobooth-assets/0/expression/angry03.webp"
+    },
+    {
+      "name": "angry04",
+      "file": "live2d/chara/037_general_rip/angry04.exp.json",
+      "display_name": "生气04",
+      "image": "/assets/photobooth-assets/0/expression/angry04.webp"
+    }
+  ]
+
 }

@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import SplitText from "gsap/SplitText";
-import { useIdle } from "../hooks/useIdle";
 import { useGSAP } from "@gsap/react";
 import useSplit from "../hooks/useSplit";
 
@@ -72,7 +71,6 @@ function L2dCanvas( {character, offsetBottom, width, height, className="",
     const [lastMouseY, setLastMouseY] = useState(0)
 
 //   const [isModelShown, setIsModelShown] = useState(false)  
-    const {isIdle, resetTimer} = useIdle(20000)
     
     const timeoutId = useRef(null);
     let brithdayAnimationTriggered = false;
@@ -243,6 +241,7 @@ function L2dCanvas( {character, offsetBottom, width, height, className="",
     useEffect(()=>{
         const config = live2DConfigs[0]
         playMotionExpression(config.motion, config.expression, 3, 5000, 0)
+        console.log(config.expression)
     }, [live2DConfigs[0].motion, live2DConfigs?.[0].motionPlayback])
 
     useEffect(()=>{

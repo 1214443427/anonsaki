@@ -444,7 +444,7 @@ function ChallengePage( {pageHash} ) {
         setCurrentPage(pageNumber); 
     }
 
-    function pageInputOnChange(num){
+    function pageInputOnBlur(num){
         const intValue = parseInt(num)
         if(!Number.isNaN(intValue)){
             setPageInput(intValue)
@@ -701,7 +701,8 @@ function ChallengePage( {pageHash} ) {
                                     <input 
                                         type='number' 
                                         min={1} max={30} 
-                                        onChange={(e)=>pageInputOnChange(e.target.value)} 
+                                        onChange={(e)=>setPageInput(e.target.value)}
+                                        onBlur={(e)=>pageInputOnBlur(e.target.value)}
                                         value={pageInput}
                                         ></input>
                                     <button 

@@ -192,6 +192,25 @@
     border-right: 1px solid gray;
 } */
 
+.motion-subsection{
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.subsection-buttons{
+    width: 30%;
+    aspect-ratio: 4/3;
+    overflow: hidden;
+    border-radius: 10px;
+    border: 2px solid rgb(var(--saki-color));
+}
+
+.button-background-images{
+    object-fit: fill;
+    max-width: 150%;
+    object-position: center;
+}
+
 .photo-booth-canvas{
     --background-image: url(/assets/photobooth-assets/mall.webp);
     width: 80%;
@@ -199,6 +218,7 @@
     border: 5px solid rgb(var(--combined-color));
     background: var(--background-image);
     background-size: cover;
+    pointer-events: none;
 }
 
 .photo-booth-canvas-container{
