@@ -3,6 +3,7 @@ import L2dCanvas from '../components/L2dCanvas'
 import "./PhotoBoothPage.css"
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap/gsap-core';
+import Spinner from "../components/Spinner"
 
 const subsections = [
     {
@@ -45,11 +46,13 @@ const subsections = [
 // }
 
 function SectionButtons({onClick, displayText, image}){
+    const [loading, setLoading] = useState(true)
 
     return(
-        <div className='subsection-buttons' onClick={onClick}>
-            <img className='button-background-images' src={image}></img>
-            {displayText}
+        <div className='subsection-buttons flex' onClick={onClick}>
+            <img className='button-background-images' src={image} onLoad={()=>setLoading(false)}></img>
+            {loading && <Spinner />}
+            <p className='button-text'>{displayText}</p>
         </div>
     )
 }
@@ -192,10 +195,10 @@ function PhotoBoothPage() {
         )))
     }
 
-    function changeCharacterConfig(character, name, value){
+    function changeCharacterConfig(name, value){
         const numericValue = parseFloat(value)
         setLive2dConfigs(prev => prev.map((config, index)=>(
-            index == character? {...config, [name]:Number.isNaN(numericValue)?value:numericValue}: config
+            index == selectedCharacter? {...config, [name]:Number.isNaN(numericValue)?value:numericValue}: config
         )))
     }
 
@@ -209,6 +212,11 @@ function PhotoBoothPage() {
                 positionY: 1.15,
             }: config
         )))
+    }
+
+    function handleMotionOnClick(motion){
+        changeCharacterConfig("motion", motion)
+        changeCharacterConfig("motionPlayback", live2DConfigs[selectedCharacter].motionPlayback+1)
     }
 
     return (
@@ -264,26 +272,26 @@ function PhotoBoothPage() {
                                     <div className='flex input-container'>
                                         <span>朝向X轴:</span>
                                         <input type="range" 
-                                            onChange={(e)=>changeCharacterConfig(selectedCharacter, "faceDirectionX", e.target.value)} 
+                                            onChange={(e)=>changeCharacterConfig("faceDirectionX", e.target.value)} 
                                             min={-1}
                                             max={1}
                                             step={0.01}
                                             value={live2DConfigs[selectedCharacter].faceDirectionX}
                                             />
-                                        <button className={""} onClick={(e)=>changeCharacterConfig(selectedCharacter, "faceDirectionX", 0)}> 
+                                        <button className={""} onClick={(e)=>changeCharacterConfig( "faceDirectionX", 0)}> 
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M65.9 228.5c13.3-93 93.4-164.5 190.1-164.5 53 0 101 21.5 135.8 56.2 .2 .2 .4 .4 .6 .6l7.6 7.2-47.9 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l128 0c17.7 0 32-14.3 32-32l0-128c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 53.4-11.3-10.7C390.5 28.6 326.5 0 256 0 127 0 20.3 95.4 2.6 219.5 .1 237 12.2 253.2 29.7 255.7s33.7-9.7 36.2-27.1zm443.5 64c2.5-17.5-9.7-33.7-27.1-36.2s-33.7 9.7-36.2 27.1c-13.3 93-93.4 164.5-190.1 164.5-53 0-101-21.5-135.8-56.2-.2-.2-.4-.4-.6-.6l-7.6-7.2 47.9 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L32 320c-8.5 0-16.7 3.4-22.7 9.5S-.1 343.7 0 352.3l1 127c.1 17.7 14.6 31.9 32.3 31.7S65.2 496.4 65 478.7l-.4-51.5 10.7 10.1c46.3 46.1 110.2 74.7 180.7 74.7 129 0 235.7-95.4 253.4-219.5z"/></svg>
                                         </button>
                                     </div>
                                     <div className='flex input-container'>
                                         <span>朝向Y轴:</span>
                                         <input type="range" 
-                                            onChange={(e)=>changeCharacterConfig(selectedCharacter, "faceDirectionY", e.target.value)} 
+                                            onChange={(e)=>changeCharacterConfig( "faceDirectionY", e.target.value)} 
                                             min={-1}
                                             max={1}
                                             step={0.01}
                                             value={live2DConfigs[selectedCharacter].faceDirectionY}
                                             />
-                                        <button className={""} onClick={(e)=>changeCharacterConfig(selectedCharacter, "faceDirectionY", 0)}> 
+                                        <button className={""} onClick={(e)=>changeCharacterConfig("faceDirectionY", 0)}> 
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M65.9 228.5c13.3-93 93.4-164.5 190.1-164.5 53 0 101 21.5 135.8 56.2 .2 .2 .4 .4 .6 .6l7.6 7.2-47.9 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l128 0c17.7 0 32-14.3 32-32l0-128c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 53.4-11.3-10.7C390.5 28.6 326.5 0 256 0 127 0 20.3 95.4 2.6 219.5 .1 237 12.2 253.2 29.7 255.7s33.7-9.7 36.2-27.1zm443.5 64c2.5-17.5-9.7-33.7-27.1-36.2s-33.7 9.7-36.2 27.1c-13.3 93-93.4 164.5-190.1 164.5-53 0-101-21.5-135.8-56.2-.2-.2-.4-.4-.6-.6l-7.6-7.2 47.9 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L32 320c-8.5 0-16.7 3.4-22.7 9.5S-.1 343.7 0 352.3l1 127c.1 17.7 14.6 31.9 32.3 31.7S65.2 496.4 65 478.7l-.4-51.5 10.7 10.1c46.3 46.1 110.2 74.7 180.7 74.7 129 0 235.7-95.4 253.4-219.5z"/></svg>
                                         </button>
                                     </div>
@@ -296,20 +304,20 @@ function PhotoBoothPage() {
                                             step={0.01}
                                             value={live2DConfigs[selectedCharacter].positionX}
                                             />                            
-                                        <button className={""} onClick={()=>changeCharacterConfig(selectedCharacter, "positionX", selectedCharacter==0?-1.35: -0.65)}> 
+                                        <button className={""} onClick={()=>changeCharacterConfig( "positionX", selectedCharacter==0?-1.35: -0.65)}> 
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M65.9 228.5c13.3-93 93.4-164.5 190.1-164.5 53 0 101 21.5 135.8 56.2 .2 .2 .4 .4 .6 .6l7.6 7.2-47.9 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l128 0c17.7 0 32-14.3 32-32l0-128c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 53.4-11.3-10.7C390.5 28.6 326.5 0 256 0 127 0 20.3 95.4 2.6 219.5 .1 237 12.2 253.2 29.7 255.7s33.7-9.7 36.2-27.1zm443.5 64c2.5-17.5-9.7-33.7-27.1-36.2s-33.7 9.7-36.2 27.1c-13.3 93-93.4 164.5-190.1 164.5-53 0-101-21.5-135.8-56.2-.2-.2-.4-.4-.6-.6l-7.6-7.2 47.9 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L32 320c-8.5 0-16.7 3.4-22.7 9.5S-.1 343.7 0 352.3l1 127c.1 17.7 14.6 31.9 32.3 31.7S65.2 496.4 65 478.7l-.4-51.5 10.7 10.1c46.3 46.1 110.2 74.7 180.7 74.7 129 0 235.7-95.4 253.4-219.5z"/></svg>
                                         </button>
                                     </div>
                                     <div className='flex input-container'>
                                         <span>位置Y轴:</span>
                                         <input type="range" 
-                                            onChange={(e)=>changeCharacterConfig(selectedCharacter, "positionY", e.target.value)} 
+                                            onChange={(e)=>changeCharacterConfig( "positionY", e.target.value)} 
                                             min={0.55}
                                             max={1.55}
                                             step={0.01}
                                             value={live2DConfigs[selectedCharacter].positionY}
                                             />
-                                        <button className={""} onClick={()=>changeCharacterConfig(selectedCharacter, "positionY", 1.15)}> 
+                                        <button className={""} onClick={()=>changeCharacterConfig("positionY", 1.15)}> 
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M65.9 228.5c13.3-93 93.4-164.5 190.1-164.5 53 0 101 21.5 135.8 56.2 .2 .2 .4 .4 .6 .6l7.6 7.2-47.9 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l128 0c17.7 0 32-14.3 32-32l0-128c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 53.4-11.3-10.7C390.5 28.6 326.5 0 256 0 127 0 20.3 95.4 2.6 219.5 .1 237 12.2 253.2 29.7 255.7s33.7-9.7 36.2-27.1zm443.5 64c2.5-17.5-9.7-33.7-27.1-36.2s-33.7 9.7-36.2 27.1c-13.3 93-93.4 164.5-190.1 164.5-53 0-101-21.5-135.8-56.2-.2-.2-.4-.4-.6-.6l-7.6-7.2 47.9 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L32 320c-8.5 0-16.7 3.4-22.7 9.5S-.1 343.7 0 352.3l1 127c.1 17.7 14.6 31.9 32.3 31.7S65.2 496.4 65 478.7l-.4-51.5 10.7 10.1c46.3 46.1 110.2 74.7 180.7 74.7 129 0 235.7-95.4 253.4-219.5z"/></svg>
                                         </button>
                                     </div>
@@ -321,15 +329,25 @@ function PhotoBoothPage() {
                             }
                             {activeSubsection == "motion" && 
                                 <div className='tools-subsections flex motion-subsection'>
-                                        {Object.keys(modelData[selectedCharacter].motions).map((motion, index)=>(
-                                            <SectionButtons 
-                                                key={index} 
-                                                onClick={()=>changeCharacterConfig(selectedCharacter, "motion", motion)} 
-                                                displayText={modelData[selectedCharacter].motions[motion][0].display_name}
-                                                image = {modelData[selectedCharacter].motions[motion][0].image}
-                                                />
-                                        ))}
-                                    
+                                    {Object.keys(modelData[selectedCharacter].motions).map((motion, index)=>(
+                                        <SectionButtons 
+                                            key={`${selectedCharacter}-${index}`} 
+                                            onClick={()=>handleMotionOnClick(motion)} 
+                                            displayText={modelData[selectedCharacter].motions[motion][0].display_name}
+                                            image = {modelData[selectedCharacter].motions[motion][0].image}
+                                            />
+                                    ))}
+                                </div>}
+                            {activeSubsection == "expression" && 
+                                <div className='tools-subsections flex expression-subsection'>
+                                    {modelData[selectedCharacter].expressions.map((expression, index)=>(
+                                        <SectionButtons 
+                                            key={`${selectedCharacter}-${index}`} 
+                                            onClick={()=>changeCharacterConfig("expression", expression.name)} 
+                                            displayText={expression.display_name}
+                                            image = {expression.image}
+                                            />
+                                    ))}
                                 </div>}
                         </div>
                     </div>
@@ -346,7 +364,7 @@ function PhotoBoothPage() {
                 <div className='flex tab-selector'>
                     <div 
                         className={`tab-selector-button ${activeTab == "model"? "active":""}`}
-                        onClick={()=>setActiveTab("model")}
+                        onClick={()=>{activeTab == "model" ? switchSubsection("home"):setActiveTab("model")}}
                         >
                         <svg className="selection-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M464 256a208 208 0 1 0 -416 0 208 208 0 1 0 416 0zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0zm177.3 63.4C192.3 335 218.4 352 256 352s63.7-17 78.7-32.6c9.2-9.6 24.4-9.9 33.9-.7s9.9 24.4 .7 33.9c-22.1 23-60 47.4-113.3 47.4s-91.2-24.4-113.3-47.4c-9.2-9.6-8.9-24.8 .7-33.9s24.8-8.9 33.9 .7zM144 208a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm164 8c0 11-9 20-20 20s-20-9-20-20c0-33.1 26.9-60 60-60l16 0c33.1 0 60 26.9 60 60 0 11-9 20-20 20s-20-9-20-20-9-20-20-20l-16 0c-11 0-20 9-20 20z"/></svg>
                         模型</div>

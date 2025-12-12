@@ -94,6 +94,7 @@
 
 .subsection-container{
     overflow-y: scroll;
+    scroll-snap-type: y mandatory
 }
 
 .tools-subsections{
@@ -192,23 +193,40 @@
     border-right: 1px solid gray;
 } */
 
-.motion-subsection{
+.motion-subsection, .expression-subsection{
     flex-wrap: wrap;
     justify-content: space-between;
 }
 
 .subsection-buttons{
-    width: 30%;
+    position: relative;
+    width: 45%;
     aspect-ratio: 4/3;
     overflow: hidden;
     border-radius: 10px;
     border: 2px solid rgb(var(--saki-color));
+    justify-content: center;
+    scroll-snap-align: center;
+    max-width: 200px;
 }
 
 .button-background-images{
-    object-fit: fill;
+    object-fit: cover;
+    width: 150%;
     max-width: 150%;
     object-position: center;
+    flex-shrink: 0;
+    z-index: 1;
+}
+
+.button-text{   
+    position: absolute;
+    bottom: 0px;
+    background-color: rgba(0, 0, 0, 0.50);
+    z-index: 2;
+    width: 100%;
+    text-align: center;
+    color: white;
 }
 
 .photo-booth-canvas{
