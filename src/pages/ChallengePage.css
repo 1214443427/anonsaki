@@ -102,6 +102,7 @@
 
 .sticker .tape{
     left: 25%;
+    z-index: unset;
 }
 
 .notebook-page{
@@ -579,6 +580,37 @@
     color: #10273f;
 }
 
+.spinning-snow-flake{
+    position: absolute;
+    height: 20%;
+    aspect-ratio: 1;
+    opacity: 1;
+    fill: white;
+}
+
+#flake-1{
+    top: 0;
+    left: 0;
+    transform: translate(-25%, -25%);
+}
+
+#flake-2{
+    bottom: 10%;
+    left: 0;
+    transform: translate(-50%, 25%);
+}
+
+#flake-3{
+    top: 50%;
+    right: 0;
+    transform: translate(20%, -50%);
+    height: 25%;
+}
+
+.spinning-snow-flake svg{
+    height: 100%;
+}
+
 @media screen and (min-width: 768px){
     
     .challenge-page{
@@ -602,11 +634,24 @@
         height: 70%;
         width: auto
     }
+
+    #flake-1{
+        top: 15%;
+        left: 20%;
+    }
+
+    #flake-2{
+        left: 10%;
+    }
+
+    #flake-3{
+        right: 10%;
+    }
     
 }
 
 
-@media screen and (min-width: 1920px), (min-height: 1000px){
+@media screen and (min-width: 1900px), (min-height: 1000px){
     .sticky-note{
         width: 500px;
         padding: 2rem;
@@ -628,6 +673,21 @@
             height: 70%;
             width: auto
         }
+
+    #flake-1{
+        top: 15%;
+        left: 25%;
+        height: 30%;
+    }
+
+    #flake-2{
+        left: 20%;
+    }
+
+    #flake-3{
+        right: 15%;
+        height: 30%;
+    }
 }
 
 @media screen and (min-width: 2550px){
@@ -645,6 +705,21 @@
 
     .challenge-page-nav button{
         width: 200px;
+    }
+
+    #flake-1{
+        top: 10%;
+        left: 25%;
+    }
+
+    #flake-2{
+        left: 10%;
+    }
+    
+
+    #flake-3{
+        right: 15%;
+        height: 40%;
     }
 
 }

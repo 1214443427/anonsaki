@@ -75,10 +75,11 @@ function L2dCanvas( {character, offsetBottom, width, height, className="",
     const timeoutId = useRef(null);
     let brithdayAnimationTriggered = false;
     const date = new Date()
-    useEffect(() => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-        const mouseHandler = (e) => {
+    // useEffect(() => {
+    //     const canvas = canvasRef.current;
+    //     if (!canvas) return;
+    const mouseHandler = (e) => {
+        // console.log("123", timeoutId.current)
         if(timeoutId.current){
             return
             // clearTimeout(timeoutId);
@@ -107,30 +108,31 @@ function L2dCanvas( {character, offsetBottom, width, height, className="",
             }, 2000)
             timeoutId.current = id
         }
-        };
-        const touchHandler = (e) => { /* handle touch */ };
+    };
+    //     const touchHandler = (e) => { /* handle touch */ };
 
-        canvas.addEventListener("mousedown", mouseHandler);
-        // canvas.addEventListener("mousemove", mouseHandler);
-        canvas.addEventListener("mouseup", mouseHandler);
-        // canvas.addEventListener("mouseout", mouseHandler);
+    //     canvas.addEventListener("mousedown", mouseHandler);
+    //     // canvas.addEventListener("mousemove", mouseHandler);
+    //     canvas.addEventListener("mouseup", mouseHandler);
+    //     // canvas.addEventListener("mouseout", mouseHandler);
 
-        canvas.addEventListener("touchstart", touchHandler);
-        canvas.addEventListener("touchend", touchHandler);
-        canvas.addEventListener("touchmove", touchHandler);
+    //     canvas.addEventListener("touchstart", touchHandler);
+    //     canvas.addEventListener("touchend", touchHandler);
+    //     canvas.addEventListener("touchmove", touchHandler);
 
-        return () => {
-        // cleanup listeners
-        canvas.removeEventListener("mousedown", mouseHandler);
-        canvas.removeEventListener("mousemove", mouseHandler);
-        canvas.removeEventListener("mouseup", mouseHandler);
-        canvas.removeEventListener("mouseout", mouseHandler);
+    //     return () => {
+    //     // cleanup listeners
+    //     canvas.removeEventListener("mousedown", mouseHandler);
+    //     canvas.removeEventListener("mousemove", mouseHandler);
+    //     canvas.removeEventListener("mouseup", mouseHandler);
+    //     canvas.removeEventListener("mouseout", mouseHandler);
 
-        canvas.removeEventListener("touchstart", touchHandler);
-        canvas.removeEventListener("touchend", touchHandler);
-        canvas.removeEventListener("touchmove", touchHandler);
-        };
-    }, [model]);
+    //     canvas.removeEventListener("touchstart", touchHandler);
+    //     canvas.removeEventListener("touchend", touchHandler);
+    //     canvas.removeEventListener("touchmove", touchHandler);
+    //     };
+    // }, [model]);
+
     useEffect(() => {
         const canvas = canvasRef.current
         // console.log(canvas)
@@ -239,9 +241,11 @@ function L2dCanvas( {character, offsetBottom, width, height, className="",
     }, [live2DConfigs])
 
     useEffect(()=>{
-        const config = live2DConfigs[0]
-        playMotionExpression(config.motion, config.expression, 3, 5000, 0)
-        console.log(config.expression)
+        if(live2DMgrRef.current && live2DMgrRef.current.numModels() > 1){
+            const config = live2DConfigs[0]
+            playMotionExpression(config.motion, config.expression, 3, 5000, 0)
+            console.log(config.expression)
+        }
     }, [live2DConfigs[0].motion, live2DConfigs?.[0].motionPlayback])
 
     useEffect(()=>{
@@ -252,8 +256,10 @@ function L2dCanvas( {character, offsetBottom, width, height, className="",
     }, [live2DConfigs?.[1]?.motion, live2DConfigs?.[1]?.motionPlayback])
 
     useEffect(()=>{
-        const config = live2DConfigs[0]
-        live2DMgrRef.current.models[0].setExpression(config.expression)
+        if(live2DMgrRef.current && live2DMgrRef.current.numModels() > 1){
+            const config = live2DConfigs[0]
+            live2DMgrRef.current.models[0].setExpression(config.expression)
+        }
     }, [live2DConfigs[0].expression])
 
     useEffect(()=>{
@@ -302,7 +308,7 @@ function L2dCanvas( {character, offsetBottom, width, height, className="",
     )
     const playBrithdayAnimation = contextSafe((character)=>{
         brithdayAnimationTriggered = true
-        // console.log("triggered")
+        console.log("brithday triggered")
         if(timeoutId.current){
             clearTimeout(timeoutId.current)
             timeoutId.current = null
@@ -371,6 +377,7 @@ function L2dCanvas( {character, offsetBottom, width, height, className="",
     })
 
     function playMotionExpression(motion, expression, priority, timeout, modelNumber){
+        console.log("playMotionExpression", motion, expression, priority, timeout, modelNumber)
         if(timeoutId.current){
             clearTimeout(timeoutId.current)
             timeoutId.current = null;
@@ -463,7 +470,7 @@ function L2dCanvas( {character, offsetBottom, width, height, className="",
 
     return (
         <div id={'gl_canvas'} className={className} style={{bottom: offsetBottom }} ref={containerRef}>
-            <canvas ref={canvasRef} width={width} height={height}
+            <canvas ref={canvasRef} width={width} height={height} onClick={mouseHandler}
                 //(canvasRef.current? canvasRef.current.offsetHeight:0)
             />
                 <div className='canvas-dialog non-select'>

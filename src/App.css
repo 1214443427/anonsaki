@@ -167,6 +167,21 @@ h1, h2, h3, h4, h5, h6 {
   text-decoration: none;
 }
 
+.snow-shower-container{
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.snow-flakes{
+  position: absolute;
+  z-index: 1;
+  font-size: 2rem;
+}
+
 /* Landing Page */
 
 .landing-page{
@@ -220,11 +235,32 @@ h1, h2, h3, h4, h5, h6 {
   drop-shadow(-2px 2px white) drop-shadow(-2px -2px white);
 }
 
+.christmas-hat{
+  position: absolute;
+  top: 0px;
+  left: 50%;
+  transform: translate(-30%, -10%);
+  z-index: 1;
+  width: 12vw;
+}
+
+.octo-container{
+  filter: drop-shadow(2px 2px white) drop-shadow(2px -2px white)
+  drop-shadow(-2px 2px white) drop-shadow(-2px -2px white);
+  -webkit-filter:  drop-shadow(2px 2px white) drop-shadow(2px -2px white)
+  drop-shadow(-2px 2px white) drop-shadow(-2px -2px white);
+}
+
+#saki-hat{
+  transform: rotateY(180deg) translate(70%, -5%);
+}
+
 .drag-me-message{
   font-size: 2rem;
   opacity: 0;
   position: absolute;
   transition: opacity 0.5s ease;
+  z-index: 2;
 }
 
 .dmm--a1,.dmm--s2{
@@ -458,6 +494,7 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  z-index: 2;
 }
 
 .character-page-octo{
@@ -479,7 +516,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .anon-border{
   --border-color: rgba(var(--anon-color), 1);
-  z-index: 2;
   background-image: url(/assets/MyGO!!!!!_logo.png);
   background-repeat: no-repeat;
   background-position: bottom 5% left 5%;
@@ -612,6 +648,7 @@ h1, h2, h3, h4, h5, h6 {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   place-items: center;
+  z-index: 2;
 }
 
 .spinner-container {
@@ -680,6 +717,7 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
   cursor: pointer;
   pointer-events: all;
+  z-index: 2;
 }
 
 .tape{
@@ -768,6 +806,10 @@ h1, h2, h3, h4, h5, h6 {
 @media screen and (max-width: 769px){
   .octo-image{
     width: 45vw;
+  }
+
+  .christmas-hat{
+    width: 20vw;
   }
 
   .saki-border{
@@ -1143,6 +1185,22 @@ h1, h2, h3, h4, h5, h6 {
   height: 15vw;
 }
 
+#anon-laser .christmas-hat{
+  top: -30%;
+}
+
+#saki-laser .christmas-hat{
+  top: -35%;
+  left: -20%;
+  transform: scaleX(-1);
+}
+
+.octo-image .christmas-hat{
+  width: 10vw;
+  height: 10vw;
+  top: -20%;
+}
+
 #heart{
   position: absolute;
   left: -40%;
@@ -1150,6 +1208,7 @@ h1, h2, h3, h4, h5, h6 {
   /* width: 5000px; */
   /* width: 17.5%; */
   rotate: 180deg;
+  z-index: 2;
 }
 
 .octo-easteregg{

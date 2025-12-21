@@ -6,6 +6,7 @@
     background-color: rgb(var(--anon-color-alpha));
     padding-top: 15%;
     gap: 10px;
+    overflow-x: hidden;
 }
 
 .tools-section{
@@ -20,6 +21,7 @@
     padding-top: 10px;
     background-color: rgba(255, 255, 255, 0.25);
     backdrop-filter: blur(5px);
+    overflow-x: hidden;
 }
 
 
@@ -40,12 +42,12 @@
 
 .tabs-container{
     overflow: hidden;
-    overflow-x: hidden;
-    width: 100%;
+    justify-content: flex-start;
+    width: 400%;
 }
 
 .tabs{
-    width: 100%;
+    width: 25%;
     flex-shrink: 0;
     padding-inline: 10px;
     position: relative;
@@ -92,9 +94,19 @@
     width: 50%;
 }
 
-.subsection-container{
+.subsection-container, .decor-tab, .background-tab{
     overflow-y: scroll;
     scroll-snap-type: y mandatory
+}
+
+.decor-tab, .background-tab{
+    padding: 10px;
+    gap: 10px;
+}
+.decor-tab .button-background-images{
+    width: 100%;
+    max-width: 100%;
+    object-fit: contain;
 }
 
 .tools-subsections{
@@ -119,8 +131,8 @@
 }
 
 .home-subsection-icon{
-    height: 68px;
-    width: 68px;
+    height: 70px;
+    width: 70px;
     justify-content: center;
     align-items: center;
     padding: 5px;
@@ -193,7 +205,7 @@
     border-right: 1px solid gray;
 } */
 
-.motion-subsection, .expression-subsection{
+.motion-subsection, .expression-subsection, .decor-tab, .background-tab{
     flex-wrap: wrap;
     justify-content: space-between;
 }
@@ -208,6 +220,11 @@
     justify-content: center;
     scroll-snap-align: center;
     max-width: 200px;
+    cursor: pointer;
+}
+
+.subsection-buttons.active{
+    border: 5px solid rgb(var(--anon-color));
 }
 
 .button-background-images{
@@ -230,31 +247,100 @@
 }
 
 .photo-booth-canvas{
-    --background-image: url(/assets/photobooth-assets/mall.webp);
-    width: 80%;
     max-width: 600px;
-    border: 5px solid rgb(var(--combined-color));
-    background: var(--background-image);
-    background-size: cover;
     pointer-events: none;
 }
 
 .photo-booth-canvas-container{
+    border: 5px solid rgb(var(--combined-color));
+    --background-image: url(/assets/photobooth-assets/bg/mall.webp);
+    background: var(--background-image);
+    background-size: cover;
     width: 80%;
     max-width: 600px;
     aspect-ratio: 6/7;
     justify-content: center;
+    position: relative;
 }
 
 .cat-whisker{
     background-image: url(/assets/photobooth-assets/cat-whiskers.webp);
     background-size: cover;
     width: 100px;
-    height: 40px;
+    height: 50px;
 }
 
 .prop-container{
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.decoration-container{
+    --width: 100px;
+    --height: 100px;
+    --left: 50px;
+    --top: 50px;
+    --rotation: 0deg;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: var(--width);
+    height: var(--height);
+    left: var(--left);
+    top: var(--top);
+    transform: rotate(var(--rotation));
+    z-index: 50;
+    justify-content: center;
+    align-items: center;
+    transform-origin: center center 0px;
+    cursor: grab;
+}
+
+.decoration-assets-container{
+    width: 85%;
+}
+
+.edit-overlay{
+    position: absolute;
+    border: 2px solid rgb(var(--anon-color));
+    height: 100%;
+    width: 100%;
+    top: 0;
+}
+
+.overlay-buttons{
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+}
+
+.resizing-editor{
     background-color: white;
-    height: 100px;
-    width: 100px;
+    border: 2px solid rgb(var(--saki-color));
+    top: -10px;
+    left: -10px;
+    cursor: nwse-resize;
+    fill: rgb(var(--saki-color));
+}
+
+.resizing-editor svg{
+    rotate: 90deg;
+}
+
+.overlay-close-button{
+    top: -10px;
+    right: -10px;
+    background-color: red;
+}
+
+.rotation-button{
+    background-color: rgb(var(--saki-color-alpha));
+    fill: white;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
 }

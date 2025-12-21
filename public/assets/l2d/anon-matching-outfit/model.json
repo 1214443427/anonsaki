@@ -78,7 +78,7 @@
     "kandou02": [
       {
         "file": "live2d/chara/037_general_rip/kandou02.mtn",
-        "display_name": "感动02",
+        "display_name": "感动02(⚠会造成bug)",
         "image": "/assets/photobooth-assets/0/motion/kandou02.webp"
       }
     ],

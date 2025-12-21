@@ -14,9 +14,51 @@ import ChallengePage from './pages/ChallengePage';
 import MotionPathPlugin from 'gsap/MotionPathPlugin';
 import MorphSVGPlugin from 'gsap/src/MorphSVGPlugin';
 import DrawSVGPlugin from 'gsap/src/DrawSVGPlugin';
+import Draggable from 'gsap/src/Draggable';
+import { isChristmas } from './utils/util';
 
 
-gsap.registerPlugin(useGSAP, MotionPathPlugin, MorphSVGPlugin, DrawSVGPlugin);
+const isChristmasTime = isChristmas()
+gsap.registerPlugin(useGSAP, MotionPathPlugin, MorphSVGPlugin, DrawSVGPlugin, Draggable);
+
+function SnowShowerElement(){
+  const ref = useRef(null)
+  const [randomStyle, setRandomStyle] = useState(()=>({
+         snowPattern : gsap.utils.random(["❄", "❅", "❆"]),
+         yoyo: gsap.utils.random([true, false]),
+         xSpeed: gsap.utils.random(0, 0.3)
+      })
+    )
+    useGSAP(()=>{
+      const tl = gsap.timeline({repeat: -1, repeatRefresh: true})
+      tl.set(
+        ref.current, {
+          x: 0,
+          y: 0, 
+          color: () => gsap.utils.random(["#fffafa", "#ffffff", "#ecfffd", "#d0eceb"]),
+          opacity: 1,
+          left: () =>`${gsap.utils.random(0,100)}vw`,
+          yPercent: -100,
+          scale: () => gsap.utils.random(0.5,1.5)
+        }).to(ref.current, 
+        {
+          y: "100vh",
+          opacity: 0,
+          duration: ()=>20/gsap.utils.random(1,2),
+          delay: () =>gsap.utils.random(0,20),
+          rotate: () =>gsap.utils.random(-360,360),
+          ease: "none",
+        }).to(ref.current, {
+          x: () =>`${gsap.utils.random(-25,25)}vw`,
+          duration: () =>gsap.utils.random(10,20),
+          ease: "power2.inOut"
+      }, "<")
+      tl.progress(Math.random())
+    }, [])
+    return(
+      <div ref={ref} className='snow-flakes non-select'>{randomStyle.snowPattern}</div>
+  )
+}
 
 function OctopusShowerElement({index, tl}){
   const source = index%2 == 0? "/assets/happy_saki_octo_matching.webp":"/assets/anon_octo.webp"
@@ -121,6 +163,7 @@ function App() {
   }
 
   const octopusShower = Array.from({ length: 50 }).map((_, i)=>(<OctopusShowerElement key={i} index={i} tl={timelineRef.current}/>))
+  const SnowShower = Array.from({ length: 50 }).map((_, i)=>(<SnowShowerElement key={i}/>))
   const playOctopusShower = contextSafe(() => {timelineRef.current.play()})
 
   const parseRoute = () => {
@@ -166,6 +209,11 @@ function App() {
   return (
     <div className='layout'>
       {easterEgg.length == NUM_OF_EASTEREGGS && octopusShower}
+      {isChristmasTime && currentRoute!= "invitation" && currentRoute!= "challenge" &&
+       <div className='snow-shower-container'>
+        {SnowShower}
+       </div>
+       }
       <MenuBar navigateTo={navigateTo} currentlyActive={currentRoute}/>
       {(()=>{ 
         switch(currentRoute){

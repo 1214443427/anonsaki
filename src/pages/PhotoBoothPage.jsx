@@ -4,6 +4,154 @@ import "./PhotoBoothPage.css"
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap/gsap-core';
 import Spinner from "../components/Spinner"
+import Draggable from 'gsap/src/Draggable';
+
+const colors = {
+blue: 'rgb(119, 153, 204)',
+pink: 'rgb(255, 136, 153)',
+purple: 'rgb(186, 145, 204)'
+};
+
+const BACKGROUNDS = [
+    {
+        name: "商城",
+        url:"/assets/photobooth-assets/bg/mall.webp"
+    },
+    {
+        name: "樱花",
+        url:"/assets/photobooth-assets/bg/sakura.webp"
+    },
+    {
+        name: "烟花",
+        url:"/assets/photobooth-assets/bg/fireworks.webp"
+    },
+    {
+        name: "街头",
+        url:"/assets/photobooth-assets/bg/street-view.webp"
+    },
+    {
+        name: "排练室",
+        url:"/assets/photobooth-assets/bg/studio.webp"
+    },
+    {
+        name: "天台",
+        url:"/assets/photobooth-assets/bg/roof.webp"
+    },
+    {
+        name: "学生会室",
+        url:"/assets/photobooth-assets/bg/student-council-room.webp"
+    },
+    {
+        name: "海边",
+        url:"/assets/photobooth-assets/bg/sea.webp"
+    },
+    {
+        name: "阁楼",
+        url:"/assets/photobooth-assets/bg/anon-room.webp"
+    },
+    {
+        name: "音乐教室",
+        url:"/assets/photobooth-assets/bg/music-room.webp"
+    },
+    {
+        name: "桌球室",
+        url:"/assets/photobooth-assets/bg/saki-room.webp"
+    },
+]
+
+const DECORATION_TEMPLATES = [
+    {
+        id: 'cat-whiskers',
+        name: '胡须',
+        type: 'decoration',
+        url: "/assets/photobooth-assets/decorations/cat-whiskers.webp",
+        width: 80,
+        height: 40
+    },    
+    {
+        id: 'cat-ear-pink',
+        name: '粉猫耳',
+        type: 'decoration',
+        url: "/assets/photobooth-assets/decorations/cat-ear.png",
+        width: 100,
+        height: 50
+    },
+    {
+        id: 'cat-ear-blue',
+        name: '蓝猫耳',
+        type: 'decoration',
+        url: "/assets/photobooth-assets/decorations/cat-ear-blue.png",
+        width: 100,
+        height: 50
+    },
+    {
+        id: 'blush',
+        name: '腮红',
+        type: 'decoration',
+        url: "/assets/blushing.png",
+        width: 60,
+        height: 20
+    },
+    {
+        id: 'sunglasses',
+        name: '墨镜',
+        type: 'decoration',
+        url: "/assets/photobooth-assets/decorations/sunglasses.webp",
+        width: 80,
+        height: 30
+    },
+    {
+        id: 'glasses',
+        name: '眼镜',
+        type: 'decoration',
+        url: "/assets/photobooth-assets/decorations/glasses.webp",
+        width: 80,
+        height: 30
+    },
+    {
+        id: 'heart-blue',
+        name: '蓝心',
+        type: 'decoration',
+        url: "/assets/blue_heart.png",
+        width: 50,
+        height: 50
+    },
+    {
+        id: 'heart',
+        name: '粉心',
+        type: 'decoration',
+        url: "/assets/pink_heart.png",
+        width: 50,
+        height: 50
+    },
+    {
+        id: 'star',
+        name: '星星',
+        type: 'decoration',
+        svg: (
+        <svg viewBox="0 0 50 50" className="w-full h-full">
+            <path d="M25,5 L30,15 L40,17 L32,25 L35,35 L25,30 L15,35 L18,25 L10,17 L20,15 Z" 
+            fill={colors.blue} stroke="white" strokeWidth="2"/>
+        </svg>
+        ),
+        width: 50,
+        height: 50
+    },
+    {
+        id: 'sparkle',
+        name: '闪耀',
+        type: 'decoration',
+        svg: (
+        <svg viewBox="0 0 40 40" className="w-full h-full">
+            <path d="M20,5 L22,18 L35,20 L22,22 L20,35 L18,22 L5,20 L18,18 Z" 
+            fill="white" stroke={colors.blue} strokeWidth="2"/>
+        </svg>
+        ),
+        width: 40,
+        height: 40
+    }
+];
+
 
 const subsections = [
     {
@@ -45,14 +193,193 @@ const subsections = [
 //     return deviceToScreenRef.current.transformY(deviceY);
 // }
 
-function SectionButtons({onClick, displayText, image}){
-    const [loading, setLoading] = useState(true)
+function SectionButtons({onClick, displayText, image, active, svg}){
+    const [loading, setLoading] = useState(svg?false:true)
 
     return(
-        <div className='subsection-buttons flex' onClick={onClick}>
-            <img className='button-background-images' src={image} onLoad={()=>setLoading(false)}></img>
+        <div className={`subsection-buttons flex ${active?"active": ""}`} onClick={onClick}>
+            {image && <img className='button-background-images non-select' src={image} onLoad={()=>setLoading(false)}></img>}
+            {svg && svg}
             {loading && <Spinner />}
             <p className='button-text'>{displayText}</p>
+        </div>
+    )
+}
+
+function Decorations({url, isSelected, svg, width, height, onClick, onDelete, canvasContainerRef}){
+    const [scale, setScale] = useState(1)
+    const [rotation, setRotation] = useState(0)
+    const [center, setCenter] = useState({x: 200, y: 200})
+    const ref = useRef(null)
+    const parentDragRef = useRef(null)
+    // useGSAP(()=>{
+    //     parentDragRef.current = Draggable.create(ref.current,
+    //         {
+    //             type: 'x, y',
+    //             onPress: onClick,
+    //             bounds: ".photo-booth-canvas-container",
+    //             cancel: ".resizing-editor",
+    //             dragClickables: true,
+    //         }
+    //     ) 
+    // }, [])
+    // useGSAP(()=>{
+    //     const tl = gsap.timeline({paused:true})
+    //     tl.to(".resizing-editor", {
+    //         x: 3 * width,
+    //         y: 3 * height,
+    //         ease: "none"
+    //     })
+    //     Draggable.create(".resizing-editor",
+    //         {
+    //             type: 'x, y',
+    //             onDragStart: function() {
+    //                 parentDragRef.current[0].disable()
+    //             },
+    //             onDrag: function(){
+    //                 let progress = gsap.utils.clamp(0, 1, (this.x) /(3 * width))
+    //                 tl.progress(progress)
+    //             },
+    //             onDragEnd: function() {
+    //                 parentDragRef.current[0].enable()
+    //             },
+    //         }
+    //     ) 
+    // }, [isSelected])
+    const [isDragging, setIsDragging] = useState(false)
+    const [isResizing, setIsResizing] = useState(false)
+    const [isRotating, setIsRotating] = useState(false)
+    const [anchorStart, setAnchorStart] = useState()
+
+    function handleDragStart(e){
+        onClick()
+        setIsDragging(true)
+        updateAnchorStart(e)
+        // parentDragRef.current[0].disable()
+    }
+
+    function handleResizeStart(e){
+        setIsResizing(true)
+        updateAnchorStart(e)
+    }
+    
+    function handleRotationStart(e){
+        setIsRotating(true)
+        updateAnchorStart(e)
+    }
+    
+    function updateAnchorStart(e){
+        e.stopPropagation()
+        const rect = canvasContainerRef.current?.getBoundingClientRect();
+        let x 
+        let y 
+        if (e.touches) {
+            x = e.touches[0].clientX - (rect?.left || 0);
+            y = e.touches[0].clientY - (rect?.top || 0);
+        }else{
+            x = e.clientX - (rect?.left || 0);
+            y = e.clientY - (rect?.top || 0);
+        }
+        const initialDistance = Math.sqrt(Math.pow(x - center.x, 2) + Math.pow(y - center.y, 2));
+        const angle = Math.atan2(y - center.y, x - center.x) * 180 / Math.PI;
+        setAnchorStart({x: x, y: y, distance: initialDistance, scale: scale, angle: angle - rotation})
+    }
+
+    useEffect(() => {
+        function handleMouseMove(e) {
+            if (!canvasContainerRef.current) return;
+        
+            const rect = canvasContainerRef.current.getBoundingClientRect();
+            let x 
+            let y
+            if (e.touches) {
+                x = e.touches[0].clientX - rect.left;
+                y = e.touches[0].clientY - rect.top;
+            }
+            else{
+                x = e.clientX - rect.left;
+                y = e.clientY - rect.top;
+            }
+            console.log(x, y) 
+            if(isDragging){
+                setCenter({
+                    x: center.x + x - anchorStart.x,
+                    y: center.y + y - anchorStart.y
+                })
+            }else if(isResizing){
+                const deltaX = x - anchorStart.x
+                const deltaY = y - anchorStart.y
+                const currentDistance = Math.sqrt(Math.pow(x - center.x, 2) + Math.pow(y - center.y, 2));
+                const distanceRatio = currentDistance / anchorStart.distance;
+                const newScale = Math.max(0.3, Math.min(3, anchorStart.scale * distanceRatio));
+                // console.log(deltaX, deltaY, newScale)
+                setScale(newScale)
+            }else if(isRotating){
+                const normalize = a => ((a + 180) % 360) - 180
+                const angle = Math.atan2(y - center.y, x - center.x) * 180 / Math.PI;
+                setRotation(normalize(angle - anchorStart.angle));
+            }
+        }
+        function handleDragEnd(){
+            setIsDragging(false)
+            setIsResizing(false)
+            setIsRotating(false)
+            // parentDragRef.current[0].enable()
+        }
+        if(isDragging||isResizing||isRotating){
+            window.addEventListener('mousemove', handleMouseMove);
+            window.addEventListener('mouseup', handleDragEnd);
+            window.addEventListener('touchmove', handleMouseMove, { passive: false });
+            window.addEventListener('touchend', handleDragEnd);
+        }
+        return () => {
+            window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('mouseup', handleDragEnd);
+            window.removeEventListener('touchmove', handleMouseMove, { passive: false });
+            window.removeEventListener('touchend', handleDragEnd);
+        }
+    }, [isDragging, isResizing, isRotating, anchorStart]);
+
+    return(
+        <div 
+            className='decoration-container flex' 
+            ref={ref}
+            style={{
+                "--width": `${width * scale}px`,
+                "--height": `${height * scale}px`,
+                "--left": `${center.x - width/2 * scale}px`,
+                "--top": `${center.y - height/2 * scale}px`,
+                "--rotation": `${rotation}deg`
+            }}
+            onMouseDown={(e)=>handleDragStart(e)}
+            onClick={(e)=>e.stopPropagation()}
+            onTouchStart={(e)=>handleDragStart(e)}
+        >
+            <div className='decoration-assets-container non-select'>
+                {url && <img src={url}></img>}
+                {svg && svg}
+            </div>
+            {isSelected && 
+                <div className='edit-overlay'>
+                    <div className='resizing-editor overlay-buttons flex' 
+                        onMouseDown={(e)=>handleResizeStart(e)}
+                        onTouchStart={(e)=>handleResizeStart(e)}
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="12px" height="12px"><path d="M344 0L488 0c13.3 0 24 10.7 24 24l0 144c0 9.7-5.8 18.5-14.8 22.2s-19.3 1.7-26.2-5.2l-39-39-87 87c-9.4 9.4-24.6 9.4-33.9 0l-32-32c-9.4-9.4-9.4-24.6 0-33.9l87-87-39-39c-6.9-6.9-8.9-17.2-5.2-26.2S334.3 0 344 0zM168 512L24 512c-13.3 0-24-10.7-24-24L0 344c0-9.7 5.8-18.5 14.8-22.2S34.1 320.2 41 327l39 39 87-87c9.4-9.4 24.6-9.4 33.9 0l32 32c9.4 9.4 9.4 24.6 0 33.9l-87 87 39 39c6.9 6.9 8.9 17.2 5.2 26.2S177.7 512 168 512z"/></svg>
+                        </div>
+                    <div className='overlay-close-button overlay-buttons flex' onClick={onDelete}>
+                        <svg fill="#fff" height="10px" width="10px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460.775 460.775">
+                            <path d="M285.08,230.397L456.218,59.27c6.076-6.077,6.076-15.911,0-21.986L423.511,4.565c-2.913-2.911-6.866-4.55-10.992-4.55  c-4.127,0-8.08,1.639-10.993,4.55l-171.138,171.14L59.25,4.565c-2.913-2.911-6.866-4.55-10.993-4.55  c-4.126,0-8.08,1.639-10.992,4.55L4.558,37.284c-6.077,6.075-6.077,15.909,0,21.986l171.138,171.128L4.575,401.505  c-6.074,6.077-6.074,15.911,0,21.986l32.709,32.719c2.911,2.911,6.865,4.55,10.992,4.55c4.127,0,8.08-1.639,10.994-4.55  l171.117-171.12l171.118,171.12c2.913,2.911,6.866,4.55,10.993,4.55c4.128,0,8.081-1.639,10.992-4.55l32.709-32.719  c6.074-6.075,6.074-15.909,0-21.986L285.08,230.397z"/>
+                        </svg>
+                    </div>
+                    <div className='rotation-button overlay-buttons flex'
+                        onMouseDown={(e)=>handleRotationStart(e)}
+                        onTouchStart={(e)=>handleRotationStart(e)}
+                        >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="12px" height="12px"><path d="M436.7 74.7L448 85.4 448 32c0-17.7 14.3-32 32-32s32 14.3 32 32l0 128c0 17.7-14.3 32-32 32l-128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32l47.9 0-7.6-7.2c-.2-.2-.4-.4-.6-.6-75-75-196.5-75-271.5 0s-75 196.5 0 271.5 196.5 75 271.5 0c8.2-8.2 15.5-16.9 21.9-26.1 10.1-14.5 30.1-18 44.6-7.9s18 30.1 7.9 44.6c-8.5 12.2-18.2 23.8-29.1 34.7-100 100-262.1 100-362 0S-25 175 75 75c99.9-99.9 261.7-100 361.7-.3z"/></svg>
+                    </div>
+                </div>
+            }
         </div>
     )
 }
@@ -71,6 +398,12 @@ function PhotoBoothPage() {
     const [activeSubsection, setActiveSubsection] = useState("home")
     // const [pausedCharacter, setPausedCharacter] = useState([])
     // const [turnCords, setTurnCords] = useState([{x:0, y:0}, {x:0, y:0}])
+    
+    const [decorations, setDecorations] = useState([])
+    const [selectedDecorations, setSelectedDecorations] = useState(null)
+    const currentId = useRef(0)
+    const canvasContainerRef = useRef(null)
+    const [background, setBackground] = useState(0)
     
     useEffect(()=>{
         async function fetchData(){
@@ -115,7 +448,7 @@ function PhotoBoothPage() {
     useGSAP(()=>{
         const index = activeTab == "model"? 0: activeTab == "decor"? 1: activeTab == "background"? 2: 3
         gsap.to(".tabs-container", {
-            xPercent: index * -100,
+            xPercent: index * -25,
             duration: 0.25
         })
     }, [activeTab])
@@ -221,9 +554,31 @@ function PhotoBoothPage() {
 
     return (
         <div className='photobooth-page flex flex-col'>
-            <div className='photo-booth-canvas-container flex flex-col'>
+            <div 
+                className='photo-booth-canvas-container flex flex-col' 
+                style={{"--background-image": `url(${BACKGROUNDS[background].url})`}}
+                ref={canvasContainerRef}
+                onClick={(e)=>{
+                    // if (e.target.dataset.drag)
+                    setSelectedDecorations(null)
+                }}>
                 <div className='prop-container'>
-                    <div className='cat-whisker'></div>
+                    {decorations.map((decoration, index)=>(
+                        <Decorations 
+                            key={decoration.id}
+                            url={decoration.url}
+                            svg={decoration.svg}
+                            isSelected={selectedDecorations == decoration.id}
+                            // rotation={decoration.rotation}
+                            width={decoration.width}
+                            height={decoration.height}
+                            canvasContainerRef = {canvasContainerRef}
+                            onClick={()=>{
+                                setSelectedDecorations(decoration.id)
+                            }}
+                            onDelete={()=>setDecorations((prev)=>prev.filter((decor)=>decor.id!=decoration.id))}
+                        />))
+                    }
                 </div>
                 <L2dCanvas 
                     character={character} 
@@ -298,7 +653,7 @@ function PhotoBoothPage() {
                                     <div className='flex input-container'>
                                         <span>位置X轴:</span>
                                         <input type="range" 
-                                            onChange={(e)=>changeCharacterConfig(selectedCharacter, "positionX", e.target.value)} 
+                                            onChange={(e)=>changeCharacterConfig("positionX", e.target.value)} 
                                             min={-1.75}
                                             max={-0.25}
                                             step={0.01}
@@ -335,6 +690,7 @@ function PhotoBoothPage() {
                                             onClick={()=>handleMotionOnClick(motion)} 
                                             displayText={modelData[selectedCharacter].motions[motion][0].display_name}
                                             image = {modelData[selectedCharacter].motions[motion][0].image}
+                                            active = {live2DConfigs[selectedCharacter].motion === motion}
                                             />
                                     ))}
                                 </div>}
@@ -346,16 +702,35 @@ function PhotoBoothPage() {
                                             onClick={()=>changeCharacterConfig("expression", expression.name)} 
                                             displayText={expression.display_name}
                                             image = {expression.image}
+                                            active = {live2DConfigs[selectedCharacter].expression === expression.name}
                                             />
                                     ))}
                                 </div>}
                         </div>
                     </div>
-                    <div className = "tabs flex flex-col decor-tab" ref={activeTab == "model"? activeTabRef: null}>
-                        decor
+                    <div className = "tabs flex decor-tab" ref={activeTab == "model"? activeTabRef: null}>
+                        {DECORATION_TEMPLATES.map(decoration=>(
+                            <SectionButtons 
+                                key={decoration.id}
+                                onClick={()=>setDecorations((prev)=>[...prev, {...decoration, id:currentId.current++, x:200, y:200 }])}
+                                displayText={decoration.name}
+                                image={decoration.url}
+                                svg={decoration.svg}
+                            />
+                        ))
+                        }
                     </div>
-                    <div className = "tabs flex flex-col background-tab" ref={activeTab == "model"? activeTabRef: null}>
-                        background
+                    <div className = "tabs flex background-tab" ref={activeTab == "model"? activeTabRef: null}>
+                        {BACKGROUNDS.map((background, index)=>(
+                            <SectionButtons
+                                key={index}
+                                onClick={()=>setBackground(index)
+                                }
+                                displayText = {background.name}
+                                image={background.url}
+                            />
+                        ))
+                        }
                     </div>
                     <div className = "tabs flex flex-col filter-tab" ref={activeTab == "model"? activeTabRef: null}>
                         filter

@@ -5,6 +5,7 @@ import { useGSAP } from '@gsap/react';
 import ScrollIndicator from '../components/ScrollIndicator';
 import ToolTips from '../components/ToolTips';
 import L2dCanvas from '../components/L2dCanvas';
+import { isChristmas } from '../utils/util';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -233,7 +234,7 @@ function CharacterPage({navigateTo, collectEasterEgg}) {
     };
   }, [images])
 
-
+  const isChristmasTime = isChristmas()
 
   // const danmakuComponents = DANMAKU.map(danmaku=> (<Danmaku danmaku = {danmaku}/>))
   // useEffect(()=>{
@@ -265,7 +266,7 @@ function CharacterPage({navigateTo, collectEasterEgg}) {
       <L2dCanvas character={character} offsetBottom={offsetBottom} width={600} height={800}/> 
       <section className='character-section saki-section'>
         <div className='dialog-box saki-border'>
-          <img src="/assets/happy_saki_octo_matching.webp" className='character-page-octo' onClick={()=>collectEasterEgg("character-page-saki")}/>
+          <img src={isChristmasTime?'/assets/happy-saki-octo-winter.webp':"/assets/happy_saki_octo_matching.webp"} className='character-page-octo' onClick={()=>collectEasterEgg("character-page-saki")}/>
           <h1>Togawa Sakiko</h1>
           <p>羽丘学院1年b班</p>
           <p>
@@ -311,7 +312,7 @@ function CharacterPage({navigateTo, collectEasterEgg}) {
 
       <section className='character-section anon-section'>
         <div className='dialog-box anon-border'>
-          <img src='/assets/anon_octo.webp' className='character-page-octo' onClick={()=>collectEasterEgg("character-page-anon")}/>
+          <img src={isChristmasTime?'/assets/anon-octo-winter.webp':'/assets/anon_octo.webp'} className='character-page-octo' onClick={()=>collectEasterEgg("character-page-anon")}/>
           <h1>Chihaya Anon</h1>
           <p>羽丘学院1年a班</p>
           <p>

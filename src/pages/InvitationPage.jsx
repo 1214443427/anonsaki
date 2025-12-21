@@ -7,6 +7,7 @@ import React, { useRef, useState } from 'react'
 import ExternalLink from '../components/ExternalLink';
 import MotionPathPlugin from 'gsap/MotionPathPlugin';
 import ConfirmationModal from '../components/ConfirmationModal';
+import { isChristmas } from '../utils/util';
 
 const TEXT = [
 `Epistula Invitatoria`,
@@ -137,7 +138,7 @@ const ScrollText = ({as: Component = "h2", text, effect, className, offset, inde
                                 className='moon-final non-select' 
                                 src='/assets/moon.webp' 
                                 ref={moonRef}
-                                alt='月亮'/>
+                                alt='月'/>
                         </div>
                     </span>
                     的相恋乃是禁忌。
@@ -494,12 +495,9 @@ function InvitationPage({collectEasterEgg, easterEggProgress}) {
             },
             immediateRender: false
         })
-
-
-
-
     }, [])
 
+    const isChristmasTime = isChristmas()
 
     return (
         <div className='invitation-page'>
@@ -521,6 +519,7 @@ function InvitationPage({collectEasterEgg, easterEggProgress}) {
                         onClick={()=>collectEasterEgg("invitation-anon")}
                         >
                        <img src='/assets/anon_octo.webp' className='non-select' alt='爱音章鱼'/>
+                        {isChristmasTime && <img className='christmas-hat' src='/assets/christmas-hat.webp'></img>}
                     </div>
                     <div 
                         ref={sakiOctoRef} 
@@ -528,6 +527,7 @@ function InvitationPage({collectEasterEgg, easterEggProgress}) {
                         onClick={()=>collectEasterEgg("invitation-saki")}
                         >
                         <img src="/assets/happy_saki_octo.webp" className='non-select' alt='开心小祥章鱼'/>
+                        {isChristmasTime && <img className='christmas-hat' src='/assets/christmas-hat.webp'></img>}                    
                     </div>
                     <img src="/assets/chat-mate.jpg" id="chat-mate" className='invitation-easter-egg non-select' />
                     <img  id="saki-heart" className='invitation-heart non-select' src='/assets/blue_heart.png'/>
@@ -537,10 +537,14 @@ function InvitationPage({collectEasterEgg, easterEggProgress}) {
                 </div>
                 <div className='bg--3'></div>
                 <div className='laser-div' >
-                    <img id='saki-laser' src='/assets/saki-laser.webp' className='invitation-easter-egg non-select' alt='章鱼激光'/>
-                    <div id='anon-laser'  className='invitation-easter-egg non-select' >
+                    <div id='saki-laser' className='invitation-easter-egg non-select'>
+                        <img src='/assets/saki-laser.webp' className='non-select' alt='章鱼激光'/>
+                        {isChristmasTime && <img className='christmas-hat' src='/assets/christmas-hat.webp'></img>}
+                    </div>
+                    <div id='anon-laser' className='invitation-easter-egg non-select' >
                         <img src='/assets/anon-laser-edit.webp' className='non-select' alt='奶龙激光'/>
                         <img id='heart' src='/assets/heart.webp' className='non-select' alt='小心心'/>
+                        {isChristmasTime && <img className='christmas-hat' src='/assets/christmas-hat.webp'></img>}
                     </div>
                 </div>
             </div>

@@ -3,6 +3,7 @@ import gsap from "gsap";
 import Physics2DPlugin from 'gsap/Physics2DPlugin';
 import { useGSAP } from '@gsap/react';
 import { useIdle } from '../hooks/useIdle';
+import { isChristmas } from '../utils/util';
 
 gsap.registerPlugin(Physics2DPlugin) 
 gsap.registerPlugin(useGSAP);
@@ -11,6 +12,7 @@ const OCTOPUS_SIZE = .25 * window.innerWidth
 const INITIAL_POSITION = {sakiX:0.60 , sakiY:0.2,
                         sakiXMobile:0.35 , sakiYMobile:0.7,
                         anonX:0.15 , anonY:0.2  };
+const isChristmasTime = isChristmas()
 const AVE_MYGO = [
     {
         emoji: "🐧",
@@ -35,6 +37,33 @@ const AVE_MYGO = [
         location: "right"
     }, {
         emoji: "🐈‍⬛",
+        location: "right"
+    }
+]
+const CHRISTMAS_EMOJI = [
+    {
+        emoji: "🎄",
+        location: "left"
+    }, {
+        emoji: "⭐",
+        location: "left"
+    }, {
+        emoji: "❄️",
+        location: "left"
+    }, {
+        emoji: "🦌",
+        location: "left"
+    }, {
+        emoji: "🎁",
+        location: "right"
+    }, {
+        emoji: "🔔",
+        location: "right"
+    }, {
+        emoji: "✨",
+        location: "right"
+    }, {
+        emoji: "⛄",
         location: "right"
     }
 ]
@@ -63,7 +92,7 @@ function EmojiBubble({emoji, index, collectEasterEgg}){
 function HeartBullet({timeline, index}){
     const ref = useRef(null);
     const hearts = ["❤️", "🩷", "🩵", "💙"]
-    const selectedHeart = gsap.utils.random(hearts)
+    const selectedHeart = hearts[index % hearts.length]
     useGSAP(()=>{
         if (!ref.current) return;
 
@@ -347,8 +376,8 @@ function LandingPage({navigateTo, collectEasterEgg}) {
         }
     },[isFinished]) //TODO. change to percentages. 
     
-    
-    const emojiBubbles = AVE_MYGO.map((member, index)=>(<EmojiBubble emoji={member} index={index} key={index}/>))
+    const emojiToUse = isChristmas? CHRISTMAS_EMOJI: AVE_MYGO
+    const emojiBubbles = emojiToUse.map((member, index)=>(<EmojiBubble emoji={member} index={index} key={index}/>))
     
     const [tl, setTl] = useState();
     
@@ -401,7 +430,7 @@ function LandingPage({navigateTo, collectEasterEgg}) {
         if(isIdle){
             // console.log("isIdle", isIdle)
             const yoyoTL = gsap.timeline({ repeat: -1, repeatDelay: 2})
-            yoyoTL.to( ".octo-image",{
+            yoyoTL.to( ".octo-container",{
                 x:"+=5", 
                 yoyo:true, 
                 repeat:5, 
@@ -429,6 +458,7 @@ function LandingPage({navigateTo, collectEasterEgg}) {
     //         })
     //     }
     // }, [heartBullets])
+
 
     return (
         <div
@@ -460,6 +490,7 @@ function LandingPage({navigateTo, collectEasterEgg}) {
                     alt="Pink Octopus" 
                     draggable="false"
                 />
+                {isChristmasTime &&<img className='christmas-hat non-select' id='anon-hat' src='./assets/christmas-hat.webp'/>}
             </div>
 
 
@@ -494,6 +525,7 @@ function LandingPage({navigateTo, collectEasterEgg}) {
                     draggable="false"
                     sizes='(width <= 768px) 155px, 600px'
                 />
+                {isChristmasTime && <img className='christmas-hat non-select' id='saki-hat' src='./assets/christmas-hat.webp'/>}
             </div>
             <div ref={curtainRef} className='curtain'></div>
             <h1 className='title non-select'> 帮助小章鱼贴贴 </h1>
