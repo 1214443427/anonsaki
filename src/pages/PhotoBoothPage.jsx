@@ -5,6 +5,7 @@ import { useGSAP } from '@gsap/react';
 import gsap from 'gsap/gsap-core';
 import Spinner from "../components/Spinner"
 import Draggable from 'gsap/src/Draggable';
+import { useFetchData } from '../hooks/useFetchData';
 
 const colors = {
 blue: 'rgb(119, 153, 204)',
@@ -139,7 +140,7 @@ const DECORATION_TEMPLATES = [
     },
     {
         id: 'sparkle',
-        name: '闪耀',
+        name: '四角星',
         type: 'decoration',
         svg: (
         <svg viewBox="0 0 40 40" className="w-full h-full">
@@ -150,6 +151,152 @@ const DECORATION_TEMPLATES = [
         width: 40,
         height: 40
     }
+];
+
+const FILTER_PRESET = [
+  {
+    id: "natural",
+    name: "Natural",
+    display_name: "自然",
+    adjustments: {
+      brightness: 1.0,
+      contrast: 1.0,
+      saturation: 1.0,
+      hue: 0,
+      grayscale: 0,
+      sepia: 0,
+      invert: 0,
+      opacity: 1.0
+    }
+  },
+  {
+    id: "cool-boost",
+    name: "Cool Boost",
+    display_name: "冷调增强",
+    adjustments: {
+      brightness: 1.04,
+      contrast: 1.04,
+      saturation: 1.22,
+      hue: 0,
+      grayscale: 0,
+      sepia: 0,
+      invert: 0,
+      opacity: 1.0
+    }
+  },
+  {
+    id: "warm-pop",
+    name: "Warm Pop",
+    display_name: "暖色增强",
+    adjustments: {
+      brightness: 1.03,
+      contrast: 1.14,
+      saturation: 1.22,
+      hue: 0,
+      grayscale: 0,
+      sepia: 0,
+      invert: 0,
+      opacity: 1.0
+    }
+  },
+  {
+    id: "vintage-red",
+    name: "Vintage Red",
+    display_name: "复古红",
+    adjustments: {
+      brightness: 1.0,
+      contrast: 0.97,
+      saturation: 1.11,
+      hue: 330,
+      grayscale: 0,
+      sepia: 0,
+      invert: 0,
+      opacity: 1.0
+    }
+  },
+  {
+    id: "pink-light",
+    name: "Pink Light",
+    display_name: "粉色柔光",
+    adjustments: {
+      brightness: 1.0,
+      contrast: 1.0,
+      saturation: 1.0,
+      hue: 0,
+      grayscale: 0,
+      sepia: 0,
+      invert: 0,
+      opacity: 1.0
+    }
+  },
+  {
+    id: "cinematic-warm",
+    name: "Cinematic Warm",
+    display_name: "电影暖调",
+    adjustments: {
+      brightness: 1.0,
+      contrast: 1.07,
+      saturation: 1.65,
+      hue: 0,
+      grayscale: 0,
+      sepia: 0.5,
+      invert: 0,
+      opacity: 1.0
+    }
+  },
+  {
+    id: "high-contrast",
+    name: "High Contrast",
+    display_name: "高对比",
+    adjustments: {
+      brightness: 1.0,
+      contrast: 1.28,
+      saturation: 1.2,
+      hue: 0,
+      grayscale: 0,
+      sepia: 0,
+      invert: 0,
+      opacity: 1.0
+    }
+  },
+  {
+    id: "mono-blue",
+    name: "Mono Blue",
+    display_name: "蓝调黑白",
+    adjustments: {
+      brightness: 1.0,
+      contrast: 1.28,
+      saturation: 1.2,
+      hue: 0,
+      grayscale: 1.0,
+      sepia: 0,
+      invert: 0,
+      opacity: 1.0
+    }
+  },
+  {
+    id: "soft-fade",
+    name: "Soft Fade",
+    display_name: "柔和褪色",
+    adjustments: {
+      brightness: 1.05,
+      contrast: 1.04,
+      saturation: 1.0,
+      hue: 0,
+      grayscale: 0.1,
+      sepia: 0.5,
+      invert: 0,
+      opacity: 1.0
+    }
+  }
+];
+
+const filterSliders = [
+  { key: "brightness", label: "亮度", min: 0.25, max: 1.25, step: 0.01, default: 1 },
+  { key: "contrast",   label: "对比", min: 0.5, max: 1.5, step: 0.01, default: 1 },
+  { key: "saturation", label: "饱和", min: 0,   max: 2.0, step: 0.01, default: 1 },
+  { key: "temperature",label: "色温", min: -50, max: 50 , step: 1,    default: 0 },
+  { key: "fade",       label: "淡入", min: 0,   max: 1.0, step: 0.01, default: 0 }
 ];
 
 
@@ -250,6 +397,7 @@ function Decorations({url, isSelected, svg, width, height, onClick, onDelete, ca
     const [isResizing, setIsResizing] = useState(false)
     const [isRotating, setIsRotating] = useState(false)
     const [anchorStart, setAnchorStart] = useState()
+
 
     function handleDragStart(e){
         onClick()
@@ -384,9 +532,26 @@ function Decorations({url, isSelected, svg, width, height, onClick, onDelete, ca
     )
 }
 
+function Slider({ config, onChange, reset}){
+    return(
+        <div className='flex input-container'>
+            <span>{config.label}:</span>
+            <input type="range" 
+                onChange={onChange} 
+                min={config.min}
+                max={config.max}
+                step={config.step}
+                value={config.value}
+                />
+            <button className={""} onClick={reset}> 
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M65.9 228.5c13.3-93 93.4-164.5 190.1-164.5 53 0 101 21.5 135.8 56.2 .2 .2 .4 .4 .6 .6l7.6 7.2-47.9 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l128 0c17.7 0 32-14.3 32-32l0-128c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 53.4-11.3-10.7C390.5 28.6 326.5 0 256 0 127 0 20.3 95.4 2.6 219.5 .1 237 12.2 253.2 29.7 255.7s33.7-9.7 36.2-27.1zm443.5 64c2.5-17.5-9.7-33.7-27.1-36.2s-33.7 9.7-36.2 27.1c-13.3 93-93.4 164.5-190.1 164.5-53 0-101-21.5-135.8-56.2-.2-.2-.4-.4-.6-.6l-7.6-7.2 47.9 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L32 320c-8.5 0-16.7 3.4-22.7 9.5S-.1 343.7 0 352.3l1 127c.1 17.7 14.6 31.9 32.3 31.7S65.2 496.4 65 478.7l-.4-51.5 10.7 10.1c46.3 46.1 110.2 74.7 180.7 74.7 129 0 235.7-95.4 253.4-219.5z"/></svg>
+            </button>
+        </div>
+    )
+}
 
 function PhotoBoothPage() {
-    const [character, setCharacter] = useState("both")
+    const [character, setCharacter] = useState("init")
     const [modelData, setModelData] = useState([])
     
     const [loading, setLoading] = useState()
@@ -404,14 +569,44 @@ function PhotoBoothPage() {
     const currentId = useRef(0)
     const canvasContainerRef = useRef(null)
     const [background, setBackground] = useState(0)
-    
+    const [filterSetting, setFilterSetting] = useState({
+        brightness: 1,
+        contrast: 1,
+        saturation: 1,
+    })
+    const [filterSliderValue, setFilterSliderValue] = useState({
+        brightness: 1,
+        contrast: 1,
+        saturation: 1,
+        temperature: 0,
+        fade: 0,
+    })
+
     useEffect(()=>{
         async function fetchData(){
             try{
                 setLoading(true)
                 const sakiData = await fetch('/assets/l2d/saki-matching-outfit/model.json').then(res => res.json())
                 const anonData = await fetch('/assets/l2d/anon-matching-outfit/model.json').then(res => res.json())
+                const textures = [
+                    "/assets/l2d/anon-matching-outfit/live2d/chara/037_general_rip/texture_00.png",
+                    "/assets/l2d/anon-matching-outfit/live2d/chara/037_school_winter-2023_rip/texture_01.png",
+                    "/assets/l2d/anon-matching-outfit/live2d/chara/341_general_rip/texture_00.png",
+                    "/assets/l2d/saki-matching-outfit/live2d/chara/341_school_winter-2023_rip/texture_01.png"
+                ]
+                for (let i = 0; i < textures.length; i++) {;
+                    const img = new Image();
+                    img.src = textures[i];  
+                }
+
+    // const {loading, data, error} = useFetchData([
+    //     "/assets/l2d/anon-matching-outfit/live2d/chara/037_general_rip/texture_00.png",
+    //     "/assets/l2d/anon-matching-outfit/live2d/chara/037_school_winter-2023_rip/texture_01.png",
+    //     "/assets/l2d/anon-matching-outfit/live2d/chara/341_general_rip/texture_00.png",
+    //     "/assets/l2d/saki-matching-outfit/live2d/chara/341_school_winter-2023_rip/texture_01.png"
+    // ])
                 setLoading(false)
+                setCharacter("both")
                 setModelData([anonData, sakiData])
             }
             catch (err){
@@ -556,7 +751,13 @@ function PhotoBoothPage() {
         <div className='photobooth-page flex flex-col'>
             <div 
                 className='photo-booth-canvas-container flex flex-col' 
-                style={{"--background-image": `url(${BACKGROUNDS[background].url})`}}
+                style={{
+                    "--background-image": `url(${BACKGROUNDS[background].url})`,
+                    "--brightness": `${filterSliderValue.brightness + 0.2 * filterSliderValue.fade}`,
+                    "--contrast": `${filterSliderValue.contrast - 0.5 * filterSliderValue.fade}`,
+                    "--saturation": `${filterSliderValue.saturation + filterSliderValue.temperature/200}`,
+                    "--hue": `${filterSliderValue.temperature * 0.5}deg`,
+                }}
                 ref={canvasContainerRef}
                 onClick={(e)=>{
                     // if (e.target.dataset.drag)
@@ -580,12 +781,17 @@ function PhotoBoothPage() {
                         />))
                     }
                 </div>
-                <L2dCanvas 
-                    character={character} 
-                    width={1200} height={1400} 
-                    className='photo-booth-canvas'
-                    live2DConfigs={live2DConfigs}
-                />
+                    <L2dCanvas 
+                        character={character} 
+                        width={1200} height={1400} 
+                        className='photo-booth-canvas'
+                        live2DConfigs={live2DConfigs}
+                    />
+                    {loading&&
+                        <div>
+                            <Spinner />
+                        </div>
+                    }
             </div>
 
             <div className='flex flex-col tools-section'>
@@ -604,7 +810,7 @@ function PhotoBoothPage() {
                                 <button className={""} onClick={()=>{selectCharacter(1)}}>Saki</button>
                                 <div className='pill'></div>
                             </div>
-                            <button className={""} onClick={()=>{toggleCharacter(selectedCharacter)}}>暂停</button>
+                            <button className='tools-section-buttons' id={"pause-button"} onClick={()=>{toggleCharacter(selectedCharacter)}}>{live2DConfigs[selectedCharacter].paused?"继续live2d":"暂停live2d"}</button>
                         </div>
                         <div className='subsection-container'>
                             {activeSubsection == "home" &&
@@ -683,7 +889,7 @@ function PhotoBoothPage() {
                                 </div>
                             }
                             {activeSubsection == "motion" && 
-                                <div className='tools-subsections flex motion-subsection'>
+                                <div className='tools-subsections  motion-subsection'>
                                     {Object.keys(modelData[selectedCharacter].motions).map((motion, index)=>(
                                         <SectionButtons 
                                             key={`${selectedCharacter}-${index}`} 
@@ -695,7 +901,7 @@ function PhotoBoothPage() {
                                     ))}
                                 </div>}
                             {activeSubsection == "expression" && 
-                                <div className='tools-subsections flex expression-subsection'>
+                                <div className='tools-subsections  expression-subsection'>
                                     {modelData[selectedCharacter].expressions.map((expression, index)=>(
                                         <SectionButtons 
                                             key={`${selectedCharacter}-${index}`} 
@@ -708,32 +914,42 @@ function PhotoBoothPage() {
                                 </div>}
                         </div>
                     </div>
-                    <div className = "tabs flex decor-tab" ref={activeTab == "model"? activeTabRef: null}>
-                        {DECORATION_TEMPLATES.map(decoration=>(
-                            <SectionButtons 
-                                key={decoration.id}
-                                onClick={()=>setDecorations((prev)=>[...prev, {...decoration, id:currentId.current++, x:200, y:200 }])}
-                                displayText={decoration.name}
-                                image={decoration.url}
-                                svg={decoration.svg}
-                            />
-                        ))
-                        }
+                    <div className = "tabs decor-tab" ref={activeTab == "model"? activeTabRef: null}>
+                        <div className='tools-subsections'>
+                            {DECORATION_TEMPLATES.map(decoration=>(
+                                <SectionButtons 
+                                    key={decoration.id}
+                                    onClick={()=>setDecorations((prev)=>[...prev, {...decoration, id:currentId.current++, x:200, y:200 }])}
+                                    displayText={decoration.name}
+                                    image={decoration.url}
+                                    svg={decoration.svg}
+                                />
+                            ))}
+                        </div>
                     </div>
-                    <div className = "tabs flex background-tab" ref={activeTab == "model"? activeTabRef: null}>
-                        {BACKGROUNDS.map((background, index)=>(
-                            <SectionButtons
-                                key={index}
-                                onClick={()=>setBackground(index)
-                                }
-                                displayText = {background.name}
-                                image={background.url}
-                            />
-                        ))
-                        }
+                    <div className = "tabs background-tab" ref={activeTab == "model"? activeTabRef: null}>
+                        <div className='tools-subsections'>
+                            {BACKGROUNDS.map((background, index)=>(
+                                <SectionButtons
+                                    key={index}
+                                    onClick={()=>setBackground(index)
+                                    }
+                                    displayText = {background.name}
+                                    image={background.url}
+                                />
+                            ))}
+                        </div>
                     </div>
                     <div className = "tabs flex flex-col filter-tab" ref={activeTab == "model"? activeTabRef: null}>
-                        filter
+                        {filterSliders.map((slider, index)=>(
+                            <Slider 
+                                key={index} 
+                                config={{...slider, value: filterSliderValue[slider.key]}}
+                                onChange={(e)=>{setFilterSliderValue(prev=>({...prev, [slider.key]: parseFloat(e.target.value)}))}}
+                                reset={()=>setFilterSliderValue(prev=>({...prev, [slider.key]:slider.default}))}
+                            />
+                        ))
+                        }
                     </div>
                 </div>
                 <div className='flex tab-selector'>

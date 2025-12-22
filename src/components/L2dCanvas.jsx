@@ -55,7 +55,7 @@ function L2dCanvas( {character, offsetBottom, width, height, className="",
     }]
     }) {
     const live2DMgrRef = useRef(null)
-    const model = character == "anon" ? 1 : character == "saki"? 0 : 2 ; //saki = 0
+    const model = character == "init" ? 3 : character == "anon" ? 1 : character == "saki"? 0 : 2 ; //saki = 0
     
     const glRef = useRef(null)
     const canvasRef = useRef(null);
@@ -181,8 +181,9 @@ function L2dCanvas( {character, offsetBottom, width, height, className="",
         Live2D.setGL(gl);
         gl.clearColor(0.0, 0.0, 0.0, 0.0);
         glRef.current = gl;
-
-        changeModel(model);
+        requestAnimationFrame(() => {
+            changeModel(model);
+        })
         return(()=>{
             Live2D.dispose();
         })

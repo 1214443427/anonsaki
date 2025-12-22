@@ -119,7 +119,7 @@ function DanmakuContainer(){
 
 
 function CharacterPage({navigateTo, collectEasterEgg}) {
-  const [character, setCharacter] = useState("anon")
+  const [character, setCharacter] = useState("init")
   const canvasRef = useRef(null)
   const [images, setImages] = useState([]);
   // const l2dRef = useRef();

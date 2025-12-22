@@ -36,7 +36,8 @@ var LAppDefine = {
     // MODEL_SHIZUKU : "assets/live2d/shizuku/shizuku.model.json",
     // MODEL_WANKO : "assets/live2d/wanko/wanko.model.json",
     // MODEL_EPSILON : "assets/live2d/Epsilon2.1/Epsilon2.1.model.json",
-
+    
+    MODEL_INIT : "assets/l2d/anon/model-init.json",
     MODEL_SAKI : "assets/l2d/saki/model.json",
     MODEL_ANON : "assets/l2d/anon/model.json",
     MODEL_ANON_MATCHING_OUTFIT : "assets/l2d/anon-matching-outfit/model.json",

@@ -1,0 +1,100 @@
+{
+  "version": "Sample 1.0.0",
+  "layout": {
+    "center_x": -2,
+    "center_y": 0,
+    "width": 2
+  },
+  "hit_areas_custom": {
+    "body_x": [
+      -0.3,
+      0.2
+    ],
+    "body_y": [
+      0.3,
+      -1.9
+    ],
+    "head_x": [
+      -0.25,
+      1
+    ],
+    "head_y": [
+      0.25,
+      0.2
+    ]
+  },
+  "model": "data/model.moc",
+  "physics": "data/physics.json",
+  "textures": [
+    "data/textures/texture_00.png",
+    "data/textures/texture_01.png"
+  ],
+  "motions": {
+    "tap_body": [
+      {
+        "file": "data/motions/nnf_right01.mtn"
+      },
+      {
+        "file": "data/motions/kime01.mtn"
+      },
+      {
+        "file": "data/motions/smile02.mtn"
+      },      
+      {
+        "file": "data/motions/smile03.mtn"
+      },
+      {
+        "file": "data/motions/smile04.mtn"
+      }
+    ],
+    "idle01": [
+      {
+        "file": "data/motions/idle01.mtn"
+      }
+    ],
+    "kime01": [
+      {
+        "file": "data/motions/kime01.mtn"
+      }
+    ],
+    "smile04": [
+      {
+        "file": "data/motions/smile04.mtn"
+      }
+    ]
+  },
+  "expressions": [
+    {
+      "name": "default",
+      "file": "data/expressions/default.exp.json"
+    },
+    {
+      "name": "idle01",
+      "file": "data/expressions/idle01.exp.json"
+    },
+    {
+      "name": "kime01",
+      "file": "data/expressions/kime01.exp.json"
+    },
+    {
+      "name": "smile01",
+      "file": "data/expressions/smile01.exp.json"
+    },
+    {
+      "name": "smile02",
+      "file": "data/expressions/smile02.exp.json"
+    },
+    {
+      "name": "smile03",
+      "file": "data/expressions/smile03.exp.json"
+    },
+    {
+      "name": "smile04",
+      "file": "data/expressions/smile04.exp.json"
+    },
+    {
+      "name": "wink01",
+      "file": "data/expressions/wink01.exp.json"
+    }
+  ]
+}

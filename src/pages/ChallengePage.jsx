@@ -88,6 +88,7 @@ function NotebookPages({title, list, className, pageNum, setSelectedWork, works,
                 <div className='notebook-header'>
                     <h3>{title}</h3>
                     {title&&<p>{title != "目录" && title !="后记" && "Day" + (pageNum-2)}</p>}
+                    {title == "目录" && <p>页</p>}
                 </div>
                 <div className='notebook-content'>
                     {title == "后记"?
@@ -161,8 +162,9 @@ function NotebookPages({title, list, className, pageNum, setSelectedWork, works,
                                 </div>
                             </div>
                             :
-                            <div key={i} className='notebook-items flex'>
-                                <p onClick={()=>flipPage(i + 3 + (pageNum-1)*list.length)}>{item}</p>
+                            <div key={i} onClick={()=>flipPage(i + 3 + (pageNum-1)*list.length)} className='notebook-items flex'>
+                                    <span>{item}</span>
+                                    <span>{i + 1 + (pageNum-1)*list.length}</span>
                             </div>
                     )}
                     {
@@ -485,7 +487,7 @@ function ChallengePage( {pageHash} ) {
         function rotateAnimation(target, direction){
             gsap.to(target, {
                 rotate: 360 * direction,
-                duration: 60,
+                duration: 30,
                 repeat: -1,
                 ease: "none"
             })
@@ -667,7 +669,7 @@ function ChallengePage( {pageHash} ) {
             }
             <div className={`challenge-page-nav ${animationPlaying?"inactive":""}`}>
                 <div 
-                    className='direction-buttons'
+                    className={`direction-buttons ${currentPage == 0 ? "disabled":""}`}
                     onClick={()=>flipPage(currentPage-1)}>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M169.4 297.4C156.9 309.9 156.9 330.2 169.4 342.7L361.4 534.7C373.9 547.2 394.2 547.2 406.7 534.7C419.2 522.2 419.2 501.9 406.7 489.4L237.3 320L406.6 150.6C419.1 138.1 419.1 117.8 406.6 105.3C394.1 92.8 373.8 92.8 361.3 105.3L169.3 297.3z"/></svg>
                 </div>
@@ -677,7 +679,7 @@ function ChallengePage( {pageHash} ) {
                         {/* {currentPage==0?"封面":currentPage==34?"封底": currentPage + " / 33" } */}
                     </button>
                 <div 
-                    className='direction-buttons'
+                    className= {`direction-buttons ${currentPage == recommendations.length-1? "disabled":""}`}
                     onClick={()=>flipPage(currentPage+1)}>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M471.1 297.4C483.6 309.9 483.6 330.2 471.1 342.7L279.1 534.7C266.6 547.2 246.3 547.2 233.8 534.7C221.3 522.2 221.3 501.9 233.8 489.4L403.2 320L233.9 150.6C221.4 138.1 221.4 117.8 233.9 105.3C246.4 92.8 266.7 92.8 279.2 105.3L471.2 297.3z"/></svg>
                 </div>

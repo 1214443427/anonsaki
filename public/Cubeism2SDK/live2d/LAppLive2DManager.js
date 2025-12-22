@@ -72,6 +72,11 @@ LAppLive2DManager.prototype.changeModel = function(gl, model)
                     this.models[1].load(gl, LAppDefine.MODEL_SAKI_MATCHING_OUTFIT)
                 });
                 break;
+            case 3: 
+                this.releaseModel(0, gl);
+                this.createModel();
+                this.models[0].load(gl, LAppDefine.MODEL_INIT);
+                break;
             default:
                 break;
         }

@@ -19,7 +19,8 @@
     border-bottom: 2px solid rgba(var(--saki-color-alpha),1);
     height: calc(var(--line-height) * 2);
     margin: 1rem 1rem 0rem 1rem;
-    padding-inline: 1rem;
+    padding-left: 1rem;
+    padding-right: 0.5rem;
     align-items: flex-end;
     justify-content: space-between;
 }
@@ -174,7 +175,7 @@
 
 .challenge-page-nav.inactive .direction-buttons{
     opacity: 0.5;
-    transition: opacity 0.25s
+    transition: opacity 0.25s;
 }
 
 .challenge-page-nav button{
@@ -187,6 +188,11 @@
 .direction-buttons{
     height: 100%;
     cursor: pointer;
+}
+
+.direction-buttons.disabled{
+    cursor: not-allowed;
+    opacity: 0.25;
 }
 
 .challenge-page-nav svg{
