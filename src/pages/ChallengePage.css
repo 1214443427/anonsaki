@@ -401,7 +401,7 @@
     cursor: pointer;
 }
 
-.sticky-note-popup-backdrop{
+.popup-backdrop{
     position: absolute;
     top: 0;
     left: 0;

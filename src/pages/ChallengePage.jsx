@@ -686,7 +686,7 @@ function ChallengePage( {pageHash} ) {
             </div>
 
             <div className='sticky-note-popup'>
-                <div className='sticky-note-popup-backdrop' onClick={unselectWork}>
+                <div className='popup-backdrop' onClick={unselectWork}>
                 </div>
                 <div className="sticky-note" style={{"--pastel":`${PASTEL_COLORS[currentPage%PASTEL_COLORS.length]}`}}>
                     <div className='tape'></div>
@@ -770,7 +770,7 @@ function ChallengePage( {pageHash} ) {
                 </div>
             </div>
             <div className='navigation-popup-container'>
-                <div className='sticky-note-popup-backdrop' onClick={()=>setShowNavigation(false)}></div>
+                <div className='popup-backdrop' onClick={()=>setShowNavigation(false)}></div>
                     <div className='navigation-popup flex flex-col'>
                         <div className='page-selectors flex'>
                             {Array.from({ length: 35 }).map((_, index)=>(

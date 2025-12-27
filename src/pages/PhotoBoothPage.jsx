@@ -6,6 +6,7 @@ import gsap from 'gsap/gsap-core';
 import Spinner from "../components/Spinner"
 import Draggable from 'gsap/src/Draggable';
 import { useFetchData } from '../hooks/useFetchData';
+import html2canvas from 'html2canvas';
 
 const colors = {
 blue: 'rgb(119, 153, 204)',
@@ -86,12 +87,12 @@ const DECORATION_TEMPLATES = [
         height: 50
     },
     {
-        id: 'blush',
-        name: '腮红',
+        id: 'christmas-hat',
+        name: '圣诞帽',
         type: 'decoration',
-        url: "/assets/blushing.png",
-        width: 60,
-        height: 20
+        url: "/assets/christmas-hat.webp",
+        width: 70,
+        height: 70
     },
     {
         id: 'sunglasses',
@@ -130,10 +131,30 @@ const DECORATION_TEMPLATES = [
         name: '星星',
         type: 'decoration',
         svg: (
-        <svg viewBox="0 0 50 50" className="w-full h-full">
-            <path d="M25,5 L30,15 L40,17 L32,25 L35,35 L25,30 L15,35 L18,25 L10,17 L20,15 Z" 
-            fill={colors.blue} stroke="white" strokeWidth="2"/>
-        </svg>
+    <svg
+    viewBox="0 0 100 100"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+    >
+    <path
+        d="
+        M50 5
+        L61 38
+        L95 38
+        L67 58
+        L78 91
+        L50 71
+        L22 91
+        L33 58
+        L5 38
+        L39 38
+        Z
+        "
+        stroke="white"
+        strokeWidth="4"
+        strokeLinejoin="round"
+    />
+    </svg>
         ),
         width: 50,
         height: 50
@@ -145,7 +166,7 @@ const DECORATION_TEMPLATES = [
         svg: (
         <svg viewBox="0 0 40 40" className="w-full h-full">
             <path d="M20,5 L22,18 L35,20 L22,22 L20,35 L18,22 L5,20 L18,18 Z" 
-            fill="white" stroke={colors.blue} strokeWidth="2"/>
+            stroke="white" strokeWidth="2"/>
         </svg>
         ),
         width: 40,
@@ -155,148 +176,125 @@ const DECORATION_TEMPLATES = [
 
 const FILTER_PRESET = [
   {
-    id: "natural",
-    name: "Natural",
-    display_name: "自然",
-    adjustments: {
-      brightness: 1.0,
-      contrast: 1.0,
-      saturation: 1.0,
-      hue: 0,
-      grayscale: 0,
-      sepia: 0,
-      invert: 0,
-      opacity: 1.0
+    name: "原图",
+    slug: "original",
+    imgUrl: "assets/photobooth-assets/filters/original.webp",
+    values: {
+      brightness: 1,
+      contrast: 1,
+      saturation: 1,
+      temperature: 0,
+      fade: 0
     }
   },
+
   {
-    id: "cool-boost",
-    name: "Cool Boost",
-    display_name: "冷调增强",
-    adjustments: {
-      brightness: 1.04,
-      contrast: 1.04,
-      saturation: 1.22,
-      hue: 0,
-      grayscale: 0,
-      sepia: 0,
-      invert: 0,
-      opacity: 1.0
+    name: "清新",
+    slug: "fresh",
+    imgUrl: "assets/photobooth-assets/filters/fresh.webp",
+    values: {
+      brightness: 1.1,
+      contrast: 1.05,
+      saturation: 1.15,
+      temperature: 5,
+      fade: 0.05
     }
   },
+
   {
-    id: "warm-pop",
-    name: "Warm Pop",
-    display_name: "暖色增强",
-    adjustments: {
-      brightness: 1.03,
-      contrast: 1.14,
-      saturation: 1.22,
-      hue: 0,
-      grayscale: 0,
-      sepia: 0,
-      invert: 0,
-      opacity: 1.0
-    }
-  },
-  {
-    id: "vintage-red",
-    name: "Vintage Red",
-    display_name: "复古红",
-    adjustments: {
-      brightness: 1.0,
-      contrast: 0.97,
-      saturation: 1.11,
-      hue: 330,
-      grayscale: 0,
-      sepia: 0,
-      invert: 0,
-      opacity: 1.0
-    }
-  },
-  {
-    id: "pink-light",
-    name: "Pink Light",
-    display_name: "粉色柔光",
-    adjustments: {
-      brightness: 1.0,
-      contrast: 1.0,
-      saturation: 1.0,
-      hue: 0,
-      grayscale: 0,
-      sepia: 0,
-      invert: 0,
-      opacity: 1.0
-    }
-  },
-  {
-    id: "cinematic-warm",
-    name: "Cinematic Warm",
-    display_name: "电影暖调",
-    adjustments: {
-      brightness: 1.0,
-      contrast: 1.07,
-      saturation: 1.65,
-      hue: 0,
-      grayscale: 0,
-      sepia: 0.5,
-      invert: 0,
-      opacity: 1.0
-    }
-  },
-  {
-    id: "high-contrast",
-    name: "High Contrast",
-    display_name: "高对比",
-    adjustments: {
-      brightness: 1.0,
-      contrast: 1.28,
-      saturation: 1.2,
-      hue: 0,
-      grayscale: 0,
-      sepia: 0,
-      invert: 0,
-      opacity: 1.0
-    }
-  },
-  {
-    id: "mono-blue",
-    name: "Mono Blue",
-    display_name: "蓝调黑白",
-    adjustments: {
-      brightness: 1.0,
-      contrast: 1.28,
-      saturation: 1.2,
-      hue: 0,
-      grayscale: 1.0,
-      sepia: 0,
-      invert: 0,
-      opacity: 1.0
-    }
-  },
-  {
-    id: "soft-fade",
-    name: "Soft Fade",
-    display_name: "柔和褪色",
-    adjustments: {
+    name: "暖阳",
+    slug: "warm",
+    imgUrl: "assets/photobooth-assets/filters/warm.webp",
+    values: {
       brightness: 1.05,
-      contrast: 1.04,
-      saturation: 1.0,
-      hue: 0,
-      grayscale: 0.1,
-      sepia: 0.5,
-      invert: 0,
-      opacity: 1.0
+      contrast: 1.1,
+      saturation: 1.1,
+      temperature: 25,
+      fade: 0.08
+    }
+  },
+
+  {
+    name: "冷调",
+    slug: "cool",
+    imgUrl: "assets/photobooth-assets/filters/cool.webp",
+    values: {
+      brightness: 0.95,
+      contrast: 1.1,
+      saturation: 0.95,
+      temperature: -25,
+      fade: 0.05
+    }
+  },
+
+  {
+    name: "复古",
+    slug: "vintage",
+    imgUrl: "assets/photobooth-assets/filters/vintage.webp",
+    values: {
+      brightness: 0.9,
+      contrast: 1.0,
+      saturation: 0.8,
+      temperature: 10,
+      fade: 0.35
+    }
+  },
+
+  {
+    name: "胶片",
+    slug: "film",
+    imgUrl: "assets/photobooth-assets/filters/film.webp",
+    values: {
+      brightness: 0.95,
+      contrast: 1.0,
+      saturation: 0.8,
+      temperature: 15,
+      fade: 0.45
+    }
+  },
+
+
+  {
+    name: "黑白",
+    slug: "bw",
+    imgUrl: "assets/photobooth-assets/filters/bw.webp",
+    values: {
+      brightness: 1,
+      contrast: 1.2,
+      saturation: 0,
+      temperature: 0,
+      fade: 0.1
+    }
+  },
+
+  {
+    name: "暗调",
+    slug: "dark",
+    imgUrl: "assets/photobooth-assets/filters/dark.webp",
+    values: {
+      brightness: 0.75,
+      contrast: 1.25,
+      saturation: 0.9,
+      temperature: -5,
+      fade: 0.15
     }
   }
 ];
+
 
 const filterSliders = [
   { key: "brightness", label: "亮度", min: 0.25, max: 1.25, step: 0.01, default: 1 },
   { key: "contrast",   label: "对比", min: 0.5, max: 1.5, step: 0.01, default: 1 },
   { key: "saturation", label: "饱和", min: 0,   max: 2.0, step: 0.01, default: 1 },
   { key: "temperature",label: "色温", min: -50, max: 50 , step: 1,    default: 0 },
-  { key: "fade",       label: "淡入", min: 0,   max: 1.0, step: 0.01, default: 0 }
+  { key: "fade",       label: "淡化", min: 0,   max: 1.0, step: 0.01, default: 0 }
+];
+
+const positionSliders = [
+  { key: "faceDirectionX", label: "朝向X", min: -1,    max: 1,     step: 0.01, default: 0 },
+  { key: "faceDirectionY", label: "朝向Y", min: -1,    max: 1,     step: 0.01, default: 0 },
+  { key: "positionX",      label: "位置X", min: -1.75, max: -0.25, step: 0.01, default: -1.35},
+  { key: "positionY",      label: "位置Y", min: 0.55,  max: 1.55,  step: 0.01, default: 1.15 },
 ];
 
 
@@ -313,7 +311,16 @@ const subsections = [
         name: "expression",
         path: "M464 256a208 208 0 1 0 -416 0 208 208 0 1 0 416 0zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0zm372.2 46.3c11.8-3.6 23.7 6.1 19.6 17.8-19.8 55.9-73.1 96-135.8 96-62.7 0-116-40-135.8-95.9-4.1-11.6 7.8-21.4 19.6-17.8 34.7 10.6 74.2 16.5 116.1 16.5 42 0 81.5-6 116.3-16.6zM144 208a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm164 8c0 11-9 20-20 20s-20-9-20-20c0-33.1 26.9-60 60-60l16 0c33.1 0 60 26.9 60 60 0 11-9 20-20 20s-20-9-20-20-9-20-20-20l-16 0c-11 0-20 9-20 20z",
         display: "表情"
+}, {
+        name: "capture",
+        path: "M193.1 32c-18.7 0-36.2 9.4-46.6 24.9L120.5 96 64 96C28.7 96 0 124.7 0 160L0 416c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-256c0-35.3-28.7-64-64-64l-56.5 0-26-39.1C355.1 41.4 337.6 32 318.9 32L193.1 32zm-6.7 51.6c1.5-2.2 4-3.6 6.7-3.6l125.7 0c2.7 0 5.2 1.3 6.7 3.6l33.2 49.8c4.5 6.7 11.9 10.7 20 10.7l69.3 0c8.8 0 16 7.2 16 16l0 256c0 8.8-7.2 16-16 16L64 432c-8.8 0-16-7.2-16-16l0-256c0-8.8 7.2-16 16-16l69.3 0c8 0 15.5-4 20-10.7l33.2-49.8zM256 384a112 112 0 1 0 0-224 112 112 0 1 0 0 224zM192 272a64 64 0 1 1 128 0 64 64 0 1 1 -128 0z",        
+        display: "拍照"
 }]
+
+const shareData = {
+    title: ""
+}
+
 
 // function transformViewX(deviceX)
 // {
@@ -359,6 +366,8 @@ function Decorations({url, isSelected, svg, width, height, onClick, onDelete, ca
     const [center, setCenter] = useState({x: 200, y: 200})
     const ref = useRef(null)
     const parentDragRef = useRef(null)
+    const [flip, setFlip] = useState(false)
+    const [color, setColor] = useState("blue")
     // useGSAP(()=>{
     //     parentDragRef.current = Draggable.create(ref.current,
     //         {
@@ -397,7 +406,6 @@ function Decorations({url, isSelected, svg, width, height, onClick, onDelete, ca
     const [isResizing, setIsResizing] = useState(false)
     const [isRotating, setIsRotating] = useState(false)
     const [anchorStart, setAnchorStart] = useState()
-
 
     function handleDragStart(e){
         onClick()
@@ -448,11 +456,10 @@ function Decorations({url, isSelected, svg, width, height, onClick, onDelete, ca
                 x = e.clientX - rect.left;
                 y = e.clientY - rect.top;
             }
-            console.log(x, y) 
             if(isDragging){
                 setCenter({
-                    x: center.x + x - anchorStart.x,
-                    y: center.y + y - anchorStart.y
+                    x: gsap.utils.clamp(0, rect.width, center.x + x - anchorStart.x),
+                    y: gsap.utils.clamp(0, rect.height, center.y + y - anchorStart.y)
                 })
             }else if(isResizing){
                 const deltaX = x - anchorStart.x
@@ -503,7 +510,7 @@ function Decorations({url, isSelected, svg, width, height, onClick, onDelete, ca
             onClick={(e)=>e.stopPropagation()}
             onTouchStart={(e)=>handleDragStart(e)}
         >
-            <div className='decoration-assets-container non-select'>
+            <div className={`decoration-assets-container non-select flex ${flip?"mirror-horizontal":""}`} style={{"--color": color == "pink"? "var(--anon-color)":"var(--saki-color)"}}>
                 {url && <img src={url}></img>}
                 {svg && svg}
             </div>
@@ -526,6 +533,24 @@ function Decorations({url, isSelected, svg, width, height, onClick, onDelete, ca
                         >
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="12px" height="12px"><path d="M436.7 74.7L448 85.4 448 32c0-17.7 14.3-32 32-32s32 14.3 32 32l0 128c0 17.7-14.3 32-32 32l-128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32l47.9 0-7.6-7.2c-.2-.2-.4-.4-.6-.6-75-75-196.5-75-271.5 0s-75 196.5 0 271.5 196.5 75 271.5 0c8.2-8.2 15.5-16.9 21.9-26.1 10.1-14.5 30.1-18 44.6-7.9s18 30.1 7.9 44.6c-8.5 12.2-18.2 23.8-29.1 34.7-100 100-262.1 100-362 0S-25 175 75 75c99.9-99.9 261.7-100 361.7-.3z"/></svg>
                     </div>
+                    <div className='flip-button overlay-buttons flex'
+                        onPointerUp={(e)=>{
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setFlip(prev=>!prev)
+                        }}
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M502.6 150.6l-96 96c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L402.7 160 32 160c-17.7 0-32-14.3-32-32S14.3 96 32 96l370.7 0-41.4-41.4c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l96 96c12.5 12.5 12.5 32.8 0 45.3zm-397.3 352l-96-96c-12.5-12.5-12.5-32.8 0-45.3l96-96c12.5-12.5 32.8-12.5 45.3 0s12.5 32.8 0 45.3L109.3 352 480 352c17.7 0 32 14.3 32 32s-14.3 32-32 32l-370.7 0 41.4 41.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0z"/></svg>
+                    </div>
+                    {svg && <div className='fill-button overlay-buttons flex' 
+                        onPointerUp={(e)=>{
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setColor(prev=>prev=="pink"?"blue":"pink")
+                        }}
+                    >
+                        <svg style={{"--color": color == "pink"? "var(--saki-color)":"var(--anon-color)"}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M296 64c6.9 0 13.5 2.7 18.3 7.6L440.4 197.7c4.9 4.9 7.6 11.5 7.6 18.3s-2.7 13.5-7.6 18.3L386.7 288 65.3 288c1.3-3.9 3.4-7.4 6.3-10.3l96.4-96.4 33.4 33.4c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L213.3 136 277.7 71.6c4.9-4.9 11.5-7.6 18.3-7.6zM122.7 136L26.3 232.4C9.5 249.3 0 272.1 0 296s9.5 46.7 26.3 63.6L152.4 485.7C169.3 502.5 192.1 512 216 512s46.7-9.5 63.6-26.3L485.7 279.6C502.5 262.7 512 239.9 512 216s-9.5-46.7-26.3-63.6L359.6 26.3C342.7 9.5 319.9 0 296 0s-46.7 9.5-63.6 26.3L168 90.7 118.6 41.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L122.7 136z"/></svg>
+                    </div>}
                 </div>
             }
         </div>
@@ -535,14 +560,25 @@ function Decorations({url, isSelected, svg, width, height, onClick, onDelete, ca
 function Slider({ config, onChange, reset}){
     return(
         <div className='flex input-container'>
-            <span>{config.label}:</span>
-            <input type="range" 
-                onChange={onChange} 
+            <span>{config.label}</span>
+            <div className='slider-container flex'>
+                <span>{config.min}</span>
+                <input type="range" 
+                    onChange={onChange} 
+                    min={config.min}
+                    max={config.max}
+                    step={config.step}
+                    value={config.value}
+                    />
+            <span>{config.max}</span>
+            </div>
+            <input type='number'
+                onChange={onChange}
                 min={config.min}
                 max={config.max}
                 step={config.step}
                 value={config.value}
-                />
+            />
             <button className={""} onClick={reset}> 
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M65.9 228.5c13.3-93 93.4-164.5 190.1-164.5 53 0 101 21.5 135.8 56.2 .2 .2 .4 .4 .6 .6l7.6 7.2-47.9 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l128 0c17.7 0 32-14.3 32-32l0-128c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 53.4-11.3-10.7C390.5 28.6 326.5 0 256 0 127 0 20.3 95.4 2.6 219.5 .1 237 12.2 253.2 29.7 255.7s33.7-9.7 36.2-27.1zm443.5 64c2.5-17.5-9.7-33.7-27.1-36.2s-33.7 9.7-36.2 27.1c-13.3 93-93.4 164.5-190.1 164.5-53 0-101-21.5-135.8-56.2-.2-.2-.4-.4-.6-.6l-7.6-7.2 47.9 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L32 320c-8.5 0-16.7 3.4-22.7 9.5S-.1 343.7 0 352.3l1 127c.1 17.7 14.6 31.9 32.3 31.7S65.2 496.4 65 478.7l-.4-51.5 10.7 10.1c46.3 46.1 110.2 74.7 180.7 74.7 129 0 235.7-95.4 253.4-219.5z"/></svg>
             </button>
@@ -568,12 +604,8 @@ function PhotoBoothPage() {
     const [selectedDecorations, setSelectedDecorations] = useState(null)
     const currentId = useRef(0)
     const canvasContainerRef = useRef(null)
+    const l2dCanvasRef = useRef(null)
     const [background, setBackground] = useState(0)
-    const [filterSetting, setFilterSetting] = useState({
-        brightness: 1,
-        contrast: 1,
-        saturation: 1,
-    })
     const [filterSliderValue, setFilterSliderValue] = useState({
         brightness: 1,
         contrast: 1,
@@ -581,6 +613,12 @@ function PhotoBoothPage() {
         temperature: 0,
         fade: 0,
     })
+
+    const [isGenerating, setIsGenerating] = useState(false);
+    const [generatedImage, setGeneratedImage] = useState(null);
+    const [popupAnimationState, setPopupAnimationState] = useState("closed")
+    const [isFlashing, setIsFlashing] = useState(false)
+    const shutterAudioRef = useRef(null)
 
     useEffect(()=>{
         async function fetchData(){
@@ -611,7 +649,7 @@ function PhotoBoothPage() {
             }
             catch (err){
                 console.error('Failed to fetch data', err);
-                setError("无法获取模型信息！请联系作者B站")
+                setError({type:"fetch", msg:"无法获取模型信息！请联系作者B站"})
             }
         }
         fetchData();
@@ -648,7 +686,7 @@ function PhotoBoothPage() {
         })
     }, [activeTab])
 
-    useGSAP(()=>{
+    const {contextSafe} = useGSAP(()=>{
         gsap.to(".pill", {
             xPercent: selectedCharacter * 100,
             backgroundColor: selectedCharacter? "rgb(150, 174, 210)": "rgb(246, 162, 174)",
@@ -656,11 +694,49 @@ function PhotoBoothPage() {
         })
     }, [selectedCharacter])
 
-    const {contextSafe} = useGSAP(()=>{
-    }, [activeSubsection])
+    useGSAP(()=>{
+        const tl = gsap.timeline()
+        if(popupAnimationState == "opening"){
+            tl.fromTo(".sticky-note-popup", 
+                {opacity: 0},
+                {
+                    opacity: 1,
+                    duration: 0.25,
+                    pointerEvents: "all"
+                }
+            ).fromTo(".photo-popup", {
+                rotate: ()=>gsap.utils.random(-50, 50),
+                top: "0%",
+                yPercent: -200,
+            }, {
+                rotate: 0,
+                top: "50%",
+                yPercent: -50,
+                duration: 0.5,
+                ease: "none",
+            }, ">")
+        }else if(popupAnimationState == "closing"){
+            if(generatedImage!=null){
+                tl.to(".photo-popup", {
+                    top: "100%",
+                    yPercent: 100,
+                    duration: 0.5,
+                    ease: "none",
+                }).to(".sticky-note-popup", 
+                {
+                    opacity: 0,
+                    duration: 0.25,
+                    pointerEvents: "none"
+                }, ">"
+            )
+            }
+        }
+        tl.play()
+    }, [popupAnimationState])
     
     const switchSubsection = contextSafe((section)=>{
         if (section == activeSubsection) return;
+        if (section == "capture") return captureCanvas();
         const target = section !== "home"? "#home": "#back"
         const destination = section == "home"? "#home": "#back"
         const tl = gsap.timeline()
@@ -681,6 +757,18 @@ function PhotoBoothPage() {
             duration: 0.25,
             opacity: 1
         }, "<")
+    })
+
+    const canvasFlash = contextSafe(()=>{
+        setIsFlashing(true)
+        const tl = gsap.timeline({onComplete:()=>{setIsFlashing(false)}});
+        shutterAudioRef.current.play()
+        tl.fromTo("#flash-overlay", 
+            {opacity: 0}, 
+            {opacity: 1, duration: 0.3}
+        ).to("#flash-overlay",
+            {opacity: 0, duration: 0.1}
+        )
     })
 
     function handleDrag(event, character){
@@ -747,23 +835,122 @@ function PhotoBoothPage() {
         changeCharacterConfig("motionPlayback", live2DConfigs[selectedCharacter].motionPlayback+1)
     }
 
+    const propContainerRef = useRef(null)
+
+    function captureCanvas(){
+        if(isGenerating) return;
+        setIsGenerating(true)
+        canvasFlash()
+        html2canvas(propContainerRef.current, {
+                backgroundColor: null,
+                logging: false,
+                ignoreElements: el => el.classList.contains('edit-overlay'),
+            }).then(
+            function(canvas) {
+                const glCanvas = l2dCanvasRef.current;
+                const out = document.createElement('canvas');
+                out.width = canvas.width
+                out.height = canvas.height
+                const img = new Image()
+                img.src = BACKGROUNDS[background].url;
+                const ctx = out.getContext('2d');
+                img.onload = ()=>{                
+                    ctx.drawImage(img, 0, 0, out.width, out.height);
+                    requestAnimationFrame(() => {
+                        ctx.filter = `brightness(${getFilterValue("brightness")})
+                                        hue-rotate(${getFilterValue("hue")})
+                                        saturate(${getFilterValue("saturation")})
+                                        contrast(${getFilterValue("contrast")})`
+                        ctx.drawImage(
+                            glCanvas, 
+                            0, 0, glCanvas.width, glCanvas.height,
+                            0, 0, canvas.width, canvas.height
+                        )
+                        ctx.drawImage(canvas, 0, 0)
+                        out.toBlob((blob)=>{
+                            setGeneratedImage(URL.createObjectURL(blob))
+                        })
+                        setIsGenerating(false)
+                        setPopupAnimationState("opening")
+                    })
+                }
+            }
+        )
+    }
+
+    const handleDownload = () => {
+        console.log("downloading")
+        if (!generatedImage) return;
+        setError(null)
+        const a = document.createElement('a');
+        a.href = generatedImage;
+        a.download = `anonsaki-win-${crypto.randomUUID()}.png`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    };
+
+    async function handleShare(){
+        try {
+            const response = await fetch(generatedImage);
+            const blob = await response.blob();
+            
+            const file = new File([blob], `anonsaki-win-${crypto.randomUUID()}.png`, { type: blob.type });
+
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            await navigator.share({
+                files: [file],
+                title: 'Image Share',
+                text: 'Look at this photo!'
+            });
+            } else {
+                setError({type: "share", msg: "⚠错误:无法获得分享许可。请下载图片。"});
+            }
+        } catch (err) {
+            console.error("Could not share file:", err);
+        }
+    };
+
+    function getFilterValue(variable) {
+        switch(variable) {
+            case "brightness":
+            return `${filterSliderValue.brightness + 0.2 * filterSliderValue.fade}`;
+            case "contrast":
+            return `${filterSliderValue.contrast - 0.5 * filterSliderValue.fade}`;
+            case "saturation":
+            return `${filterSliderValue.saturation + filterSliderValue.temperature / 200}`;
+            case "hue":
+            return `${filterSliderValue.temperature * 0.5}deg`;
+            default:
+            return "";
+        }
+    }
+
+    if(error && error.type == "fetch"){
+        return(
+            <div>{error.msg}</div>
+        )
+    }
+
     return (
         <div className='photobooth-page flex flex-col'>
+            <audio src="/assets/sound-effects/camera-shutter-click-08.mp3" ref={shutterAudioRef}></audio>
             <div 
                 className='photo-booth-canvas-container flex flex-col' 
                 style={{
                     "--background-image": `url(${BACKGROUNDS[background].url})`,
-                    "--brightness": `${filterSliderValue.brightness + 0.2 * filterSliderValue.fade}`,
-                    "--contrast": `${filterSliderValue.contrast - 0.5 * filterSliderValue.fade}`,
-                    "--saturation": `${filterSliderValue.saturation + filterSliderValue.temperature/200}`,
-                    "--hue": `${filterSliderValue.temperature * 0.5}deg`,
+                    "--brightness": getFilterValue("brightness"),
+                    "--contrast": getFilterValue("contrast"),
+                    "--saturation": getFilterValue("saturation"),
+                    "--hue": getFilterValue("hue"),
                 }}
                 ref={canvasContainerRef}
                 onClick={(e)=>{
                     // if (e.target.dataset.drag)
                     setSelectedDecorations(null)
                 }}>
-                <div className='prop-container'>
+                <div id='flash-overlay'></div>
+                <div className='prop-container' ref={propContainerRef}>
                     {decorations.map((decoration, index)=>(
                         <Decorations 
                             key={decoration.id}
@@ -786,6 +973,7 @@ function PhotoBoothPage() {
                         width={1200} height={1400} 
                         className='photo-booth-canvas'
                         live2DConfigs={live2DConfigs}
+                        ref={l2dCanvasRef}
                     />
                     {loading&&
                         <div>
@@ -829,8 +1017,18 @@ function PhotoBoothPage() {
                                 </div>
                             }
                             {activeSubsection == "position" && 
-                                <div className='tools-subsections flex flex-col position-subsection'>
-                                    <div className='flex input-container'>
+                            <div className='tools-subsections flex flex-col position-subsection'>
+                                {positionSliders.map((slider)=>{
+                                    const defaultValue = (selectedCharacter == 1 && slider.key == "transitionX")? -0.65: slider.default
+                                    return(
+                                        <Slider 
+                                            key={slider.key}
+                                            config={{...slider, value: live2DConfigs[selectedCharacter][slider.key]}}
+                                            onChange={(e)=>changeCharacterConfig(slider.key, e.target.value)} 
+                                            reset={(e)=>changeCharacterConfig(slider.key, defaultValue)}
+                                        />
+                                )})}
+                                    {/* <div className='flex input-container'>
                                         <span>朝向X轴:</span>
                                         <input type="range" 
                                             onChange={(e)=>changeCharacterConfig("faceDirectionX", e.target.value)} 
@@ -881,7 +1079,7 @@ function PhotoBoothPage() {
                                         <button className={""} onClick={()=>changeCharacterConfig("positionY", 1.15)}> 
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M65.9 228.5c13.3-93 93.4-164.5 190.1-164.5 53 0 101 21.5 135.8 56.2 .2 .2 .4 .4 .6 .6l7.6 7.2-47.9 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l128 0c17.7 0 32-14.3 32-32l0-128c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 53.4-11.3-10.7C390.5 28.6 326.5 0 256 0 127 0 20.3 95.4 2.6 219.5 .1 237 12.2 253.2 29.7 255.7s33.7-9.7 36.2-27.1zm443.5 64c2.5-17.5-9.7-33.7-27.1-36.2s-33.7 9.7-36.2 27.1c-13.3 93-93.4 164.5-190.1 164.5-53 0-101-21.5-135.8-56.2-.2-.2-.4-.4-.6-.6l-7.6-7.2 47.9 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L32 320c-8.5 0-16.7 3.4-22.7 9.5S-.1 343.7 0 352.3l1 127c.1 17.7 14.6 31.9 32.3 31.7S65.2 496.4 65 478.7l-.4-51.5 10.7 10.1c46.3 46.1 110.2 74.7 180.7 74.7 129 0 235.7-95.4 253.4-219.5z"/></svg>
                                         </button>
-                                    </div>
+                                    </div> */}
                                     <button className={"tools-section-buttons"} onClick={resetConfig}> 
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M65.9 228.5c13.3-93 93.4-164.5 190.1-164.5 53 0 101 21.5 135.8 56.2 .2 .2 .4 .4 .6 .6l7.6 7.2-47.9 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l128 0c17.7 0 32-14.3 32-32l0-128c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 53.4-11.3-10.7C390.5 28.6 326.5 0 256 0 127 0 20.3 95.4 2.6 219.5 .1 237 12.2 253.2 29.7 255.7s33.7-9.7 36.2-27.1zm443.5 64c2.5-17.5-9.7-33.7-27.1-36.2s-33.7 9.7-36.2 27.1c-13.3 93-93.4 164.5-190.1 164.5-53 0-101-21.5-135.8-56.2-.2-.2-.4-.4-.6-.6l-7.6-7.2 47.9 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L32 320c-8.5 0-16.7 3.4-22.7 9.5S-.1 343.7 0 352.3l1 127c.1 17.7 14.6 31.9 32.3 31.7S65.2 496.4 65 478.7l-.4-51.5 10.7 10.1c46.3 46.1 110.2 74.7 180.7 74.7 129 0 235.7-95.4 253.4-219.5z"/></svg>
                                         重置所有
@@ -915,11 +1113,15 @@ function PhotoBoothPage() {
                         </div>
                     </div>
                     <div className = "tabs decor-tab" ref={activeTab == "model"? activeTabRef: null}>
-                        <div className='tools-subsections'>
+                        <div className='tools-subsections decor-subsection'>
                             {DECORATION_TEMPLATES.map(decoration=>(
                                 <SectionButtons 
                                     key={decoration.id}
-                                    onClick={()=>setDecorations((prev)=>[...prev, {...decoration, id:currentId.current++, x:200, y:200 }])}
+                                    onClick={()=>{
+                                        const newId = currentId.current++
+                                        setDecorations((prev)=>[...prev, {...decoration, id: newId, x:200, y:200 }])
+                                        setSelectedDecorations(newId)
+                                    }}
                                     displayText={decoration.name}
                                     image={decoration.url}
                                     svg={decoration.svg}
@@ -928,7 +1130,7 @@ function PhotoBoothPage() {
                         </div>
                     </div>
                     <div className = "tabs background-tab" ref={activeTab == "model"? activeTabRef: null}>
-                        <div className='tools-subsections'>
+                        <div className='tools-subsections background-subsection'>
                             {BACKGROUNDS.map((background, index)=>(
                                 <SectionButtons
                                     key={index}
@@ -948,8 +1150,17 @@ function PhotoBoothPage() {
                                 onChange={(e)=>{setFilterSliderValue(prev=>({...prev, [slider.key]: parseFloat(e.target.value)}))}}
                                 reset={()=>setFilterSliderValue(prev=>({...prev, [slider.key]:slider.default}))}
                             />
-                        ))
-                        }
+                        ))}
+                        <div className='filter-subsection'>
+                            {FILTER_PRESET.map((preset, index)=>(
+                                <SectionButtons
+                                key={index}
+                                displayText={preset.name}
+                                image={preset.imgUrl}
+                                onClick={()=>setFilterSliderValue({...preset.values})}
+                                /> 
+                            ))}
+                        </div>
                     </div>
                 </div>
                 <div className='flex tab-selector'>
@@ -979,6 +1190,32 @@ function PhotoBoothPage() {
                         滤镜</div>
                 </div>
             </div>
+            <div className='sticky-note-popup'>
+                <div className='popup-backdrop' onClick={(e)=>{
+                    e.stopPropagation();
+                    setError(null)
+                    setPopupAnimationState("closing")}
+                }></div>
+                <div className='photo-popup polaroid-container' onClick={(e)=>{e.preventDefault(); e.stopPropagation()}}>
+                    <img src={generatedImage} key={generatedImage}></img>
+                    <div className='photo-popup-buttons-container flex'>
+                        <button className='photo-popup-buttons'
+                            onClick={handleDownload}>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-242.7c0-4.2-1.7-8.3-4.7-11.3L320 86.6 320 176c0 17.7-14.3 32-32 32l-160 0c-17.7 0-32-14.3-32-32l0-96-32 0zm80 0l0 80 128 0 0-80-128 0zM0 96C0 60.7 28.7 32 64 32l242.7 0c17 0 33.3 6.7 45.3 18.7L429.3 128c12 12 18.7 28.3 18.7 45.3L448 416c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96zM160 320a64 64 0 1 1 128 0 64 64 0 1 1 -128 0z"/></svg>
+                            保存</button>
+                        <button className='photo-popup-buttons'
+                            onClick={handleShare}
+                            >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M425.5 7c-6.9-6.9-17.2-8.9-26.2-5.2S384.5 14.3 384.5 24l0 56-48 0c-88.4 0-160 71.6-160 160 0 46.7 20.7 80.4 43.6 103.4 8.1 8.2 16.5 14.9 24.3 20.4 9.2 6.5 21.7 5.7 30.1-1.9s10.2-20 4.5-29.8c-3.6-6.3-6.5-14.9-6.5-26.7 0-36.2 29.3-65.5 65.5-65.5l46.5 0 0 56c0 9.7 5.8 18.5 14.8 22.2s19.3 1.7 26.2-5.2l136-136c9.4-9.4 9.4-24.6 0-33.9L425.5 7zm7 97l0-22.1 78.1 78.1-78.1 78.1 0-22.1c0-13.3-10.7-24-24-24L338 192c-50.9 0-93.9 33.5-108.3 79.6-3.3-9.4-5.2-19.8-5.2-31.6 0-61.9 50.1-112 112-112l72 0c13.3 0 24-10.7 24-24zm-320-8c-44.2 0-80 35.8-80 80l0 256c0 44.2 35.8 80 80 80l256 0c44.2 0 80-35.8 80-80l0-24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 24c0 17.7-14.3 32-32 32l-256 0c-17.7 0-32-14.3-32-32l0-256c0-17.7 14.3-32 32-32l24 0c13.3 0 24-10.7 24-24s-10.7-24-24-24l-24 0z"/></svg>
+                            分享</button>
+                    </div>
+                    {error?.type == "share" && <p>{error.msg}</p>}
+                </div>
+            </div>
+           {(!isFlashing && isGenerating) && 
+           <div className='loading-popup'>
+                <Spinner />
+            </div>}
         </div>
     )
     }

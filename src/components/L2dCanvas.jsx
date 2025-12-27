@@ -33,7 +33,7 @@ function SplitedText({children, model}){
     )
 }
 
-function L2dCanvas( {character, offsetBottom, width, height, className="",
+function L2dCanvas( {character, offsetBottom, width, height, className="", ref,
     live2DConfigs = [{
         paused: false,  
         faceDirectionX: 0,
@@ -132,7 +132,6 @@ function L2dCanvas( {character, offsetBottom, width, height, className="",
     //     canvas.removeEventListener("touchmove", touchHandler);
     //     };
     // }, [model]);
-
     useEffect(() => {
         const canvas = canvasRef.current
         // console.log(canvas)
@@ -467,11 +466,26 @@ function L2dCanvas( {character, offsetBottom, width, height, className="",
         live2DMgrRef.current.tapEvent(0, 0.5)
     }
 
-
+    function mergeRefs(...refs) {
+    return (node) => {
+        refs.forEach(ref => {
+        if (!ref) return;
+        if (typeof ref === 'function') {
+            ref(node);
+        } else {
+            ref.current = node;
+        }
+        });
+    };
+    }
 
     return (
         <div id={'gl_canvas'} className={className} style={{bottom: offsetBottom }} ref={containerRef}>
-            <canvas ref={canvasRef} width={width} height={height} onClick={mouseHandler}
+            <canvas 
+                ref={mergeRefs(canvasRef, ref)} 
+                width={width} 
+                height={height} 
+                onClick={mouseHandler}
                 //(canvasRef.current? canvasRef.current.offsetHeight:0)
             />
                 <div className='canvas-dialog non-select'>
