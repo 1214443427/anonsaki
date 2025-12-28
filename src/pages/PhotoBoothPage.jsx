@@ -9,10 +9,21 @@ import { useFetchData } from '../hooks/useFetchData';
 import html2canvas from 'html2canvas';
 
 const colors = {
-blue: 'rgb(119, 153, 204)',
-pink: 'rgb(255, 136, 153)',
-purple: 'rgb(186, 145, 204)'
-};
+    '#881144': 'rgb(136, 17, 68)',
+    '#3388BB': 'rgb(51, 136, 187)',
+    '#FF8899': 'rgb(255, 136, 153)',
+    '#77DD77': 'rgb(119, 221, 119)',
+    '#FFDD88': 'rgb(255, 221, 136)',
+    '#7777AA': 'rgb(119, 119, 170)',
+    '#77BBDD': 'rgb(119, 187, 221)',
+    '#7799CC': 'rgb(119, 153, 204)',
+    '#BB9955': 'rgb(187, 153, 85)',
+    '#779977': 'rgb(119, 153, 119)',
+    '#335566': 'rgb(51, 85, 102)',
+    '#AA4477': 'rgb(170, 68, 119)',
+    '#6C5E53': 'rgb(108, 94, 83)'
+}
+
 
 const BACKGROUNDS = [
     {
@@ -170,6 +181,28 @@ const DECORATION_TEMPLATES = [
         </svg>
         ),
         width: 40,
+        height: 40
+    },
+    {
+        id: 'text',
+        name: '文字',
+        type: 'text',
+        textConfig: {
+            text: "爱爱的祥!",
+            style: "basic-text"
+        },
+        width: 80,
+        height: 40
+    },
+    {
+        id: 'bubbly-text',
+        name: '气泡文字',
+        type: 'text',
+        textConfig: {
+            text: "爱爱的祥!",
+            style: "bubbly-text"
+        },
+        width: 80,
         height: 40
     }
 ];
@@ -347,27 +380,33 @@ const shareData = {
 //     return deviceToScreenRef.current.transformY(deviceY);
 // }
 
-function SectionButtons({onClick, displayText, image, active, svg}){
-    const [loading, setLoading] = useState(svg?false:true)
+function SectionButtons({onClick, displayText, image, active, svg, textConfig}){
+    const [loading, setLoading] = useState((svg||textConfig)?false:true)
 
     return(
         <div className={`subsection-buttons flex ${active?"active": ""}`} onClick={onClick}>
             {image && <img className='button-background-images non-select' src={image} onLoad={()=>setLoading(false)}></img>}
             {svg && svg}
+            {textConfig && <p className={textConfig.style}>{textConfig.text}</p>}
             {loading && <Spinner />}
             <p className='button-text'>{displayText}</p>
         </div>
     )
 }
 
-function Decorations({url, isSelected, svg, width, height, onClick, onDelete, canvasContainerRef}){
+function Decorations({url, isSelected, svg, textConfig, width, height, onClick, onDelete, canvasContainerRef}){
     const [scale, setScale] = useState(1)
     const [rotation, setRotation] = useState(0)
     const [center, setCenter] = useState({x: 200, y: 200})
     const ref = useRef(null)
     const parentDragRef = useRef(null)
     const [flip, setFlip] = useState(false)
-    const [color, setColor] = useState("blue")
+    const [color, setColor] = useState(()=>gsap.utils.random(Object.keys(colors)))
+    const [text, setText] = useState(textConfig? textConfig.text : null)
+    const [isEditingText, setIsEditingText] = useState(false)
+    const textRef = useRef(null)
+    const [zIndex, setZIindex] = useState(1)
+
     // useGSAP(()=>{
     //     parentDragRef.current = Draggable.create(ref.current,
     //         {
@@ -406,9 +445,11 @@ function Decorations({url, isSelected, svg, width, height, onClick, onDelete, ca
     const [isResizing, setIsResizing] = useState(false)
     const [isRotating, setIsRotating] = useState(false)
     const [anchorStart, setAnchorStart] = useState()
+    const colorPickerRef = useRef(null)
 
     function handleDragStart(e){
         onClick()
+        if(isEditingText)return;
         setIsDragging(true)
         updateAnchorStart(e)
         // parentDragRef.current[0].disable()
@@ -495,24 +536,51 @@ function Decorations({url, isSelected, svg, width, height, onClick, onDelete, ca
         }
     }, [isDragging, isResizing, isRotating, anchorStart]);
 
+    useEffect(() => {
+        if (isSelected && textConfig && isEditingText){
+            textRef.current.focus()
+        }
+    }, [isEditingText, isSelected])
+
     return(
         <div 
             className='decoration-container flex' 
             ref={ref}
             style={{
-                "--width": `${width * scale}px`,
+                "--width": textConfig? "auto":`${width * scale}px`,
                 "--height": `${height * scale}px`,
                 "--left": `${center.x - width/2 * scale}px`,
                 "--top": `${center.y - height/2 * scale}px`,
-                "--rotation": `${rotation}deg`
+                "--rotation": `${rotation}deg`,
+                "--zIndex": zIndex,
+                "--scale": scale,
             }}
             onMouseDown={(e)=>handleDragStart(e)}
             onClick={(e)=>e.stopPropagation()}
             onTouchStart={(e)=>handleDragStart(e)}
         >
-            <div className={`decoration-assets-container non-select flex ${flip?"mirror-horizontal":""}`} style={{"--color": color == "pink"? "var(--anon-color)":"var(--saki-color)"}}>
+            <div className={`decoration-assets-container non-select flex ${flip?"mirror-horizontal":""}`} style={{"--color": color }}>
                 {url && <img src={url}></img>}
                 {svg && svg}
+                {textConfig && 
+                    <input 
+                        ref={textRef}
+                        className={`text-decoration ${textConfig.style}`}
+                        style={{
+                            "--scale":scale,
+                            "--width":`${text.length * 1.4}ch`,
+                            pointerEvents: isEditingText ? "all" : "none"
+                        }}
+                        value={text} 
+                        contentEditable={true}
+                        onChange={e=>setText(e.target.value)}
+                        onBlur={()=>setIsEditingText(false)}
+                        onKeyDown={(e)=>{
+                            if(e.key == "Enter"){ 
+                                e.target.blur()
+                            }
+                        }}
+                        ></input>}
             </div>
             {isSelected && 
                 <div className='edit-overlay'>
@@ -542,15 +610,46 @@ function Decorations({url, isSelected, svg, width, height, onClick, onDelete, ca
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M502.6 150.6l-96 96c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L402.7 160 32 160c-17.7 0-32-14.3-32-32S14.3 96 32 96l370.7 0-41.4-41.4c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l96 96c12.5 12.5 12.5 32.8 0 45.3zm-397.3 352l-96-96c-12.5-12.5-12.5-32.8 0-45.3l96-96c12.5-12.5 32.8-12.5 45.3 0s12.5 32.8 0 45.3L109.3 352 480 352c17.7 0 32 14.3 32 32s-14.3 32-32 32l-370.7 0 41.4 41.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0z"/></svg>
                     </div>
-                    {svg && <div className='fill-button overlay-buttons flex' 
+                    {(svg||textConfig) && <div className='fill-button overlay-buttons flex' 
                         onPointerUp={(e)=>{
                             e.preventDefault();
                             e.stopPropagation();
-                            setColor(prev=>prev=="pink"?"blue":"pink")
+                            colorPickerRef.current.showPicker()
                         }}
                     >
-                        <svg style={{"--color": color == "pink"? "var(--saki-color)":"var(--anon-color)"}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M296 64c6.9 0 13.5 2.7 18.3 7.6L440.4 197.7c4.9 4.9 7.6 11.5 7.6 18.3s-2.7 13.5-7.6 18.3L386.7 288 65.3 288c1.3-3.9 3.4-7.4 6.3-10.3l96.4-96.4 33.4 33.4c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L213.3 136 277.7 71.6c4.9-4.9 11.5-7.6 18.3-7.6zM122.7 136L26.3 232.4C9.5 249.3 0 272.1 0 296s9.5 46.7 26.3 63.6L152.4 485.7C169.3 502.5 192.1 512 216 512s46.7-9.5 63.6-26.3L485.7 279.6C502.5 262.7 512 239.9 512 216s-9.5-46.7-26.3-63.6L359.6 26.3C342.7 9.5 319.9 0 296 0s-46.7 9.5-63.6 26.3L168 90.7 118.6 41.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L122.7 136z"/></svg>
+                        <svg style={{"--color": color}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M296 64c6.9 0 13.5 2.7 18.3 7.6L440.4 197.7c4.9 4.9 7.6 11.5 7.6 18.3s-2.7 13.5-7.6 18.3L386.7 288 65.3 288c1.3-3.9 3.4-7.4 6.3-10.3l96.4-96.4 33.4 33.4c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L213.3 136 277.7 71.6c4.9-4.9 11.5-7.6 18.3-7.6zM122.7 136L26.3 232.4C9.5 249.3 0 272.1 0 296s9.5 46.7 26.3 63.6L152.4 485.7C169.3 502.5 192.1 512 216 512s46.7-9.5 63.6-26.3L485.7 279.6C502.5 262.7 512 239.9 512 216s-9.5-46.7-26.3-63.6L359.6 26.3C342.7 9.5 319.9 0 296 0s-46.7 9.5-63.6 26.3L168 90.7 118.6 41.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L122.7 136z"/></svg>
+                        <div className='color-picker'>
+                            <input type='color' ref={colorPickerRef} list="colorOptions" value={color} onChange={(e)=>setColor(e.target.value)}/>
+                            <datalist id="colorOptions">
+                                {Object.keys(colors).map((key)=>(
+                                    <option value={key}></option>
+                                ))}
+                            </datalist>
+                        </div>
                     </div>}
+                    {(textConfig) && <div className='text-edit-button overlay-buttons flex' 
+                        onPointerUp={(e)=>{
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setIsEditingText(true)
+                        }}
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M441 58.9L453.1 71c9.4 9.4 9.4 24.6 0 33.9L424 134.1 377.9 88 407 58.9c9.4-9.4 24.6-9.4 33.9 0zM209.8 256.2L344 121.9 390.1 168 255.8 302.2c-2.9 2.9-6.5 5-10.4 6.1l-58.5 16.7 16.7-58.5c1.1-3.9 3.2-7.5 6.1-10.4zM373.1 25L175.8 222.2c-8.7 8.7-15 19.4-18.3 31.1l-28.6 100c-2.4 8.4-.1 17.4 6.1 23.6s15.2 8.5 23.6 6.1l100-28.6c11.8-3.4 22.5-9.7 31.1-18.3L487 138.9c28.1-28.1 28.1-73.7 0-101.8L474.9 25C446.8-3.1 401.2-3.1 373.1 25zM88 64C39.4 64 0 103.4 0 152L0 424c0 48.6 39.4 88 88 88l272 0c48.6 0 88-39.4 88-88l0-112c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 112c0 22.1-17.9 40-40 40L88 464c-22.1 0-40-17.9-40-40l0-272c0-22.1 17.9-40 40-40l112 0c13.3 0 24-10.7 24-24s-10.7-24-24-24L88 64z"/></svg>
+                    </div>}
+                    <div 
+                        className='overlay-buttons flex' 
+                        id='z-index-button-1'
+                        onPointerUp={()=>{setZIindex(prev=>prev+1)}}
+                        >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M256 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 160-160 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l160 0 0 160c0 17.7 14.3 32 32 32s32-14.3 32-32l0-160 160 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-160 0 0-160z"/></svg>                    
+                    </div>
+                    <div 
+                        className='overlay-buttons flex' 
+                        id='z-index-button-2'
+                        onPointerUp={()=>{setZIindex(prev=>prev-1)}}
+                        >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M0 256c0-17.7 14.3-32 32-32l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 288c-17.7 0-32-14.3-32-32z"/></svg>
+                    </div>
                 </div>
             }
         </div>
@@ -933,7 +1032,11 @@ function PhotoBoothPage() {
     }
 
     return (
-        <div className='photobooth-page flex flex-col'>
+        <div className='photobooth-page flex flex-col'
+            onClick={(e)=>{
+            // if (e.target.dataset.drag)
+                setSelectedDecorations(null)
+            }}>
             <audio src="/assets/sound-effects/camera-shutter-click-08.mp3" ref={shutterAudioRef}></audio>
             <div 
                 className='photo-booth-canvas-container flex flex-col' 
@@ -945,10 +1048,7 @@ function PhotoBoothPage() {
                     "--hue": getFilterValue("hue"),
                 }}
                 ref={canvasContainerRef}
-                onClick={(e)=>{
-                    // if (e.target.dataset.drag)
-                    setSelectedDecorations(null)
-                }}>
+                >
                 <div id='flash-overlay'></div>
                 <div className='prop-container' ref={propContainerRef}>
                     {decorations.map((decoration, index)=>(
@@ -956,6 +1056,7 @@ function PhotoBoothPage() {
                             key={decoration.id}
                             url={decoration.url}
                             svg={decoration.svg}
+                            textConfig={decoration.textConfig}
                             isSelected={selectedDecorations == decoration.id}
                             // rotation={decoration.rotation}
                             width={decoration.width}
@@ -1113,11 +1214,19 @@ function PhotoBoothPage() {
                         </div>
                     </div>
                     <div className = "tabs decor-tab" ref={activeTab == "model"? activeTabRef: null}>
+                        {/* <div
+                            className='decoration-detailed-control'
+                            style={{
+                                "--height": selectedDecorations!==null? "100%":"0%"
+                            }}
+                        > 
+                        </div> */}
                         <div className='tools-subsections decor-subsection'>
                             {DECORATION_TEMPLATES.map(decoration=>(
                                 <SectionButtons 
                                     key={decoration.id}
-                                    onClick={()=>{
+                                    onClick={(e)=>{
+                                        e.stopPropagation();
                                         const newId = currentId.current++
                                         setDecorations((prev)=>[...prev, {...decoration, id: newId, x:200, y:200 }])
                                         setSelectedDecorations(newId)
@@ -1125,6 +1234,7 @@ function PhotoBoothPage() {
                                     displayText={decoration.name}
                                     image={decoration.url}
                                     svg={decoration.svg}
+                                    textConfig={decoration.textConfig}
                                 />
                             ))}
                         </div>

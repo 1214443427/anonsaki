@@ -278,6 +278,12 @@
     grid-template-columns: repeat(2, 1fr);
 }
 
+.decoration-detailed-control{
+    overflow: hidden;
+    max-height: var(--height);
+    transition: max-height 0.5s ease-in-out;
+}
+
 .subsection-buttons{
     position: relative;
     width: 100%;
@@ -299,6 +305,10 @@
     width: 80%;
     height: 80%;
     fill: rgb(var(--saki-color));
+}
+
+.subsection-buttons p{
+    align-self: center;
 }
 
 .button-background-images{
@@ -391,8 +401,8 @@
     height: var(--height);
     left: var(--left);
     top: var(--top);
+    z-index: var(--zIndex, 1);
     transform: rotate(var(--rotation));
-    z-index: 50;
     justify-content: center;
     align-items: center;
     transform-origin: center center 0px;
@@ -406,7 +416,38 @@
 
 .decoration-assets-container svg{
     width: 85%;
-    fill: rgb(var(--color, white));
+    fill: var(--color, white);
+}
+
+.text-decoration{
+    background: transparent;
+    width: var(--width, 100%);
+    border: none;
+    font-size: calc(var(--scale) * 1rem);
+    min-width: 50px;
+    padding-inline: 5px;
+    z-index: 1;
+}
+
+.basic-text{
+    color: var(--color, white);
+}
+
+.bubbly-text{
+    color: var(--color, #7799CC);
+    -webkit-text-stroke: 1px white;
+
+}
+
+.text-decoration:focus-visible{
+    outline: none;
+}
+
+@supports (field-sizing: content) {
+  .text-decoration {
+    field-sizing: content;
+    width: auto; 
+  }
 }
 
 .edit-overlay{
@@ -425,13 +466,20 @@
     border-radius: 50%;
     align-items: center;
     justify-content: center;
+    background-color: white;
+    border: 2px solid rgb(var(--combined-color));
+}
+
+.overlay-buttons svg{
+    width: 12px;
+    height: 12px;
 }
 
 .resizing-editor{
-    background-color: white;
     border: 2px solid rgb(var(--saki-color));
-    top: -10px;
-    left: -10px;
+    top: 0px;
+    left: 0px;
+    transform: translate(-50%, -50%);
     cursor: nwse-resize;
     fill: rgb(var(--saki-color));
 }
@@ -441,41 +489,61 @@
 }
 
 .overlay-close-button{
-    top: -10px;
-    right: -10px;
+    top: 0px;
+    right: 0px;
+    transform: translate(50%, -50%);
     background-color: red;
 }
 
 .rotation-button{
     background-color: rgb(var(--saki-color-alpha));
     fill: white;
-    bottom: -20px;
+    bottom: 0px;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, 50%);
 }
 
 .flip-button{
-    bottom: -10px;
-    left: -10px;
-    background-color: white;
-    border: 2px solid rgb(var(--combined-color));
+    bottom: 0px;
+    left: 0px;
+    transform: translate(-50%, 50%);
     fill: rgb(var(--anon-color-alpha));
 }
 
-.flip-button svg, .fill-button svg{
-    width: 12px;
-    height: 12px;
-}
-
 .fill-button{
-    bottom: -10px;
-    right: -10px;
+    bottom: 0px;
+    right: 0px;
+    transform: translate(50%, 50%);
     background-color:white;
     border: 2px solid rgb(var(--combined-color));
 }
 
 .fill-button svg{
-    fill: rgb(var(--color, white));
+    fill: var(--color, white);
+}
+
+.color-picker{
+    display: none;
+    pointer-events: none;
+}
+
+#z-index-button-1{
+    left: 0px;
+    top: 50%;
+    transform: translate(-75%, -50%);
+}
+
+#z-index-button-2{
+    right: 0px;
+    top: 50%;
+    transform: translate(75%, -50%);
+}
+
+.text-edit-button {
+    left: 50%;
+    top: 0px;
+    transform: translate(-50%, -50%);
+    fill: rgb(var(--combined-color));
 }
 
 #gl_canvas canvas{
@@ -490,7 +558,7 @@
     height: auto;
     max-width: 90%;
     min-width: 340px;
-    top: 0%;
+    top: -50%;
     left: 50%;
     transform: translate(-50%, 0%);
     pointer-events: all;

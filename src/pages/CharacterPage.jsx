@@ -24,7 +24,7 @@ const DANMAKU = [
   {text: "真的唉", speed: 0.3, yPos: 20, color: "#BB9955", delay: 0.2},  //uika
   {text: "汉墓封土", speed: 0.5, yPos: 20, color: "#779977", delay: 2.0},  //mutsumi
   {text: "祥祥？什么时候？", speed: 0.45, yPos: 20, color: "#335566", delay: 2.0}, //umiri
-  {text: "爱祥，你在哪里", speed: 0.55, yPos: 20, color: "#AA4477", delay: 2.0}, //mujica
+  {text: "爱祥，你在哪里", speed: 0.55, yPos: 20, color: "#AA4477", delay: 2.0}, //nyamu
   {text: "爱爱🩷祥祥💙爱爱🩷祥祥💙爱爱🩷祥祥💙", speed: 0.5, yPos: 20, color: "#6c5e53", delay: 0.5}, //donut
 ]
 
