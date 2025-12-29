@@ -4,7 +4,6 @@ import Spinner from '../components/Spinner';
 import { gsap } from 'gsap/gsap-core';
 import { useGSAP } from '@gsap/react';
 import ConfirmationModal from '../components/ConfirmationModal';
-import ToolTips from '../components/ToolTips';
 import ExternalLink from '../components/ExternalLink';
 import { isChristmas } from '../utils/util';
 
