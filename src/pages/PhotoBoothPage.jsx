@@ -136,6 +136,38 @@ const DECORATION_TEMPLATES = [
         url: "/assets/pink_heart.png",
         width: 50,
         height: 50
+    },    
+    {
+        id: 'anon-plush',
+        name: '爱音玩偶',
+        type: 'decoration',
+        url: "/assets/photobooth-assets/decorations/anon-plush.webp",
+        width: 80,
+        height: 110
+    },    
+    {
+        id: 'saki-plush',
+        name: '祥子玩偶',
+        type: 'decoration',
+        url: "/assets/photobooth-assets/decorations/saki-plush.webp",
+        width: 100,
+        height: 100
+    },
+        {
+        id: 'angry',
+        name: '生气',
+        type: 'decoration',
+        url: "/assets/photobooth-assets/decorations/angry-vein.png",
+        width: 50,
+        height: 50
+    },    
+    {
+        id: 'balloons',
+        name: '气球',
+        type: 'decoration',
+        url: "/assets/photobooth-assets/decorations/balloons.png",
+        width: 100,
+        height: 100
     },
     {
         id: 'star',
@@ -182,6 +214,137 @@ const DECORATION_TEMPLATES = [
         ),
         width: 40,
         height: 40
+    },
+    {
+    id: 'mustache',
+    name: '胡子',
+    type: 'decoration',
+    svg: (
+        <svg 
+        fill="#000000" 
+        height="200px" 
+        width="200px" 
+        version="1.1" 
+        xmlns="http://www.w3.org/2000/svg"  
+        viewBox="0 0 491.315 491.315" >
+        <path d="M490.862,222.617c-0.576-3.477-2.816-6.443-6.016-7.936c-3.179-1.493-6.912-1.323-9.941,0.491 c-22.528,13.312-40.149,20.053-52.437,20.053c-15.36,0-21.696-10.325-32.448-30.101c-12.736-23.403-30.165-55.467-80.363-55.467 c-23.872,0-38.443,8.661-49.088,14.976c-12.437,7.381-17.387,7.381-29.824,0c-10.645-6.315-25.216-14.976-49.088-14.976 c-50.091,0-65.643,32-76.992,55.381c-9.707,20.011-15.531,30.421-31.744,30.421c-13.056,0-32.171-6.891-56.789-20.48 c-3.051-1.685-6.699-1.792-9.813-0.256c-3.115,1.515-5.312,4.437-5.867,7.872c-3.093,18.837,9.963,50.496,30.997,75.264 c24,28.245,54.613,43.797,86.208,43.797c42.667,0,69.269-15.488,90.667-27.925c14.165-8.235,25.344-14.741,37.333-14.741 c12.011,0,23.189,6.507,37.355,14.741c21.376,12.416,48,27.925,90.645,27.925c31.616,0,62.229-15.552,86.229-43.797 C480.921,273.113,493.956,241.455,490.862,222.617z"></path>
+        </svg>
+        ),
+        width: 50,
+        height: 50
+    },
+    {
+        id: 'tophat',
+        name: '高帽',
+        type: 'decoration',
+        url: "/assets/photobooth-assets/decorations/tophat.webp",
+        width: 80,
+        height: 80
+    },
+    {
+        id: 'rose',
+        name: '玫瑰',
+        type: 'decoration',
+        url: "/assets/photobooth-assets/decorations/rose.webp",
+        width: 50,
+        height: 80
+    },
+    {
+        id: 'bowtie',
+        name: '蝴蝶结',
+        type: 'decoration',
+        svg: (
+        <svg
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlnsXlink="http://www.w3.org/1999/xlink"
+            viewBox="0 0 456.48 456.48"
+            xmlSpace="preserve"
+        >
+            <g strokeWidth="0" />
+            <g strokeLinecap="round" strokeLinejoin="round" />
+            <g>
+            <g>
+                <g>
+                <path
+                    d="M269.35,228.24v22.01c0,2.57-0.72,4.98-1.96,7.03c-2.38,3.91-6.68,6.52-11.59,6.52h-55.13
+                    c-5.14,0-9.62-2.87-11.91-7.09c-1.05-1.92-1.64-4.12-1.64-6.46v-22.01v-22.02
+                    c0-2.34,0.59-4.54,1.64-6.46c2.29-4.22,6.77-7.08,11.91-7.08h55.13
+                    c4.91,0,9.21,2.61,11.59,6.52c1.24,2.04,1.96,4.45,1.96,7.02V228.24z"
+                />
+                <path
+                    d="M269.35,228.24v-22.02c0-2.57-0.72-4.98-1.96-7.02l1.96-0.07l140.61-81.18
+                    c7.8-4.5,17.76-0.64,20.51,7.93c10.68,33.28,16.01,67.83,16.01,102.36
+                    s-5.33,69.08-16.01,102.36c-2.75,8.57-12.71,12.43-20.51,7.93l-140.61-81.18
+                    l-1.96-0.07c1.24-2.05,1.96-4.46,1.96-7.03V228.24z"
+                />
+                <path
+                    d="M187.12,228.24v22.01c0,2.34,0.59,4.54,1.64,6.46l-1.63,0.64L46.52,338.53
+                    c-7.8,4.5-17.77,0.64-20.52-7.93c-10.67-33.28-16-67.83-16-102.36
+                    s5.33-69.08,16-102.36c2.75-8.57,12.72-12.43,20.52-7.93l140.61,81.18
+                    l1.63,0.63c-1.05,1.92-1.64,4.12-1.64,6.46V228.24z"
+                />
+                </g>
+
+                <g>
+                <polyline
+                    fill="none"
+                    stroke="#000000"
+                    strokeWidth="20"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeMiterlimit="10"
+                    points="83.74,199.22 187.12,228.24 83.74,257.25"
+                />
+                <polyline
+                    fill="none"
+                    stroke="#000000"
+                    strokeWidth="20"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeMiterlimit="10"
+                    points="372.73,257.25 269.35,228.24 372.73,199.22"
+                />
+                <path
+                    fill="none"
+                    stroke="#000000"
+                    strokeWidth="20"
+                    strokeLinejoin="round"
+                    strokeMiterlimit="10"
+                    d="M187.13,257.35 L46.52,338.53c-7.8,4.5-17.77,0.64-20.52-7.93
+                    c-10.67-33.28-16-67.83-16-102.36s5.33-69.08,16-102.36
+                    c2.75-8.57,12.72-12.43,20.52-7.93l140.61,81.18"
+                />
+                <path
+                    fill="none"
+                    stroke="#000000"
+                    strokeWidth="20"
+                    strokeLinejoin="round"
+                    strokeMiterlimit="10"
+                    d="M269.35,199.13 l140.61-81.18c7.8-4.5,17.76-0.64,20.51,7.93
+                    c10.68,33.28,16.01,67.83,16.01,102.36s-5.33,69.08-16.01,102.36
+                    c-2.75,8.57-12.71,12.43-20.51,7.93l-140.61-81.18"
+                />
+                <path
+                    fill="none"
+                    stroke="#000000"
+                    strokeWidth="20"
+                    strokeLinejoin="round"
+                    strokeMiterlimit="10"
+                    d="M267.39,257.28
+                    c-2.38,3.91-6.68,6.52-11.59,6.52h-55.13c-5.14,0-9.62-2.87-11.91-7.09
+                    c-1.05-1.92-1.64-4.12-1.64-6.46v-22.01v-22.02
+                    c0-2.34,0.59-4.54,1.64-6.46c2.29-4.22,6.77-7.08,11.91-7.08h55.13
+                    c4.91,0,9.21,2.61,11.59,6.52c1.24,2.04,1.96,4.45,1.96,7.02
+                    v22.02v22.01C269.35,252.82,268.63,255.23,267.39,257.28z"
+                />
+                </g>
+            </g>
+            </g>
+        </svg>
+          ),
+        width: 50,
+        height: 50
     },
     {
         id: 'text',
@@ -622,7 +785,7 @@ function Decorations({url, isSelected, svg, textConfig, width, height, onClick, 
                             <input type='color' ref={colorPickerRef} list="colorOptions" value={color} onChange={(e)=>setColor(e.target.value)}/>
                             <datalist id="colorOptions">
                                 {Object.keys(colors).map((key)=>(
-                                    <option value={key}></option>
+                                    <option value={key} key={key}></option>
                                 ))}
                             </datalist>
                         </div>

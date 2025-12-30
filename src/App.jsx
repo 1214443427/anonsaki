@@ -16,6 +16,9 @@ import MorphSVGPlugin from 'gsap/src/MorphSVGPlugin';
 import DrawSVGPlugin from 'gsap/src/DrawSVGPlugin';
 import Draggable from 'gsap/src/Draggable';
 import { isChristmas } from './utils/util';
+import StudentCouncilPage from './pages/StudentCouncilPage';
+import DatePage from './pages/DatePage';
+import ArcadePage from './pages/arcade/ArcadePage';
 
 
 const isChristmasTime = isChristmas()
@@ -187,6 +190,12 @@ function App() {
     }else if (hash.startsWith('/challenge/')){
       const relayId = hash.replace('/challenge/', '');
       return {route: 'challenge', relayId: relayId}
+    }else if (hash === '/student-council'){
+      return {route: 'student', relayId: null}
+    }else if (hash === '/date'){
+      return {route: 'date', relayId: null}
+    }else if (hash === '/arcade'){
+      return {route: 'arcade', relayId: null}
     }
     return {route: 'landing', relayId: null}
   }
@@ -232,6 +241,13 @@ function App() {
             return <PhotoBoothPage />
         case "challenge":
             return <ChallengePage pagehash={currentRelayId}/>
+        case "student":
+            return <StudentCouncilPage />
+        case "date":
+            return <DatePage />
+        case "arcade":
+            return <ArcadePage />
+        
         }
       })()}
     </div>
