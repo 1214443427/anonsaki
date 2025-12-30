@@ -523,8 +523,11 @@
 }
 
 .color-picker{
-    display: none;
-    pointer-events: none;
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+    pointer-events: none; /* optional */
 }
 
 #z-index-button-1{
