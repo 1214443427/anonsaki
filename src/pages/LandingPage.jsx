@@ -376,7 +376,7 @@ function LandingPage({navigateTo, collectEasterEgg}) {
         }
     },[isFinished]) //TODO. change to percentages. 
     
-    const emojiToUse = isChristmas? CHRISTMAS_EMOJI: AVE_MYGO
+    const emojiToUse = isChristmasTime? CHRISTMAS_EMOJI: AVE_MYGO
     const emojiBubbles = emojiToUse.map((member, index)=>(<EmojiBubble emoji={member} index={index} key={index}/>))
     
     const [tl, setTl] = useState();

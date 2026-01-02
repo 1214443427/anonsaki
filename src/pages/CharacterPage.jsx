@@ -14,7 +14,8 @@ export const IMG_OFFSET = 3;
 const ANIMAION_DURATION = 3000;
 const DANMAKU = [
   {text: "爱祥99", speed: 0.85, yPos: 10, color: "#881144", delay: 0},  //ave mujica
-  {text: "爱祥99", speed: 0.8, yPos: 20, color: "#3388BB", delay: 0.9}, //mygo
+  {text: "铅笔橡皮", speed: 0.45, yPos: 10, color: "#881144", delay: 0},  //ave mujica
+  {text: "铁板章鱼", speed: 0.8, yPos: 20, color: "#3388BB", delay: 0.9}, //mygo
   {text: "哦不，推推的开", speed: 0.4, yPos: 20, color: "#FF8899", delay: 0.8},  //anon
   {text: "哦耶，爱爱的祥", speed: 0.75, yPos: 20, color: "#77DD77", delay: 0.7},  //raana
   {text: "呃啊感性感性", speed: 0.8, yPos: 20, color: "#FFDD88", delay: 0.6},  //soyo

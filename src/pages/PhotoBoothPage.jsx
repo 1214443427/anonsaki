@@ -78,96 +78,96 @@ const DECORATION_TEMPLATES = [
         name: '胡须',
         type: 'decoration',
         url: "/assets/photobooth-assets/decorations/cat-whiskers.webp",
-        width: 80,
-        height: 40
+        width: 160,
+        height: 80
     },    
     {
         id: 'cat-ear-pink',
         name: '粉猫耳',
         type: 'decoration',
         url: "/assets/photobooth-assets/decorations/cat-ear.png",
-        width: 100,
-        height: 50
+        width: 200,
+        height: 100
     },
     {
         id: 'cat-ear-blue',
         name: '蓝猫耳',
         type: 'decoration',
         url: "/assets/photobooth-assets/decorations/cat-ear-blue.png",
-        width: 100,
-        height: 50
+        width: 200,
+        height: 100
     },
     {
         id: 'christmas-hat',
         name: '圣诞帽',
         type: 'decoration',
         url: "/assets/christmas-hat.webp",
-        width: 70,
-        height: 70
+        width: 140,
+        height: 140
     },
     {
         id: 'sunglasses',
         name: '墨镜',
         type: 'decoration',
         url: "/assets/photobooth-assets/decorations/sunglasses.webp",
-        width: 80,
-        height: 30
+        width: 160,
+        height: 60
     },
     {
         id: 'glasses',
         name: '眼镜',
         type: 'decoration',
         url: "/assets/photobooth-assets/decorations/glasses.webp",
-        width: 80,
-        height: 30
+        width: 160,
+        height: 60
     },
     {
         id: 'heart-blue',
         name: '蓝心',
         type: 'decoration',
         url: "/assets/blue_heart.png",
-        width: 50,
-        height: 50
+        width: 100,
+        height: 100
     },
     {
         id: 'heart',
         name: '粉心',
         type: 'decoration',
         url: "/assets/pink_heart.png",
-        width: 50,
-        height: 50
+        width: 100,
+        height: 100
     },    
     {
         id: 'anon-plush',
         name: '爱音玩偶',
         type: 'decoration',
         url: "/assets/photobooth-assets/decorations/anon-plush.webp",
-        width: 80,
-        height: 110
+        width: 160,
+        height: 220
     },    
     {
         id: 'saki-plush',
         name: '祥子玩偶',
         type: 'decoration',
         url: "/assets/photobooth-assets/decorations/saki-plush.webp",
-        width: 100,
-        height: 100
+        width: 200,
+        height: 200
     },
         {
         id: 'angry',
         name: '生气',
         type: 'decoration',
         url: "/assets/photobooth-assets/decorations/angry-vein.png",
-        width: 50,
-        height: 50
+        width: 100,
+        height: 100
     },    
     {
         id: 'balloons',
         name: '气球',
         type: 'decoration',
         url: "/assets/photobooth-assets/decorations/balloons.png",
-        width: 100,
-        height: 100
+        width: 200,
+        height: 200
     },
     {
         id: 'star',
@@ -199,8 +199,8 @@ const DECORATION_TEMPLATES = [
     />
     </svg>
         ),
-        width: 50,
-        height: 50
+        width: 100,
+        height: 100
     },
     {
         id: 'sparkle',
@@ -212,8 +212,8 @@ const DECORATION_TEMPLATES = [
             stroke="white" strokeWidth="2"/>
         </svg>
         ),
-        width: 40,
-        height: 40
+        width: 100,
+        height: 100
     },
     {
     id: 'mustache',
@@ -230,24 +230,24 @@ const DECORATION_TEMPLATES = [
         <path d="M490.862,222.617c-0.576-3.477-2.816-6.443-6.016-7.936c-3.179-1.493-6.912-1.323-9.941,0.491 c-22.528,13.312-40.149,20.053-52.437,20.053c-15.36,0-21.696-10.325-32.448-30.101c-12.736-23.403-30.165-55.467-80.363-55.467 c-23.872,0-38.443,8.661-49.088,14.976c-12.437,7.381-17.387,7.381-29.824,0c-10.645-6.315-25.216-14.976-49.088-14.976 c-50.091,0-65.643,32-76.992,55.381c-9.707,20.011-15.531,30.421-31.744,30.421c-13.056,0-32.171-6.891-56.789-20.48 c-3.051-1.685-6.699-1.792-9.813-0.256c-3.115,1.515-5.312,4.437-5.867,7.872c-3.093,18.837,9.963,50.496,30.997,75.264 c24,28.245,54.613,43.797,86.208,43.797c42.667,0,69.269-15.488,90.667-27.925c14.165-8.235,25.344-14.741,37.333-14.741 c12.011,0,23.189,6.507,37.355,14.741c21.376,12.416,48,27.925,90.645,27.925c31.616,0,62.229-15.552,86.229-43.797 C480.921,273.113,493.956,241.455,490.862,222.617z"></path>
         </svg>
         ),
-        width: 50,
-        height: 50
+        width: 100,
+        height: 100
     },
     {
         id: 'tophat',
         name: '高帽',
         type: 'decoration',
         url: "/assets/photobooth-assets/decorations/tophat.webp",
-        width: 80,
-        height: 80
+        width: 160,
+        height: 160
     },
     {
         id: 'rose',
         name: '玫瑰',
         type: 'decoration',
         url: "/assets/photobooth-assets/decorations/rose.webp",
-        width: 50,
-        height: 80
+        width: 100,
+        height: 160
     },
     {
         id: 'bowtie',
@@ -343,8 +343,8 @@ const DECORATION_TEMPLATES = [
             </g>
         </svg>
           ),
-        width: 50,
-        height: 50
+        width: 100,
+        height: 100
     },
     {
         id: 'text',
@@ -354,8 +354,8 @@ const DECORATION_TEMPLATES = [
             text: "爱爱的祥!",
             style: "basic-text"
         },
-        width: 80,
-        height: 40
+        width: 160,
+        height: 80
     },
     {
         id: 'bubbly-text',
@@ -365,8 +365,8 @@ const DECORATION_TEMPLATES = [
             text: "爱爱的祥!",
             style: "bubbly-text"
         },
-        width: 80,
-        height: 40
+        width: 160,
+        height: 80
     }
 ];
 
@@ -611,7 +611,7 @@ function Decorations({url, isSelected, svg, textConfig, width, height, onClick, 
     const colorPickerRef = useRef(null)
 
     function handleDragStart(e){
-        onClick()
+        onClick() //select the element
         if(isEditingText)return;
         setIsDragging(true)
         updateAnchorStart(e)
@@ -717,6 +717,7 @@ function Decorations({url, isSelected, svg, textConfig, width, height, onClick, 
                 "--rotation": `${rotation}deg`,
                 "--zIndex": zIndex,
                 "--scale": scale,
+                "--pointer": isEditingText ? "auto" : "grab"
             }}
             onMouseDown={(e)=>handleDragStart(e)}
             onClick={(e)=>e.stopPropagation()}
@@ -737,7 +738,10 @@ function Decorations({url, isSelected, svg, textConfig, width, height, onClick, 
                         value={text} 
                         contentEditable={true}
                         onChange={e=>setText(e.target.value)}
-                        onBlur={()=>setIsEditingText(false)}
+                        onBlur={()=>{
+                            console.log("123");
+                            setIsEditingText(false)
+                        }}
                         onKeyDown={(e)=>{
                             if(e.key == "Enter"){ 
                                 e.target.blur()
@@ -764,25 +768,15 @@ function Decorations({url, isSelected, svg, textConfig, width, height, onClick, 
                         >
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="12px" height="12px"><path d="M436.7 74.7L448 85.4 448 32c0-17.7 14.3-32 32-32s32 14.3 32 32l0 128c0 17.7-14.3 32-32 32l-128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32l47.9 0-7.6-7.2c-.2-.2-.4-.4-.6-.6-75-75-196.5-75-271.5 0s-75 196.5 0 271.5 196.5 75 271.5 0c8.2-8.2 15.5-16.9 21.9-26.1 10.1-14.5 30.1-18 44.6-7.9s18 30.1 7.9 44.6c-8.5 12.2-18.2 23.8-29.1 34.7-100 100-262.1 100-362 0S-25 175 75 75c99.9-99.9 261.7-100 361.7-.3z"/></svg>
                     </div>
-                    <div className='flip-button overlay-buttons flex'
+                    {(svg||textConfig) && scale > 0.5 && <div className='fill-button overlay-buttons flex' 
                         onPointerUp={(e)=>{
                             e.preventDefault();
                             e.stopPropagation();
-                            setFlip(prev=>!prev)
-                        }}
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M502.6 150.6l-96 96c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L402.7 160 32 160c-17.7 0-32-14.3-32-32S14.3 96 32 96l370.7 0-41.4-41.4c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l96 96c12.5 12.5 12.5 32.8 0 45.3zm-397.3 352l-96-96c-12.5-12.5-12.5-32.8 0-45.3l96-96c12.5-12.5 32.8-12.5 45.3 0s12.5 32.8 0 45.3L109.3 352 480 352c17.7 0 32 14.3 32 32s-14.3 32-32 32l-370.7 0 41.4 41.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0z"/></svg>
-                    </div>
-                    {(svg||textConfig) && <div className='fill-button overlay-buttons flex' 
-                        onPointerUp={(e)=>{
-                            e.preventDefault();
-                            e.stopPropagation();
-                            colorPickerRef.current.click()
                         }}
                     >
                         <svg style={{"--color": color}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M296 64c6.9 0 13.5 2.7 18.3 7.6L440.4 197.7c4.9 4.9 7.6 11.5 7.6 18.3s-2.7 13.5-7.6 18.3L386.7 288 65.3 288c1.3-3.9 3.4-7.4 6.3-10.3l96.4-96.4 33.4 33.4c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L213.3 136 277.7 71.6c4.9-4.9 11.5-7.6 18.3-7.6zM122.7 136L26.3 232.4C9.5 249.3 0 272.1 0 296s9.5 46.7 26.3 63.6L152.4 485.7C169.3 502.5 192.1 512 216 512s46.7-9.5 63.6-26.3L485.7 279.6C502.5 262.7 512 239.9 512 216s-9.5-46.7-26.3-63.6L359.6 26.3C342.7 9.5 319.9 0 296 0s-46.7 9.5-63.6 26.3L168 90.7 118.6 41.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L122.7 136z"/></svg>
-                        <div className='color-picker'>
-                            <input type='color' ref={colorPickerRef} list="colorOptions" value={color} onChange={(e)=>setColor(e.target.value)}/>
+                        <div className='color-picker-wraper'>
+                            <input className='color-picker' type='color' ref={colorPickerRef} list="colorOptions" value={color} onChange={(e)=>setColor(e.target.value)}/>
                             <datalist id="colorOptions">
                                 {Object.keys(colors).map((key)=>(
                                     <option value={key} key={key}></option>
@@ -792,27 +786,50 @@ function Decorations({url, isSelected, svg, textConfig, width, height, onClick, 
                     </div>}
                     {(textConfig) && <div className='text-edit-button overlay-buttons flex' 
                         onPointerUp={(e)=>{
+                        }}
+                        onClick={(e)=>{
+                            console.log("triggered")
                             e.preventDefault();
                             e.stopPropagation();
                             setIsEditingText(true)
+                            // e.preventDefault();
+                            // e.stopPropagation();
                         }}
+                        // onTouchEnd={(e)=>{
+                        //     e.preventDefault();
+                        //     e.stopPropagation();
+                        //     setIsDragging(false)
+                        // }}
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M441 58.9L453.1 71c9.4 9.4 9.4 24.6 0 33.9L424 134.1 377.9 88 407 58.9c9.4-9.4 24.6-9.4 33.9 0zM209.8 256.2L344 121.9 390.1 168 255.8 302.2c-2.9 2.9-6.5 5-10.4 6.1l-58.5 16.7 16.7-58.5c1.1-3.9 3.2-7.5 6.1-10.4zM373.1 25L175.8 222.2c-8.7 8.7-15 19.4-18.3 31.1l-28.6 100c-2.4 8.4-.1 17.4 6.1 23.6s15.2 8.5 23.6 6.1l100-28.6c11.8-3.4 22.5-9.7 31.1-18.3L487 138.9c28.1-28.1 28.1-73.7 0-101.8L474.9 25C446.8-3.1 401.2-3.1 373.1 25zM88 64C39.4 64 0 103.4 0 152L0 424c0 48.6 39.4 88 88 88l272 0c48.6 0 88-39.4 88-88l0-112c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 112c0 22.1-17.9 40-40 40L88 464c-22.1 0-40-17.9-40-40l0-272c0-22.1 17.9-40 40-40l112 0c13.3 0 24-10.7 24-24s-10.7-24-24-24L88 64z"/></svg>
                     </div>}
-                    <div 
-                        className='overlay-buttons flex' 
-                        id='z-index-button-1'
-                        onPointerUp={()=>{setZIindex(prev=>prev+1)}}
-                        >
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M256 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 160-160 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l160 0 0 160c0 17.7 14.3 32 32 32s32-14.3 32-32l0-160 160 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-160 0 0-160z"/></svg>                    
-                    </div>
-                    <div 
-                        className='overlay-buttons flex' 
-                        id='z-index-button-2'
-                        onPointerUp={()=>{setZIindex(prev=>prev-1)}}
-                        >
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M0 256c0-17.7 14.3-32 32-32l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 288c-17.7 0-32-14.3-32-32z"/></svg>
-                    </div>
+                    {scale > 0.5 &&
+                        <>
+                            <div className='flip-button overlay-buttons flex'
+                                onPointerUp={(e)=>{
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    setFlip(prev=>!prev)
+                                }}
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M502.6 150.6l-96 96c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L402.7 160 32 160c-17.7 0-32-14.3-32-32S14.3 96 32 96l370.7 0-41.4-41.4c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l96 96c12.5 12.5 12.5 32.8 0 45.3zm-397.3 352l-96-96c-12.5-12.5-12.5-32.8 0-45.3l96-96c12.5-12.5 32.8-12.5 45.3 0s12.5 32.8 0 45.3L109.3 352 480 352c17.7 0 32 14.3 32 32s-14.3 32-32 32l-370.7 0 41.4 41.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0z"/></svg>
+                            </div>
+                            <div 
+                            className='overlay-buttons flex' 
+                            id='z-index-button-1'
+                            onPointerUp={()=>{setZIindex(prev=>prev+1)}}
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M256 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 160-160 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l160 0 0 160c0 17.7 14.3 32 32 32s32-14.3 32-32l0-160 160 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-160 0 0-160z"/></svg>                    
+                            </div>
+                            <div 
+                                className='overlay-buttons flex' 
+                                id='z-index-button-2'
+                                onPointerUp={()=>{setZIindex(prev=>prev-1)}}
+                                >
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M0 256c0-17.7 14.3-32 32-32l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 288c-17.7 0-32-14.3-32-32z"/></svg>
+                            </div>
+                        </>
+                    }
                 </div>
             }
         </div>
