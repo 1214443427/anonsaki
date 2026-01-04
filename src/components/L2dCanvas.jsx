@@ -55,7 +55,17 @@ function L2dCanvas( {character, offsetBottom, width, height, className="", ref,
     }]
     }) {
     const live2DMgrRef = useRef(null)
-    const model = character == "init" ? 3 : character == "anon" ? 1 : character == "saki"? 0 : 2 ; //saki = 0
+    const modelMap = { 
+        init: 3, 
+        anon: 1, 
+        saki: 0,
+        both: 2,
+        normalBoth: 4,  //switch to specified model
+        schoolSummer: 5,
+        schoolWinter: 6,
+        mujica: 7
+    };
+    const model = modelMap[character]
     
     const glRef = useRef(null)
     const canvasRef = useRef(null);
@@ -219,13 +229,13 @@ function L2dCanvas( {character, offsetBottom, width, height, className="", ref,
     }, [model])
 
     useEffect(()=>{
-        // console.log(live2DConfigs)
+        console.log(live2DConfigs, live2DMgrRef.current.numModels())
         if(dragMgrRef.current && live2DMgrRef.current){
             const live2DMgr = live2DMgrRef.current
             const dragMgr = dragMgrRef.current
             for (let i = 0; i < live2DMgr.numModels(); i++){
                 const config = live2DConfigs[i]
-                if(config.paused){
+                if(config?.paused){
                     live2DMgr.getModel(i).paused = true
                 }else{
                     live2DMgr.getModel(i).paused = false
@@ -457,8 +467,8 @@ function L2dCanvas( {character, offsetBottom, width, height, className="", ref,
     function changeModel(model)
     {
         if(glRef.current){
-        live2DMgrRef.current.reloadFlg = true;
-        live2DMgrRef.current.changeModel(glRef.current, model)
+            live2DMgrRef.current.reloadFlg = true;
+            live2DMgrRef.current.changeModel(glRef.current, model)
         }
     }
 

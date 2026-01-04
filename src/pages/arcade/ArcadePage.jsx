@@ -432,18 +432,25 @@ function purchaseUnit(state, position){
   const shopUnitsArray = state.shop.units;
   const playerUnitsArray = state.team.board;
   const unitToPurchase = shopUnitsArray[position];
-  const newShopUnits = shopUnitsArray.toSpliced(position, 1);
-  const existingUnitIndex = playerUnitsArray.find((x)=> x.name == unitToPurchase.name);
+  const newShopUnits = shopUnitsArray.toSpliced(position, 1, {
+    name: "empty",
+  });
+  const existingUnitIndex = playerUnitsArray.findIndex((x)=> x.name == unitToPurchase.name);
   let newPlayerUnitArray = playerUnitsArray
-  if (existingUnitIndex){
+  if (existingUnitIndex !== -1){
     const existingUnit = playerUnitsArray[existingUnitIndex]
+    console.log(existingUnitIndex, existingUnit)
     newPlayerUnitArray = playerUnitsArray.toSpliced(existingUnitIndex, 1)
                                           .toSpliced(existingUnitIndex, 0, {
                                             ...existingUnit,
                                             xp: existingUnit.xp + 1
                                           })
   }else{
-    newPlayerUnitArray = playerUnitsArray.concat(unitToPurchase)
+    const emptySlot = playerUnitsArray.findIndex((x)=>x.name=="empty")
+    newPlayerUnitArray = playerUnitsArray.toSpliced(emptySlot, 1, {
+      ...unitToPurchase,
+      xp: 0,
+    })
   }
   return({
     ...state,
@@ -480,6 +487,12 @@ function reducer(state, action){
         const newState = generateShop(state);
         return {...newState, phase: PHASE.shopping}
       }
+      case 'PURCHASE_UNIT':{
+        console.log("purchasing", action.position)
+        const newState = purchaseUnit(state, action.position);
+        return {...newState}
+      }
+
       default: 
         return state;
     }
@@ -519,8 +532,6 @@ const initialState = {
 
 function Unit({unit}){
 
-  console.log(unit, unit.name == "empty")
-
   if(unit.name == "empty"){
     return
   }
@@ -552,7 +563,7 @@ function ArcadePage() {
           <div className='shop-section'>
             <div className='unit-section'>
               {state.shop.units.map((unit, index)=>(
-                <div className='slot' key={index}>
+                <div className='slot' key={index} onClick={()=>dispatch({type: "PURCHASE_UNIT", position: index})}>
                   <Unit unit={unit}/>
                 </div>
               ))}

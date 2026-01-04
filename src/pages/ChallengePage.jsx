@@ -133,6 +133,13 @@ function NotebookPages({title, list, className, pageNum, setSelectedWork, works,
                                     安科收录
                                 </div>
                             </ConfirmationModal>
+                        <ConfirmationModal url={"https://tieba.baidu.com/p/9893219524#"}
+                            className={"link"}>
+                                <div className='flex note-link'>
+                                    <img src='assets/baidu-tieba.svg' className='icons'></img>
+                                    作品补档
+                                </div>
+                            </ConfirmationModal>
                     </div>
                     :
                     list.map((item, i)=>

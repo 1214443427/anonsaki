@@ -8,6 +8,45 @@ import Draggable from 'gsap/src/Draggable';
 import { useFetchData } from '../hooks/useFetchData';
 import html2canvas from 'html2canvas';
 
+const INITIALL2DCONFIGS = 
+[
+    {
+        paused: false,  
+        faceDirectionX:0,
+        faceDirectionY:0,
+        motion: "idle01",
+        expression: "default",
+        motionPlayback: 0,
+        positionX: -1.35,
+        positionY: 1.15,
+    },
+    {
+        paused: false,  
+        faceDirectionX:0, 
+        faceDirectionY:0,
+        motion: "idle01",
+        expression: "default",
+        motionPlayback: 0,
+        positionX: -0.65,
+        positionY: 1.15,
+    }
+]
+
+const MODEL_PATHS = {
+    both: {
+        models: [
+            "/assets/l2d/saki/model-matching-outfit.json",
+            "/assets/l2d/anon/model-matching-outfit.json"
+        ],
+        textures: [
+            "/assets/l2d/anon/data-matching-outfit/textures/texture_00_winter.png",
+            "/assets/l2d/anon/data-matching-outfit/textures/texture_01_winter.png",
+            "/assets/l2d/saki/data-matching-outfit/textures/texture_00_winter.png",
+            "/assets/l2d/saki/data-matching-outfit/textures/texture_01_winter.png"
+        ]
+    }
+}
+
 const colors = {
     '#881144': 'rgb(136, 17, 68)',
     '#3388BB': 'rgb(51, 136, 187)',
@@ -23,7 +62,6 @@ const colors = {
     '#AA4477': 'rgb(170, 68, 119)',
     '#6C5E53': 'rgb(108, 94, 83)'
 }
-
 
 const BACKGROUNDS = [
     {
@@ -501,6 +539,7 @@ const subsections = [
         display: "位置"
     }, {
         name: "motion",
+        viewBox: "0 -50 448 612",
         path: "M256.5-32a56 56 0 1 1 0 112 56 56 0 1 1 0-112zM123.6 176c-3.3 0-6.2 2-7.4 5L94.2 235.9c-6.6 16.4-25.2 24.4-41.6 17.8s-24.4-25.2-17.8-41.6l21.9-54.9C67.7 129.9 94.1 112 123.6 112l97.3 0c28.5 0 54.8 15.1 69.1 39.7l32.8 56.3 61.6 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-61.6 0c-22.8 0-43.8-12.1-55.3-31.8l-10-17.1-20.7 70.4 75.4 22.6c27.7 8.3 41.8 39 30.1 65.5L285.7 509c-7.2 16.2-26.1 23.4-42.2 16.2s-23.4-26.1-16.2-42.2l49.2-110.8-95.9-28.8c-32.7-9.8-52-43.7-43.7-76.8l22.7-90.6-35.9 0zm-8 181c13.3 14.9 30.7 26.3 51.2 32.4l4.7 1.4-6.9 19.3c-5.8 16.3-16 30.8-29.3 41.8L52.9 519.8c-13.6 11.2-33.8 9.3-45-4.3s-9.3-33.8 4.3-45l82.4-67.9c4.5-3.7 7.8-8.5 9.8-13.9L115.6 357z",
         display: "动作"
     }, {
@@ -511,8 +550,13 @@ const subsections = [
         name: "capture",
         path: "M193.1 32c-18.7 0-36.2 9.4-46.6 24.9L120.5 96 64 96C28.7 96 0 124.7 0 160L0 416c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-256c0-35.3-28.7-64-64-64l-56.5 0-26-39.1C355.1 41.4 337.6 32 318.9 32L193.1 32zm-6.7 51.6c1.5-2.2 4-3.6 6.7-3.6l125.7 0c2.7 0 5.2 1.3 6.7 3.6l33.2 49.8c4.5 6.7 11.9 10.7 20 10.7l69.3 0c8.8 0 16 7.2 16 16l0 256c0 8.8-7.2 16-16 16L64 432c-8.8 0-16-7.2-16-16l0-256c0-8.8 7.2-16 16-16l69.3 0c8 0 15.5-4 20-10.7l33.2-49.8zM256 384a112 112 0 1 0 0-224 112 112 0 1 0 0 224zM192 272a64 64 0 1 1 128 0 64 64 0 1 1 -128 0z",        
         display: "拍照"
-}]
-
+}, {
+        name: "cloth",
+        viewBox: "0 0 640 512",
+        path: "M320.2 112c44.2 0 80-35.8 80-80l53.5 0c17 0 33.3 6.7 45.3 18.7L617.6 169.4c12.5 12.5 12.5 32.8 0 45.3l-50.7 50.7c-12.5 12.5-32.8 12.5-45.3 0l-41.4-41.4 0 224c0 35.3-28.7 64-64 64l-192 0c-35.3 0-64-28.7-64-64l0-224-41.4 41.4c-12.5 12.5-32.8 12.5-45.3 0L22.9 214.6c-12.5-12.5-12.5-32.8 0-45.3L141.5 50.7c12-12 28.3-18.7 45.3-18.7l53.5 0c0 44.2 35.8 80 80 80z",
+        display: "服装"
+    }
+]
 const shareData = {
     title: ""
 }
@@ -900,17 +944,11 @@ function PhotoBoothPage() {
     const shutterAudioRef = useRef(null)
 
     useEffect(()=>{
-        async function fetchData(){
+        async function fetchData(models, textures){
             try{
                 setLoading(true)
-                const sakiData = await fetch('/assets/l2d/saki-matching-outfit/model.json').then(res => res.json())
-                const anonData = await fetch('/assets/l2d/anon-matching-outfit/model.json').then(res => res.json())
-                const textures = [
-                    "/assets/l2d/anon-matching-outfit/live2d/chara/037_general_rip/texture_00.png",
-                    "/assets/l2d/anon-matching-outfit/live2d/chara/037_school_winter-2023_rip/texture_01.png",
-                    "/assets/l2d/anon-matching-outfit/live2d/chara/341_general_rip/texture_00.png",
-                    "/assets/l2d/saki-matching-outfit/live2d/chara/341_school_winter-2023_rip/texture_01.png"
-                ]
+                const sakiData = await fetch(models[0]).then(res => res.json())
+                const anonData = await fetch(models[1]).then(res => res.json())
                 for (let i = 0; i < textures.length; i++) {;
                     const img = new Image();
                     img.src = textures[i];  
@@ -931,31 +969,11 @@ function PhotoBoothPage() {
                 setError({type:"fetch", msg:"无法获取模型信息！请联系作者B站"})
             }
         }
-        fetchData();
-    }, [])
+        if(MODEL_PATHS[character])
+            fetchData(MODEL_PATHS[character].models, MODEL_PATHS[character].textures);
+    }, [character])
 
-    const [live2DConfigs, setLive2dConfigs] = useState([
-        {
-            paused: false,  
-            faceDirectionX:0,
-            faceDirectionY:0,
-            motion: "idle01",
-            expression: "default",
-            motionPlayback: 0,
-            positionX: -1.35,
-            positionY: 1.15,
-        },
-        {
-            paused: false,  
-            faceDirectionX:0, 
-            faceDirectionY:0,
-            motion: "idle01",
-            expression: "default",
-            motionPlayback: 0,
-            positionX: -0.65,
-            positionY: 1.15,
-        }
-    ])
+    const [live2DConfigs, setLive2dConfigs] = useState(INITIALL2DCONFIGS)
 
     useGSAP(()=>{
         const index = activeTab == "model"? 0: activeTab == "decor"? 1: activeTab == "background"? 2: 3
@@ -1283,13 +1301,13 @@ function PhotoBoothPage() {
                         </div>
                         <div className='subsection-container'>
                             {activeSubsection == "home" &&
-                                <div className='tools-subsections flex home-subsection'>
+                                <div className='tools-subsections home-subsection'>
                                     {subsections.map((section, index)=>(
                                         <div 
                                             key={index} 
                                             className='home-subsection-icon flex flex-col' 
                                             onClick={()=>switchSubsection(section.name)}>
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox={section.viewBox?section.viewBox:"0 0 512 512"}>
                                                 <path d={section.path} />
                                             </svg>
                                             {section.display}
@@ -1300,7 +1318,7 @@ function PhotoBoothPage() {
                             {activeSubsection == "position" && 
                             <div className='tools-subsections flex flex-col position-subsection'>
                                 {positionSliders.map((slider)=>{
-                                    const defaultValue = (selectedCharacter == 1 && slider.key == "transitionX")? -0.65: slider.default
+                                    const defaultValue = (selectedCharacter == 1 && slider.key == "positionX")? -0.65: slider.default
                                     return(
                                         <Slider 
                                             key={slider.key}
@@ -1390,7 +1408,20 @@ function PhotoBoothPage() {
                                             active = {live2DConfigs[selectedCharacter].expression === expression.name}
                                             />
                                     ))}
-                                </div>}
+                            </div>}
+                            {activeSubsection == "cloth" && 
+                                <div className='tools-subsections cloth-subsection'>
+                                    {/* {modelData[selectedCharacter].expressions.map((expression, index)=>(
+                                        <SectionButtons 
+                                            key={`${selectedCharacter}-${index}`} 
+                                            onClick={()=>changeCharacterConfig("expression", expression.name)} 
+                                            displayText={expression.display_name}
+                                            image = {expression.image}
+                                            active = {live2DConfigs[selectedCharacter].expression === expression.name}
+                                            />
+                                    ))} */}
+                                    <button onClick={()=>{setCharacter("normalBoth"); setLive2dConfigs([...INITIALL2DCONFIGS])}}>  aaaa </button>
+                            </div>}
                         </div>
                     </div>
                     <div className = "tabs decor-tab" ref={activeTab == "model"? activeTabRef: null}>

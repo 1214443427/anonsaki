@@ -49,8 +49,9 @@ LAppLive2DManager.prototype.changeModel = function(gl, model)
 
         var thisRef = this;
         if(LAppDefine.DEBUG_LOG){
-            console.log("changeModel", model)
         }
+        console.log("changeModel", model)
+        console.log(this.models)
         switch (model)
         {
             case 0: 
@@ -65,6 +66,7 @@ LAppLive2DManager.prototype.changeModel = function(gl, model)
                 this.models[0].load(gl, LAppDefine.MODEL_ANON);
                 break;
             case 2: 
+                this.releaseModel(1, gl);
                 this.releaseModel(0, gl);
                 this.createModel();
                 this.models[0].load(gl, LAppDefine.MODEL_ANON_MATCHING_OUTFIT, ()=>{
@@ -76,6 +78,42 @@ LAppLive2DManager.prototype.changeModel = function(gl, model)
                 this.releaseModel(0, gl);
                 this.createModel();
                 this.models[0].load(gl, LAppDefine.MODEL_INIT);
+                break;
+            case 4: 
+                this.releaseModel(1, gl);
+                this.releaseModel(0, gl);
+                this.createModel();
+                this.models[0].load(gl, LAppDefine.MODEL_ANON_FULL, ()=>{
+                    this.createModel();
+                    this.models[1].load(gl, LAppDefine.MODEL_SAKI_FULL)
+                });
+                break;
+            case 5: 
+                this.releaseModel(1, gl);
+                this.releaseModel(0, gl);
+                this.createModel();
+                this.models[0].load(gl, LAppDefine.MODEL_ANON_SCHOOL_SUMMER, ()=>{
+                    this.createModel();
+                    this.models[1].load(gl, LAppDefine.MODEL_SAKI_SCHOOL_SUMMER)
+                });
+                break;
+            case 6: 
+                this.releaseModel(1, gl);
+                this.releaseModel(0, gl);
+                this.createModel();
+                this.models[0].load(gl, LAppDefine.MODEL_ANON_SCHOOL_WINTER, ()=>{
+                    this.createModel();
+                    this.models[1].load(gl, LAppDefine.MODEL_SAKI_SCHOOL_WINTER)
+                });
+                break;
+            case 7: 
+                this.releaseModel(1, gl);
+                this.releaseModel(0, gl);
+                this.createModel();
+                this.models[0].load(gl, LAppDefine.MODEL_ANON_MUJICA, ()=>{
+                    this.createModel();
+                    this.models[1].load(gl, LAppDefine.MODEL_SAKI_MUJICA)
+                });
                 break;
             default:
                 break;
