@@ -229,7 +229,7 @@ function L2dCanvas( {character, offsetBottom, width, height, className="", ref,
     }, [model])
 
     useEffect(()=>{
-        console.log(live2DConfigs, live2DMgrRef.current.numModels())
+        // console.log(live2DConfigs, live2DMgrRef.current.numModels())
         if(dragMgrRef.current && live2DMgrRef.current){
             const live2DMgr = live2DMgrRef.current
             const dragMgr = dragMgrRef.current
@@ -254,7 +254,7 @@ function L2dCanvas( {character, offsetBottom, width, height, className="", ref,
         if(live2DMgrRef.current && live2DMgrRef.current.numModels() > 1){
             const config = live2DConfigs[0]
             playMotionExpression(config.motion, config.expression, 3, 5000, 0)
-            console.log(config.expression)
+            // console.log(config.expression)
         }
     }, [live2DConfigs[0].motion, live2DConfigs?.[0].motionPlayback])
 
@@ -318,7 +318,7 @@ function L2dCanvas( {character, offsetBottom, width, height, className="", ref,
     )
     const playBrithdayAnimation = contextSafe((character)=>{
         brithdayAnimationTriggered = true
-        console.log("brithday triggered")
+        // console.log("brithday triggered")
         if(timeoutId.current){
             clearTimeout(timeoutId.current)
             timeoutId.current = null
@@ -387,7 +387,7 @@ function L2dCanvas( {character, offsetBottom, width, height, className="", ref,
     })
 
     function playMotionExpression(motion, expression, priority, timeout, modelNumber){
-        console.log("playMotionExpression", motion, expression, priority, timeout, modelNumber)
+        // console.log("playMotionExpression", motion, expression, priority, timeout, modelNumber)
         if(timeoutId.current){
             clearTimeout(timeoutId.current)
             timeoutId.current = null;

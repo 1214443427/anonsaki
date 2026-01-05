@@ -101,7 +101,8 @@
 
 .subsection-container, .decor-tab, .background-tab{
     overflow-y: scroll;
-    scroll-snap-type: y mandatory
+    scroll-snap-type: y mandatory;
+    padding-right: 10px;
 }
 
 .filter-tab{
@@ -271,7 +272,7 @@
     border-right: 1px solid gray;
 } */
 
-.motion-subsection, .expression-subsection, .decor-subsection, .background-subsection, .filter-subsection{
+.motion-subsection, .expression-subsection, .decor-subsection, .background-subsection, .filter-subsection, .cloth-subsection{
     /* flex-wrap: wrap;
     justify-content: space-between; */
     display: grid;
@@ -637,7 +638,7 @@
 }
 
 @media (min-width: 480px) {
-    .motion-subsection, .expression-subsection, .decor-subsection, .background-subsection, .filter-subsection{
+    .motion-subsection, .expression-subsection, .decor-subsection, .background-subsection, .filter-subsection, .cloth-subsection{
         grid-template-columns: repeat(3, 1fr)
     }
     .photo-booth-canvas-container{
@@ -646,10 +647,13 @@
     .photo-popup.polaroid-container{
         max-width: 60%;
     }
+    .home-subsection{
+        grid-template-columns: repeat(6, 1fr);
+    }
 }
 
 @media (min-width: 768px) {
-    .motion-subsection, .expression-subsection, .decor-subsection, .background-subsection, .filter-subsection{
+    .motion-subsection, .expression-subsection, .decor-subsection, .background-subsection, .filter-subsection, .cloth-subsection{
         grid-template-columns: repeat(4, 1fr)
     }
 
@@ -663,6 +667,10 @@
     .overlay-buttons{
         width: 30px;
         height: 30px;
+    }
+
+    .home-subsection{
+        grid-template-columns: repeat(8, 1fr);
     }
 
 }
@@ -683,7 +691,7 @@
         flex: 1;
     }
 
-    .motion-subsection, .expression-subsection, .decor-subsection, .background-subsection, .filter-subsection{
+    .motion-subsection, .expression-subsection, .decor-subsection, .background-subsection, .filter-subsection, .cloth-subsection{
         grid-template-columns:repeat(3, 1fr)
     }
 

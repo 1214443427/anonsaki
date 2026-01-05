@@ -34,15 +34,73 @@ const INITIALL2DCONFIGS =
 
 const MODEL_PATHS = {
     both: {
+        display_name: "情侣服",
+        imgUrl: "/assets/photobooth-assets/clothes/matching-outfit.webp",
         models: [
-            "/assets/l2d/saki/model-matching-outfit.json",
-            "/assets/l2d/anon/model-matching-outfit.json"
+            "/assets/l2d/saki/data-matching-outfit/sakiko_school_winter-2023.moc",
+            "/assets/l2d/anon/data-matching-outfit/anon_school_winter-2023.moc"
         ],
         textures: [
             "/assets/l2d/anon/data-matching-outfit/textures/texture_00_winter.png",
             "/assets/l2d/anon/data-matching-outfit/textures/texture_01_winter.png",
             "/assets/l2d/saki/data-matching-outfit/textures/texture_00_winter.png",
             "/assets/l2d/saki/data-matching-outfit/textures/texture_01_winter.png"
+        ]
+    },
+    normalBoth: {
+        display_name: "常服",
+        imgUrl: "/assets/photobooth-assets/clothes/casual.webp",
+        models: [
+            "/assets/l2d/saki/data/model.moc",
+            "/assets/l2d/anon/data/model.moc"
+        ],
+        textures: [
+            "/assets/l2d/anon/data/textures/texture_00_winter.png",
+            "/assets/l2d/anon/data/textures/texture_01_winter.png",
+            "/assets/l2d/saki/data/textures/texture_00_winter.png",
+            "/assets/l2d/saki/data/textures/texture_01_winter.png"
+        ]
+    },
+    schoolSummer: {
+        display_name: "夏季校服",
+        imgUrl: "/assets/photobooth-assets/clothes/summer.webp",
+        models: [
+            "/assets/l2d/saki/data-summer/model.moc",
+            "/assets/l2d/anon/data-summer/model.moc"
+        ],
+        textures: [
+            "/assets/l2d/anon/data-summer/textures/texture_00_winter.png",
+            "/assets/l2d/anon/data-summer/textures/texture_01_winter.png",
+            "/assets/l2d/saki/data-summer/textures/texture_00_winter.png",
+            "/assets/l2d/saki/data-summer/textures/texture_01_winter.png"
+        ]
+    },
+    schoolWinter: {
+        display_name: "冬季校服",
+        imgUrl: "/assets/photobooth-assets/clothes/winter.webp",
+        models: [
+            "/assets/l2d/saki/data-winter/model.moc",
+            "/assets/l2d/anon/data-winter/model.moc"
+        ],
+        textures: [
+            "/assets/l2d/anon/data-winter/textures/texture_00_winter.png",
+            "/assets/l2d/anon/data-winter/textures/texture_01_winter.png",
+            "/assets/l2d/saki/data-winter/textures/texture_00_winter.png",
+            "/assets/l2d/saki/data-winter/textures/texture_01_winter.png"
+        ]
+    },
+    mujica: {
+        display_name: "演出服",
+        imgUrl: "/assets/photobooth-assets/clothes/mujica.webp",
+        models: [
+            "/assets/l2d/saki/data-mujica/model.moc",
+            "/assets/l2d/anon/data-mujica/model.moc"
+        ],
+        textures: [
+            "/assets/l2d/anon/data-mujica/textures/texture_00_winter.png",
+            "/assets/l2d/anon/data-mujica/textures/texture_01_winter.png",
+            "/assets/l2d/saki/data-mujica/textures/texture_00_winter.png",
+            "/assets/l2d/saki/data-mujica/textures/texture_01_winter.png"
         ]
     }
 }
@@ -783,7 +841,6 @@ function Decorations({url, isSelected, svg, textConfig, width, height, onClick, 
                         contentEditable={true}
                         onChange={e=>setText(e.target.value)}
                         onBlur={()=>{
-                            console.log("123");
                             setIsEditingText(false)
                         }}
                         onKeyDown={(e)=>{
@@ -832,7 +889,7 @@ function Decorations({url, isSelected, svg, textConfig, width, height, onClick, 
                         onPointerUp={(e)=>{
                         }}
                         onClick={(e)=>{
-                            console.log("triggered")
+                            // console.log("triggered")
                             e.preventDefault();
                             e.stopPropagation();
                             setIsEditingText(true)
@@ -943,32 +1000,37 @@ function PhotoBoothPage() {
     const [isFlashing, setIsFlashing] = useState(false)
     const shutterAudioRef = useRef(null)
 
-    useEffect(()=>{
-        async function fetchData(models, textures){
-            try{
-                setLoading(true)
-                const sakiData = await fetch(models[0]).then(res => res.json())
-                const anonData = await fetch(models[1]).then(res => res.json())
-                for (let i = 0; i < textures.length; i++) {;
-                    const img = new Image();
-                    img.src = textures[i];  
-                }
-
-    // const {loading, data, error} = useFetchData([
-    //     "/assets/l2d/anon-matching-outfit/live2d/chara/037_general_rip/texture_00.png",
-    //     "/assets/l2d/anon-matching-outfit/live2d/chara/037_school_winter-2023_rip/texture_01.png",
-    //     "/assets/l2d/anon-matching-outfit/live2d/chara/341_general_rip/texture_00.png",
-    //     "/assets/l2d/saki-matching-outfit/live2d/chara/341_school_winter-2023_rip/texture_01.png"
-    // ])
-                setLoading(false)
-                setCharacter("both")
-                setModelData([anonData, sakiData])
+    async function fetchData(models, textures){
+        try{
+            setLoading(true)
+            await fetch(models[0])
+            await fetch(models[1])
+            for (let i = 0; i < textures.length; i++) {;
+                const img = new Image();
+                img.src = textures[i];  
             }
-            catch (err){
-                console.error('Failed to fetch data', err);
-                setError({type:"fetch", msg:"无法获取模型信息！请联系作者B站"})
-            }
+            setLoading(false)
         }
+        catch (err){
+            console.error('Failed to fetch data', err);
+            setError({type:"fetch", msg:"无法获取模型信息！请联系作者B站"})
+            return false
+        }
+    }
+
+   useEffect(()=>{
+        async function fetchModelData(){
+            const sakiData = await fetch("/assets/l2d/saki/model-matching-outfit.json").then(res => res.json())
+            const anonData = await fetch("/assets/l2d/anon/model-matching-outfit.json").then(res => res.json())
+            setModelData([sakiData, anonData])
+        }
+        fetchData(MODEL_PATHS.both.models, MODEL_PATHS.both.textures)
+        fetchModelData()
+        setCharacter("both")
+
+    }, [])
+
+    useEffect(()=>{
         if(MODEL_PATHS[character])
             fetchData(MODEL_PATHS[character].models, MODEL_PATHS[character].textures);
     }, [character])
@@ -1176,7 +1238,7 @@ function PhotoBoothPage() {
     }
 
     const handleDownload = () => {
-        console.log("downloading")
+        // console.log("downloading")
         if (!generatedImage) return;
         setError(null)
         const a = document.createElement('a');
@@ -1398,7 +1460,7 @@ function PhotoBoothPage() {
                                     ))}
                                 </div>}
                             {activeSubsection == "expression" && 
-                                <div className='tools-subsections  expression-subsection'>
+                                <div className='tools-subsections expression-subsection'>
                                     {modelData[selectedCharacter].expressions.map((expression, index)=>(
                                         <SectionButtons 
                                             key={`${selectedCharacter}-${index}`} 
@@ -1411,7 +1473,19 @@ function PhotoBoothPage() {
                             </div>}
                             {activeSubsection == "cloth" && 
                                 <div className='tools-subsections cloth-subsection'>
-                                    {/* {modelData[selectedCharacter].expressions.map((expression, index)=>(
+                                    {
+                                    Object.entries(MODEL_PATHS).map(([key, model])=>{
+                                        console.log(key)
+                                        return(
+                                        <SectionButtons
+                                            key={key}
+                                            onClick={()=>setCharacter(key)}
+                                            displayText={model.display_name}
+                                            active={character == key}
+                                            image={model.imgUrl}
+                                        />
+                                    )})
+                                    /* {modelData[selectedCharacter].expressions.map((expression, index)=>(
                                         <SectionButtons 
                                             key={`${selectedCharacter}-${index}`} 
                                             onClick={()=>changeCharacterConfig("expression", expression.name)} 
@@ -1420,7 +1494,7 @@ function PhotoBoothPage() {
                                             active = {live2DConfigs[selectedCharacter].expression === expression.name}
                                             />
                                     ))} */}
-                                    <button onClick={()=>{setCharacter("normalBoth"); setLive2dConfigs([...INITIALL2DCONFIGS])}}>  aaaa </button>
+                                    
                             </div>}
                         </div>
                     </div>
