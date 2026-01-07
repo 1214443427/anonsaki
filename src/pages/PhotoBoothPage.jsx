@@ -659,6 +659,37 @@ function SectionButtons({onClick, displayText, image, active, svg, textConfig}){
     )
 }
 
+function FileUploadButton({handleCustomImageUpload}){
+    const fileInputRef = useRef(null)
+    const svg = (<svg
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+    >
+    <path
+        d="
+M18 20H4V6h9V4H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-9h-2v9zm-7.79-3.17l-1.96-2.36L5.5 18h11l-3.54-4.71zM20 4V1h-2v3h-3c.01.01 0 2 0 2h3v2.99c.01.01 2 0 2 0V6h3V4h-3z
+        "
+        stroke="white"
+        strokeWidth="1"
+        strokeLinejoin="round"
+    />
+    </svg>)
+
+    return(
+        <>
+            <SectionButtons svg={svg} displayText={"上传图片"} onClick={()=>fileInputRef.current.click()}/>
+            <input             
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleCustomImageUpload}
+                className='upload-input'
+            />
+        </>
+    )
+}
+
 function Decorations({url, isSelected, svg, textConfig, width, height, onClick, onDelete, canvasContainerRef}){
     const [scale, setScale] = useState(1)
     const [rotation, setRotation] = useState(0)
@@ -985,7 +1016,7 @@ function PhotoBoothPage() {
     const currentId = useRef(0)
     const canvasContainerRef = useRef(null)
     const l2dCanvasRef = useRef(null)
-    const [background, setBackground] = useState(0)
+    const [background, setBackground] = useState(()=>BACKGROUNDS[0].url)
     const [filterSliderValue, setFilterSliderValue] = useState({
         brightness: 1,
         contrast: 1,
@@ -1022,7 +1053,7 @@ function PhotoBoothPage() {
         async function fetchModelData(){
             const sakiData = await fetch("/assets/l2d/saki/model-matching-outfit.json").then(res => res.json())
             const anonData = await fetch("/assets/l2d/anon/model-matching-outfit.json").then(res => res.json())
-            setModelData([sakiData, anonData])
+            setModelData([anonData, sakiData])
         }
         fetchData(MODEL_PATHS.both.models, MODEL_PATHS.both.textures)
         fetchModelData()
@@ -1096,7 +1127,6 @@ function PhotoBoothPage() {
     useEffect(() => {
         return () => {
             if (generatedImage) {
-                console.log("revoking", generatedImage)
                 URL.revokeObjectURL(generatedImage);
             }
         };
@@ -1130,6 +1160,7 @@ function PhotoBoothPage() {
     const canvasFlash = contextSafe(()=>{
         setIsFlashing(true)
         const tl = gsap.timeline({onComplete:()=>{setIsFlashing(false)}});
+        shutterAudioRef.current.volume = 0.5
         shutterAudioRef.current.play()
         tl.fromTo("#flash-overlay", 
             {opacity: 0}, 
@@ -1216,15 +1247,13 @@ function PhotoBoothPage() {
             }).then(
             function(canvas) {
                 const glCanvas = l2dCanvasRef.current;
-                const out = document.createElement('canvas');
-                out.width = canvas.width
-                out.height = canvas.height
+                const out = new OffscreenCanvas(canvas.width, canvas.height)
                 const img = new Image()
-                img.src = BACKGROUNDS[background].url;
+                img.src = background;
                 const ctx = out.getContext('2d');
                 img.onload = ()=>{                
                     ctx.drawImage(img, 0, 0, out.width, out.height);
-                    requestAnimationFrame(() => {
+                    requestAnimationFrame(async () => {
                         ctx.filter = `brightness(${getFilterValue("brightness")})
                                         hue-rotate(${getFilterValue("hue")})
                                         saturate(${getFilterValue("saturation")})
@@ -1235,11 +1264,11 @@ function PhotoBoothPage() {
                             0, 0, canvas.width, canvas.height
                         )
                         ctx.drawImage(canvas, 0, 0)
-                        out.toBlob((blob)=>{
-                            setGeneratedImage(URL.createObjectURL(blob))
-                        })
+                        const blob = await out.convertToBlob({ type: 'image/png' })
+                        setGeneratedImage(URL.createObjectURL(blob))
                         setIsGenerating(false)
                         setPopupAnimationState("opening")
+                        ctx.reset(); 
                     })
                 }
             }
@@ -1294,6 +1323,49 @@ function PhotoBoothPage() {
         }
     }
 
+    function addDecoration(decoration){
+        const newId = currentId.current++
+        setDecorations((prev)=>[...prev, {...decoration, id: newId, x:200, y:200 }])
+        setSelectedDecorations(newId)
+    }
+    
+    function decorationUploadCallback(imageDataUrl){
+        const img = new Image();
+        img.onload = () => {
+            const customDecoration = {
+                name: "custom-decoration",
+                type: "decoration",
+                url: imageDataUrl,
+                width: 100,
+                height: img.height / img.width * 100
+            }
+            addDecoration(customDecoration);
+            img.onload = null; 
+            img.src = "";
+        };
+        img.src = imageDataUrl;
+    }
+
+    function handleCustomImageUpload(e, callback){
+        const file = e.target.files?.[0];
+        if (!file) return;
+        if (!file.type.startsWith('image/')) {
+            setError({type:"file", msg:"上传失败。请选择图片文件。"})
+            return;
+        }
+        if (file.size > 20 * 1024 * 1024) {
+            setError({type:"file", msg:"上传失败。请选择20MB以下的图片文件。"})
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const imageDataUrl = event.target?.result;
+            callback(imageDataUrl)
+        }
+        reader.readAsDataURL(file);
+    }
+
     if(error && error.type == "fetch"){
         return(
             <div>{error.msg}</div>
@@ -1306,11 +1378,14 @@ function PhotoBoothPage() {
             // if (e.target.dataset.drag)
                 setSelectedDecorations(null)
             }}>
-            <audio src="/assets/sound-effects/camera-shutter-click-08.mp3" ref={shutterAudioRef}></audio>
+            <audio
+                src="/assets/sound-effects/camera-shutter-click-08.mp3" 
+                ref={shutterAudioRef}>
+            </audio>
             <div 
                 className='photo-booth-canvas-container flex flex-col' 
                 style={{
-                    "--background-image": `url(${BACKGROUNDS[background].url})`,
+                    "--background-image": `url(${background})`,
                     "--brightness": getFilterValue("brightness"),
                     "--contrast": getFilterValue("contrast"),
                     "--saturation": getFilterValue("saturation"),
@@ -1484,7 +1559,6 @@ function PhotoBoothPage() {
                                 <div className='tools-subsections cloth-subsection'>
                                     {
                                     Object.entries(MODEL_PATHS).map(([key, model])=>{
-                                        console.log(key)
                                         return(
                                         <SectionButtons
                                             key={key}
@@ -1507,14 +1581,13 @@ function PhotoBoothPage() {
                         > 
                         </div> */}
                         <div className='tools-subsections decor-subsection'>
+                            <FileUploadButton handleCustomImageUpload={(e)=>handleCustomImageUpload(e, decorationUploadCallback)}/>
                             {DECORATION_TEMPLATES.map(decoration=>(
                                 <SectionButtons 
                                     key={decoration.id}
                                     onClick={(e)=>{
                                         e.stopPropagation();
-                                        const newId = currentId.current++
-                                        setDecorations((prev)=>[...prev, {...decoration, id: newId, x:200, y:200 }])
-                                        setSelectedDecorations(newId)
+                                        addDecoration(decoration)
                                     }}
                                     displayText={decoration.name}
                                     image={decoration.url}
@@ -1526,10 +1599,11 @@ function PhotoBoothPage() {
                     </div>
                     <div className = "tabs background-tab" ref={activeTab == "model"? activeTabRef: null}>
                         <div className='tools-subsections background-subsection'>
+                            <FileUploadButton handleCustomImageUpload={(e)=>handleCustomImageUpload(e, setBackground)}/>
                             {BACKGROUNDS.map((background, index)=>(
                                 <SectionButtons
                                     key={index}
-                                    onClick={()=>setBackground(index)
+                                    onClick={()=>setBackground(background.url)
                                     }
                                     displayText = {background.name}
                                     image={background.url}
