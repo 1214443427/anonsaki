@@ -588,6 +588,10 @@
     gap: 10px;
 }
 
+.photo-popup img{
+    user-select: none;
+}
+
 .photobooth-page .sticky-note-popup{
     position: absolute;
     width: 100%;

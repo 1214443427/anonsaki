@@ -66,16 +66,25 @@
 }
 
 .slot{
-    background-image: url(/assets/game-assets/slot.png);
+    background-image: url(/assets/game-assets/slot.webp);
     background-size: cover;
-    width: 50px;
-    height: 50px;
-    background-position-y: bottom 32px;
+    width: 70px;
+    height: 70px;
+    background-position-y: bottom -20px;
 }
 
 .game-overlay{
     position: absolute;
     z-index: 100;
+}
+
+.unit-container{
+    align-items: center; 
+}
+
+.unit-image{
+    width: auto;
+    height: 60px;
 }
 
 @media (min-width: 1024px) {

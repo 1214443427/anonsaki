@@ -6,77 +6,77 @@ import "./ArcadePage.css"
 const CARDS = [
     { emoji: '🍬', name: 'Anon',  baseAttack: 1, baseHealth: 6, cost: 3, 
       description: '粉色章鱼' ,
-      imageUrl: "",
+      imageUrl: "/assets/game-assets/anon.webp",
       ability:{},
       display_name:"",
       color:"#FF8899"
     },
     { emoji: '🐙', name: 'Saki',  baseAttack: 2, baseHealth: 3, cost: 3, 
       description: '蓝色章鱼' ,
-      imageUrl: "",
+      imageUrl: "/assets/game-assets/saki.webp",
       ability:{},
       display_name:"",
       color:"#7799CC"
     },
     { emoji: '🦊', name: 'Soyo',  baseAttack: 3, baseHealth: 2, cost: 3, 
       description: '生活在月之森的狐狸。' ,
-      imageUrl: "",
+      imageUrl: "/assets/game-assets/Fox.webp",
       ability:{},
       display_name:"",
       color:"#FFDD88"
     },
     { emoji: '🐧', name: 'Tomori',baseAttack: 3, baseHealth: 1, cost: 3, 
-      description: '喜欢收集石头的小企鹅。' ,
-      imageUrl: "",
+      description: '喜欢收集石头的小企鹅' ,
+      imageUrl: "/assets/game-assets/Penguin.webp",
       ability:{},
       display_name:"",
       color:"#77BBDD"
     },
     { emoji: '🐼', name: 'Taki',  baseAttack: 2, baseHealth: 4, cost: 3, 
       description: '有颗泪痣的大熊猫。' ,
-      imageUrl: "",
+      imageUrl: "/assets/game-assets/Panda.webp",
       ability:{},
       display_name:"",
       color:"#7777AA"
     },
     { emoji: '🐱', name: 'Raana', baseAttack: 2, baseHealth: 3, cost: 3, 
       description: '自由自在的猫咪。' ,
-      imageUrl: "",
+      imageUrl: "/assets/game-assets/Raana.webp",
       ability:{},
       display_name:"",
       color:"#77DD77"
     },
     { emoji: '🐕', name: 'Uika',  baseAttack: 3, baseHealth: 3, cost: 3, 
       description: '戴着鸭舌帽的大狗狗。' ,
-      imageUrl: "",
+      imageUrl: "/assets/game-assets/Puppy.webp",
       ability:{},
       display_name:"",
       color:"#BB9955"
     },
     { emoji: '🐺', name: 'Umiri', baseAttack: 4, baseHealth: 2, cost: 3, 
       description: '想要获取信任的狼。' ,
-      imageUrl: "",
+      imageUrl: "/assets/game-assets/Wolf.webp",
       ability:{},
       display_name:"",
       color:"#335566"
     },
     { emoji: '🥒', name: 'Mutsu', baseAttack: 6, baseHealth: 1, cost: 3, 
       description: '不喜欢说话的黄瓜精灵。' ,
-      imageUrl: "",
+      imageUrl: "/assets/game-assets/Cucumber.webp",
       ability:{},
       display_name:"",
       color:"#779977"
     },
     { emoji: '🐈‍⬛', name: 'Nyamu', baseAttack: 3, baseHealth: 2, cost: 3, 
       description: '毛发保养良好的紫色的猫猫。' ,
-      imageUrl: "",
+      imageUrl: "/assets/game-assets/Nyamu.webp",
       ability:{},
       display_name:"",
       color:"#AA4477"
     },
     { emoji: '🍩', name: 'Mana',  baseAttack: 2, baseHealth: 3, cost: 3, 
       description: '甜甜圈' ,
-      imageUrl: "",
+      imageUrl: "/assets/game-assets/Donut.webp",
       ability:{},
       display_name:"",
       color:"#6c5e53"
@@ -389,6 +389,8 @@ const PHASE = {
   results: "results",
 }
 
+const UNIT_COST = 3
+
 function startRound(state){
     const currentLevel = state.level
     const enemyCount = gsap.utils.clamp(1, 5, currentLevel)
@@ -447,6 +449,9 @@ function purchaseUnit(state, position){
                                           })
   }else{
     const emptySlot = playerUnitsArray.findIndex((x)=>x.name=="empty")
+    if(emptySlot === -1){
+      return state
+    }
     newPlayerUnitArray = playerUnitsArray.toSpliced(emptySlot, 1, {
       ...unitToPurchase,
       xp: 0,
@@ -461,6 +466,9 @@ function purchaseUnit(state, position){
     team: {
       ...state.team,
       board: newPlayerUnitArray 
+    },
+    economy: {
+      start: state.economy.star - unitToPurchase.cost
     }
   })
 }
@@ -537,8 +545,11 @@ function Unit({unit}){
   }
 
   return(
-    <div className='unit-container'>
+    <div className='unit-container flex flex-col'>
       <div className='levels-container'>{unit.level}</div>
+      <img 
+        className='unit-image'
+        src={unit.imageUrl} />
       {unit.emoji}
       <div className='flex'>
         <div className='attack-indicator'>{unit.currentAttack}</div>

@@ -41,8 +41,8 @@ const MODEL_PATHS = {
             "/assets/l2d/anon/data-matching-outfit/anon_school_winter-2023.moc"
         ],
         textures: [
-            "/assets/l2d/anon/data-matching-outfit/textures/texture_00_winter.png",
-            "/assets/l2d/anon/data-matching-outfit/textures/texture_01_winter.png",
+            "/assets/l2d/anon/data-matching-outfit/textures/texture_00.png",
+            "/assets/l2d/anon/data-matching-outfit/textures/texture_01.png",
             "/assets/l2d/saki/data-matching-outfit/textures/texture_00_winter.png",
             "/assets/l2d/saki/data-matching-outfit/textures/texture_01_winter.png"
         ]
@@ -1092,6 +1092,15 @@ function PhotoBoothPage() {
         }
         tl.play()
     }, [popupAnimationState])
+
+    useEffect(() => {
+        return () => {
+            if (generatedImage) {
+                console.log("revoking", generatedImage)
+                URL.revokeObjectURL(generatedImage);
+            }
+        };
+    }, [generatedImage]);
     
     const switchSubsection = contextSafe((section)=>{
         if (section == activeSubsection) return;
@@ -1259,8 +1268,8 @@ function PhotoBoothPage() {
             if (navigator.canShare && navigator.canShare({ files: [file] })) {
             await navigator.share({
                 files: [file],
-                title: 'Image Share',
-                text: 'Look at this photo!'
+                title: '图片分享',
+                text: '爱爱的祥生产图片'
             });
             } else {
                 setError({type: "share", msg: "⚠错误:无法获得分享许可。请下载图片。"});
@@ -1481,20 +1490,11 @@ function PhotoBoothPage() {
                                             key={key}
                                             onClick={()=>setCharacter(key)}
                                             displayText={model.display_name}
-                                            active={character == key}
                                             image={model.imgUrl}
+                                            active={character == key}
                                         />
                                     )})
-                                    /* {modelData[selectedCharacter].expressions.map((expression, index)=>(
-                                        <SectionButtons 
-                                            key={`${selectedCharacter}-${index}`} 
-                                            onClick={()=>changeCharacterConfig("expression", expression.name)} 
-                                            displayText={expression.display_name}
-                                            image = {expression.image}
-                                            active = {live2DConfigs[selectedCharacter].expression === expression.name}
-                                            />
-                                    ))} */}
-                                    
+                                    }
                             </div>}
                         </div>
                     </div>

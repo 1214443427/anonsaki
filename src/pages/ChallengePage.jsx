@@ -211,8 +211,8 @@ function ChallengePage( {pageHash} ) {
     const [topPage, setTopPage] = useState(0)
     const [currentPage, setCurrentPage] = useState(pageHash||0)
     const [selectedWork, setSelectedWork] = useState(null)
-    const [completedWork, setCompletedWork] = useState([])
-    const [lastVisited, setLastVisited] = useState(0)
+    const [completedWork, setCompletedWork] = useState(()=>JSON.parse(localStorage.getItem("completedWorks"))||[])
+    const [lastVisited, setLastVisited] = useState(()=>JSON.parse(localStorage.getItem("lastVisited"))??0)
     const [showNavigation, setShowNavigation] = useState(false)
     const [pageInput, setPageInput] = useState(1)
     const [animationPlaying, setAnimationPlaying] = useState(false)
@@ -230,10 +230,6 @@ function ChallengePage( {pageHash} ) {
                 const data = await fetch('/data/recommendations.json').then(res => res.json())
                 setRecommendations(data.days)
                 setWorks(data.works)
-                const completed = JSON.parse(localStorage.getItem("completedWorks"))
-                const last = JSON.parse(localStorage.getItem("lastVisited"))
-                setCompletedWork(completed||[])
-                setLastVisited(last||0)
                 // console.log(data)
                 setLoading(false)
             }
@@ -246,9 +242,7 @@ function ChallengePage( {pageHash} ) {
     }, [])
 
     useEffect(()=>{
-        if(completedWork?.length > 0){
-            localStorage.setItem("completedWorks", JSON.stringify(completedWork))
-        }
+        localStorage.setItem("completedWorks", JSON.stringify(completedWork))
         if(currentPage > 0){
             localStorage.setItem("lastVisited", JSON.stringify(currentPage))
         }
