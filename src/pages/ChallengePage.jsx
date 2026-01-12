@@ -200,7 +200,7 @@ function NotebookPages({title, list, className, pageNum, setSelectedWork, works,
 }
 
 
-function ChallengePage( {pageHash} ) {
+function ChallengePage( {pageHash, navigateTo} ) {
     const animationPageRef = useRef(null)
     const contentPageRef = useRef(null)
     const [recommendations, setRecommendations] = useState([])
@@ -209,7 +209,7 @@ function ChallengePage( {pageHash} ) {
     const [error, setError] = useState(null)
     const [bottomPage, setBottomPage] = useState(0)
     const [topPage, setTopPage] = useState(0)
-    const [currentPage, setCurrentPage] = useState(pageHash||0)
+    const [currentPage, setCurrentPage] = useState(0)
     const [selectedWork, setSelectedWork] = useState(null)
     const [completedWork, setCompletedWork] = useState(()=>JSON.parse(localStorage.getItem("completedWorks"))||[])
     const [lastVisited, setLastVisited] = useState(()=>JSON.parse(localStorage.getItem("lastVisited"))??0)
@@ -248,7 +248,20 @@ function ChallengePage( {pageHash} ) {
         }
     }, [completedWork, currentPage])
 
+    useEffect(()=>{
+        const handle = requestAnimationFrame(()=>{
+            if(animationPageRef.current!=null){
+                const pageNum = parseInt(pageHash)
+                if(isLegalPageNum(pageNum)){
+                    flipPage(pageNum)
+                }
+            }
+        })
+        return () => cancelAnimationFrame(handle)
+    }, [pageHash, animationPageRef.current])
+
     useGSAP(()=>{
+        if(animationPageRef.current == null) return
         const tl = gsap.timeline({paused:true, onComplete:()=> setAnimationPlaying(false)})
         // console.log(currentPage, bottomPage, topPage)
         if(currentPage == bottomPage){
@@ -427,9 +440,12 @@ function ChallengePage( {pageHash} ) {
             works[selectedWork]?.author_link? 
             works[selectedWork].author_link: null
     
-
+    function isLegalPageNum(pageNumber){
+        return (pageNumber>=0 && pageNumber<=34 )
+    }
+    
     const flipPage = (pageNumber)=>{
-        if(pageNumber<0 || pageNumber>34 || animationPlaying || pageNumber == currentPage) return
+        if(!isLegalPageNum(pageNumber)|| animationPlaying || pageNumber == currentPage) return
         setShowNavigation(false)
         const current = currentPage
         // console.log(pageNumber, current)
@@ -446,6 +462,7 @@ function ChallengePage( {pageHash} ) {
         // }
         setAnimationPlaying(true)
         setCurrentPage(pageNumber); 
+        navigateTo(`/challenge/${pageNumber}`)
     }
 
     function pageInputOnBlur(num){
@@ -476,25 +493,27 @@ function ChallengePage( {pageHash} ) {
     const isChristmasTime = isChristmas()
 
     useGSAP(()=>{
-        gsap.to(".spinning-snow-flake", {
-            yoyo: true,
-            fill: "#ecfffd",
-            duration: 20,
-            opacity: 0.5,
-            repeat: -1,
-            stagger: 5,
-        })
-        function rotateAnimation(target, direction){
-            gsap.to(target, {
-                rotate: 360 * direction,
-                duration: 30,
+        if(isChristmasTime){
+            gsap.to(".spinning-snow-flake", {
+                yoyo: true,
+                fill: "#ecfffd",
+                duration: 20,
+                opacity: 0.5,
                 repeat: -1,
-                ease: "none"
+                stagger: 5,
             })
+            function rotateAnimation(target, direction){
+                gsap.to(target, {
+                    rotate: 360 * direction,
+                    duration: 30,
+                    repeat: -1,
+                    ease: "none"
+                })
+            }
+            rotateAnimation("#flake-1", -1)
+            rotateAnimation("#flake-2", gsap.utils.random([-1, 1]))
+            rotateAnimation("#flake-3", 1)
         }
-        rotateAnimation("#flake-1", -1)
-        rotateAnimation("#flake-2", gsap.utils.random([-1, 1]))
-        rotateAnimation("#flake-3", 1)
     }, [])
 
     return (

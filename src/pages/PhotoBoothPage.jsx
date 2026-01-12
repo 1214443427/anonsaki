@@ -7,6 +7,7 @@ import Spinner from "../components/Spinner"
 import Draggable from 'gsap/src/Draggable';
 import { useFetchData } from '../hooks/useFetchData';
 import html2canvas from 'html2canvas';
+import { createPortal } from 'react-dom';
 
 const INITIALL2DCONFIGS = 
 [
@@ -106,18 +107,18 @@ const MODEL_PATHS = {
 }
 
 const colors = {
-    '#881144': 'rgb(136, 17, 68)',
-    '#3388BB': 'rgb(51, 136, 187)',
     '#FF8899': 'rgb(255, 136, 153)',
+    '#7799CC': 'rgb(119, 153, 204)',
     '#77DD77': 'rgb(119, 221, 119)',
     '#FFDD88': 'rgb(255, 221, 136)',
     '#7777AA': 'rgb(119, 119, 170)',
     '#77BBDD': 'rgb(119, 187, 221)',
-    '#7799CC': 'rgb(119, 153, 204)',
     '#BB9955': 'rgb(187, 153, 85)',
     '#779977': 'rgb(119, 153, 119)',
     '#335566': 'rgb(51, 85, 102)',
     '#AA4477': 'rgb(170, 68, 119)',
+    '#881144': 'rgb(136, 17, 68)',
+    '#3388BB': 'rgb(51, 136, 187)',
     '#6C5E53': 'rgb(108, 94, 83)'
 }
 
@@ -544,21 +545,18 @@ const FILTER_PRESET = [
       fade: 0.45
     }
   },
-
-
-  {
-    name: "黑白",
-    slug: "bw",
-    imgUrl: "assets/photobooth-assets/filters/bw.webp",
-    values: {
-      brightness: 1,
-      contrast: 1.2,
-      saturation: 0,
-      temperature: 0,
-      fade: 0.1
-    }
-  },
-
+//   {
+//     name: "黑白",
+//     slug: "bw",
+//     imgUrl: "assets/photobooth-assets/filters/bw.webp",
+//     values: {
+//       brightness: 1,
+//       contrast: 1.2,
+//       saturation: 0,
+//       temperature: 0,
+//       fade: 0.1
+//     }
+//   },
   {
     name: "暗调",
     slug: "dark",
@@ -604,15 +602,15 @@ const subsections = [
         name: "expression",
         path: "M464 256a208 208 0 1 0 -416 0 208 208 0 1 0 416 0zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0zm372.2 46.3c11.8-3.6 23.7 6.1 19.6 17.8-19.8 55.9-73.1 96-135.8 96-62.7 0-116-40-135.8-95.9-4.1-11.6 7.8-21.4 19.6-17.8 34.7 10.6 74.2 16.5 116.1 16.5 42 0 81.5-6 116.3-16.6zM144 208a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm164 8c0 11-9 20-20 20s-20-9-20-20c0-33.1 26.9-60 60-60l16 0c33.1 0 60 26.9 60 60 0 11-9 20-20 20s-20-9-20-20-9-20-20-20l-16 0c-11 0-20 9-20 20z",
         display: "表情"
-}, {
-        name: "capture",
-        path: "M193.1 32c-18.7 0-36.2 9.4-46.6 24.9L120.5 96 64 96C28.7 96 0 124.7 0 160L0 416c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-256c0-35.3-28.7-64-64-64l-56.5 0-26-39.1C355.1 41.4 337.6 32 318.9 32L193.1 32zm-6.7 51.6c1.5-2.2 4-3.6 6.7-3.6l125.7 0c2.7 0 5.2 1.3 6.7 3.6l33.2 49.8c4.5 6.7 11.9 10.7 20 10.7l69.3 0c8.8 0 16 7.2 16 16l0 256c0 8.8-7.2 16-16 16L64 432c-8.8 0-16-7.2-16-16l0-256c0-8.8 7.2-16 16-16l69.3 0c8 0 15.5-4 20-10.7l33.2-49.8zM256 384a112 112 0 1 0 0-224 112 112 0 1 0 0 224zM192 272a64 64 0 1 1 128 0 64 64 0 1 1 -128 0z",        
-        display: "拍照"
-}, {
+    }, {
         name: "cloth",
         viewBox: "0 0 640 512",
         path: "M320.2 112c44.2 0 80-35.8 80-80l53.5 0c17 0 33.3 6.7 45.3 18.7L617.6 169.4c12.5 12.5 12.5 32.8 0 45.3l-50.7 50.7c-12.5 12.5-32.8 12.5-45.3 0l-41.4-41.4 0 224c0 35.3-28.7 64-64 64l-192 0c-35.3 0-64-28.7-64-64l0-224-41.4 41.4c-12.5 12.5-32.8 12.5-45.3 0L22.9 214.6c-12.5-12.5-12.5-32.8 0-45.3L141.5 50.7c12-12 28.3-18.7 45.3-18.7l53.5 0c0 44.2 35.8 80 80 80z",
         display: "服装"
+    }, {
+        name: "capture",
+        path: "M193.1 32c-18.7 0-36.2 9.4-46.6 24.9L120.5 96 64 96C28.7 96 0 124.7 0 160L0 416c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-256c0-35.3-28.7-64-64-64l-56.5 0-26-39.1C355.1 41.4 337.6 32 318.9 32L193.1 32zm-6.7 51.6c1.5-2.2 4-3.6 6.7-3.6l125.7 0c2.7 0 5.2 1.3 6.7 3.6l33.2 49.8c4.5 6.7 11.9 10.7 20 10.7l69.3 0c8.8 0 16 7.2 16 16l0 256c0 8.8-7.2 16-16 16L64 432c-8.8 0-16-7.2-16-16l0-256c0-8.8 7.2-16 16-16l69.3 0c8 0 15.5-4 20-10.7l33.2-49.8zM256 384a112 112 0 1 0 0-224 112 112 0 1 0 0 224zM192 272a64 64 0 1 1 128 0 64 64 0 1 1 -128 0z",        
+        display: "拍照"
     }
 ]
 const shareData = {
@@ -839,6 +837,7 @@ function Decorations({url, isSelected, svg, textConfig, width, height, onClick, 
     }, [isEditingText, isSelected])
 
     return(
+        <>
         <div 
             className='decoration-container flex' 
             ref={ref}
@@ -865,7 +864,7 @@ function Decorations({url, isSelected, svg, textConfig, width, height, onClick, 
                         className={`text-decoration ${textConfig.style}`}
                         style={{
                             "--scale":scale,
-                            "--width":`${text.length * 1.4}ch`,
+                            "--width":`${text.length * 1.5}ch`,
                             pointerEvents: isEditingText ? "all" : "none"
                         }}
                         value={text} 
@@ -965,6 +964,56 @@ function Decorations({url, isSelected, svg, textConfig, width, height, onClick, 
                 </div>
             }
         </div>
+
+            {isSelected && createPortal(
+                <div onClick={(e)=>e.stopPropagation()} className='detailed-control-inner-container flex flex-col'>
+                    <Slider 
+                        config={{label: "大小", min: 0.3, max: 3, step: 0.1, value: scale}} 
+                        onChange={(e)=>{
+                            setScale(parseFloat(e.target.value))}
+                        }
+                        reset={()=>setScale(1)}
+                    />
+                    <Slider 
+                        config={{label: "旋转", min: -180, max: 180, step: 1, value: rotation}} 
+                        onChange={(e)=>{
+                            setRotation(parseInt(e.target.value))}
+                        }
+                        reset={()=>setRotation(0)}
+                    />
+                    <div className='flex detailed-control-bottom'>
+                        <div className='flex layer-input'>
+                            <label htmlFor="z-index-input">层次</label>
+                            <input 
+                                id='z-index-input' 
+                                type='number' 
+                                value={zIndex}
+                                onChange={(e)=>{
+                                setZIindex(parseInt(e.target.value)||1)
+                            }}></input>
+                        </div>
+                        {(svg || textConfig) && 
+                            <div className='flex layer-input'>                            
+                                <p>颜色</p>
+                                <div 
+                                    className='color-picker-block' 
+                                    style={{"--background-color":color}}
+                                    onClick={()=>colorPickerRef.current.click()}
+                                    ></div>
+                            </div>
+                        }
+                    </div>
+                    {
+                        textConfig &&
+                        <div className='flex layer-input'>
+                            <p>文字</p>
+                            <input type='text' value={text} onChange={(e)=>setText(e.target.value)}></input>
+                        </div>
+                    }
+                    <button className="detailed-delete-button tools-section-buttons" onClick={onDelete}>删除</button>
+                </div>, document.getElementsByClassName("decoration-detailed-control")[0]
+            )}
+        </>
     )
 }
 
@@ -990,9 +1039,9 @@ function Slider({ config, onChange, reset}){
                 step={config.step}
                 value={config.value}
             />
-            <button className={""} onClick={reset}> 
+            <div className={""} onClick={reset}> 
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M65.9 228.5c13.3-93 93.4-164.5 190.1-164.5 53 0 101 21.5 135.8 56.2 .2 .2 .4 .4 .6 .6l7.6 7.2-47.9 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l128 0c17.7 0 32-14.3 32-32l0-128c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 53.4-11.3-10.7C390.5 28.6 326.5 0 256 0 127 0 20.3 95.4 2.6 219.5 .1 237 12.2 253.2 29.7 255.7s33.7-9.7 36.2-27.1zm443.5 64c2.5-17.5-9.7-33.7-27.1-36.2s-33.7 9.7-36.2 27.1c-13.3 93-93.4 164.5-190.1 164.5-53 0-101-21.5-135.8-56.2-.2-.2-.4-.4-.6-.6l-7.6-7.2 47.9 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L32 320c-8.5 0-16.7 3.4-22.7 9.5S-.1 343.7 0 352.3l1 127c.1 17.7 14.6 31.9 32.3 31.7S65.2 496.4 65 478.7l-.4-51.5 10.7 10.1c46.3 46.1 110.2 74.7 180.7 74.7 129 0 235.7-95.4 253.4-219.5z"/></svg>
-            </button>
+            </div>
         </div>
     )
 }
@@ -1447,7 +1496,7 @@ function PhotoBoothPage() {
                         </div>
                         <div className='subsection-container'>
                             {activeSubsection == "home" &&
-                                <div className='tools-subsections home-subsection'>
+                                <div className='tools-subsections home-subsection flex'>
                                     {subsections.map((section, index)=>(
                                         <div 
                                             key={index} 
@@ -1573,13 +1622,15 @@ function PhotoBoothPage() {
                         </div>
                     </div>
                     <div className = "tabs decor-tab" ref={activeTab == "model"? activeTabRef: null}>
-                        {/* <div
-                            className='decoration-detailed-control'
+                        <div
+                            className='decoration-detailed-control flex flex-col'
                             style={{
-                                "--height": selectedDecorations!==null? "100%":"0%"
+                                "--height": selectedDecorations!==null? "80%":"0%",
+                                "--borderWidth": selectedDecorations!==null? "1px": "0px",
                             }}
                         > 
-                        </div> */}
+                            {/* {portal destination} */}
+                        </div> 
                         <div className='tools-subsections decor-subsection'>
                             <FileUploadButton handleCustomImageUpload={(e)=>handleCustomImageUpload(e, decorationUploadCallback)}/>
                             {DECORATION_TEMPLATES.map(decoration=>(

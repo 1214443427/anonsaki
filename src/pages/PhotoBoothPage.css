@@ -12,7 +12,7 @@
 
 .tools-section{
     width: 100%;
-    height: 40%;
+    height: 50%;
     /* background-color: rgb(var(--saki-color-alpha)); */
     /* background-color: white; */
     /* border-top: 2px solid rgb(var(--saki-color)); */
@@ -102,12 +102,15 @@
 .subsection-container, .decor-tab, .background-tab{
     overflow-y: scroll;
     scroll-snap-type: y mandatory;
-    padding-right: 10px;
 }
 
 .filter-tab{
     overflow-y: scroll;
     scroll-snap-type: y proximity
+}
+
+.decor-tab{
+    position: relative;
 }
 
 .decor-tab, .background-tab{
@@ -131,6 +134,7 @@
 
 .tools-subsections{
     min-height: 100px;
+    padding-right: 10px;
 }
 
 .pill{
@@ -173,7 +177,7 @@
 }
 
 .position-subsection{
-  overflow-x: hidden;
+  overflow: hidden;
   gap: 5px;
   /* padding: 5px 15px 5px 0px; */
 }
@@ -187,6 +191,11 @@
     white-space: nowrap;
     display: inline-block;
     word-break: keep-all;
+}
+
+.input-container button{
+    width: 100%;
+    flex-shrink: 0;
 }
 
 .slider-container{
@@ -211,7 +220,7 @@
     margin-top: 10px;  
 }
 
-.input-container input[type="number"]{
+.input-container input[type="number"], #z-index-input{
     -moz-appearance: textfield; /* Replaces the spinner with a standard text field look */
     appearance: textfield; /* Standard property for newer browsers */
     width: 6ch;    
@@ -245,9 +254,13 @@
 }
 
 .tools-section .tools-section-buttons{
+    display: flex;
     border-radius: 5px;
     background-color: rgb(var(--combined-color));
     padding: 5px;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid transparent;
 }
 
 .tools-section .tools-section-buttons:active{
@@ -281,11 +294,56 @@
     grid-template-columns: repeat(2, 1fr);
 }
 
+
 .decoration-detailed-control{
-    overflow: hidden;
+    width: 25%;
+    position: fixed;
+    left: 25%;
+    bottom: 0px;
+    overflow: scroll;
     max-height: var(--height);
-    transition: max-height 0.5s ease-in-out;
+    transition: max-height 0.5s ease-in-out, border-width 0.1s ease-out;
+    border-block: var(--borderWidth, 0px) solid rgb(var(--anon-color));
+    background-color: rgb(var(--anon-color-alpha));
+    justify-content: stretch;
+    z-index: 3;
 }
+
+.detailed-control-inner-container{
+    margin-top: 10px;
+    padding: 10px;
+    gap: 10px
+}
+
+.tools-section-buttons, .layer-input{
+    width: 50%;
+    gap: 10px;
+}
+
+.detailed-delete-button{
+    width: 100%;
+}
+
+.layer-input{
+    justify-content: flex-start;
+    align-items: center;
+    text-wrap: nowrap;
+}
+
+.color-picker-block{
+    background-color: var(--background-color, transparent);
+    border: 1px solid black;
+    width: 6ch;
+    height: 34px;
+    border-radius: 5px;
+}
+
+
+.detailed-delete-button.tools-section-buttons{
+    background-color: #DC3545;
+    color: white;
+}
+
 
 .subsection-buttons{
     position: relative;
@@ -364,6 +422,7 @@
     user-select: none;
     -moz-user-select: none;
     -webkit-user-select: none;
+    touch-action: none;
 }
 
 #flash-overlay{
@@ -418,6 +477,13 @@
     align-items: center;
     transform-origin: center center 0px;
     cursor: var(--pointer, grab);
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+}
+
+.decoration-container img, .decoration-assets-container{
+    width: 100%;
 }
 
 .decoration-assets-container{

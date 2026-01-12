@@ -140,7 +140,7 @@ function App() {
   const NUM_OF_EASTEREGGS = 6;
 
   const [currentRoute, setCurrentRoute] = useState('landing');
-  const [currentRelayId, setCurrentRelayId] = useState(null); //to be implemented as record.
+  const [queryParam, setQueryParam] = useState(null); //to be implemented as record.
   const [easterEgg, setEasterEgg] = useState([])
   const timelineRef = useRef(null)
 
@@ -167,7 +167,6 @@ function App() {
 
   const octopusShower = Array.from({ length: 50 }).map((_, i)=>(<OctopusShowerElement key={i} index={i} tl={timelineRef.current}/>))
   const SnowShower = Array.from({ length: 50 }).map((_, i)=>(<SnowShowerElement key={i}/>))
-  const playOctopusShower = contextSafe(() => {timelineRef.current.play()})
 
   const parseRoute = () => {
     const hash = window.location.hash.slice(1);
@@ -203,11 +202,10 @@ function App() {
   const handleRouteChange = () => {
     const { route, relayId } = parseRoute();
     setCurrentRoute(route);
-    setCurrentRelayId(relayId);
+    setQueryParam(relayId);
   }
 
   useEffect(()=>{
-      // loadAllScripts();
       handleRouteChange();
       prefetchContentAssets();
       addEventListener('hashchange', handleRouteChange)
@@ -231,23 +229,22 @@ function App() {
         case 'character':
           return <CharacterPage navigateTo={navigateTo} collectEasterEgg={collectEasterEgg}/> 
         case 'relays':
-          if(currentRelayId == null)
+          if(queryParam == null)
             return <RelayPage navigateTo={navigateTo} collectEasterEgg={collectEasterEgg}/>
           else
-            return <RelayDetailsPage filename={decodeURI(currentRelayId)}></RelayDetailsPage>
+            return <RelayDetailsPage filename={decodeURI(queryParam)}></RelayDetailsPage>
         case "invitation":
             return <InvitationPage collectEasterEgg={collectEasterEgg} easterEggProgress={easterEgg}/>
         case "photo-booth":
             return <PhotoBoothPage />
         case "challenge":
-            return <ChallengePage pagehash={currentRelayId}/>
+            return <ChallengePage pageHash={queryParam} navigateTo={navigateTo} />
         case "student":
             return <StudentCouncilPage />
         case "date":
             return <DatePage />
         case "arcade":
             return <ArcadePage />
-        
         }
       })()}
     </div>

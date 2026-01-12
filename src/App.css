@@ -25,6 +25,7 @@ html, body {
   height: 100%;
   min-height: 100dvh;  
   overscroll-behavior: none;
+  background-color: rgb(var(--saki-color-alpha));
 }
 
 body::-webkit-scrollbar{
@@ -268,6 +269,11 @@ h1, h2, h3, h4, h5, h6 {
   drop-shadow(-2px 2px white) drop-shadow(-2px -2px white);
   -webkit-filter:  drop-shadow(2px 2px white) drop-shadow(2px -2px white)
   drop-shadow(-2px 2px white) drop-shadow(-2px -2px white);
+}
+
+.octo-container .heart-bullet{
+  -webkit-backdrop-filter: blur(0);
+  /* -webkit-transform: translateZ(0); Forces GPU rendering */
 }
 
 #saki-hat{
