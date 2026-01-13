@@ -33,7 +33,7 @@ function CheckMarkSVG({animate}){
 }
 
 
-function NotebookPages({title, list, className, pageNum, setSelectedWork, works, flipPage, completedWork, setCompletedWork}){
+function NotebookPages({title, list, className, pageNum, setSelectedWork, works, navigateToPage, completedWork, setCompletedWork}){
     
     const [newlyAdded, setNewlyAdded] = useState([])
     const [copyStatus, setCopyStatus] = useState()
@@ -168,7 +168,7 @@ function NotebookPages({title, list, className, pageNum, setSelectedWork, works,
                                 </div>
                             </div>
                             :
-                            <div key={i} onClick={()=>flipPage(i + 3 + (pageNum-1)*list.length)} className='notebook-items flex'>
+                            <div key={i} onClick={()=>navigateToPage(i + 3 + (pageNum-1)*list.length)} className='notebook-items flex'>
                                     <span>{item}</span>
                                     <span>{i + 1 + (pageNum-1)*list.length}</span>
                             </div>
@@ -248,8 +248,9 @@ function ChallengePage( {pageHash, navigateTo} ) {
         }
     }, [completedWork, currentPage])
 
-    useEffect(()=>{
+    const animationRefCallback = ()=>{
         const handle = requestAnimationFrame(()=>{
+            console.log(animationPageRef.current)
             if(animationPageRef.current!=null){
                 const pageNum = parseInt(pageHash)
                 if(isLegalPageNum(pageNum)){
@@ -258,7 +259,12 @@ function ChallengePage( {pageHash, navigateTo} ) {
             }
         })
         return () => cancelAnimationFrame(handle)
-    }, [pageHash, animationPageRef.current])
+    }
+
+    const setRefs = (node) => {
+        animationPageRef.current = node
+        animationRefCallback()
+    }
 
     useGSAP(()=>{
         if(animationPageRef.current == null) return
@@ -443,6 +449,11 @@ function ChallengePage( {pageHash, navigateTo} ) {
     function isLegalPageNum(pageNumber){
         return (pageNumber>=0 && pageNumber<=34 )
     }
+
+    const navigateToPage = (pageNumber) => {
+        if(!isLegalPageNum(pageNumber)|| animationPlaying || pageNumber == currentPage) return
+        navigateTo(`/challenge/${pageNumber}`)
+    }
     
     const flipPage = (pageNumber)=>{
         if(!isLegalPageNum(pageNumber)|| animationPlaying || pageNumber == currentPage) return
@@ -462,7 +473,6 @@ function ChallengePage( {pageHash, navigateTo} ) {
         // }
         setAnimationPlaying(true)
         setCurrentPage(pageNumber); 
-        navigateTo(`/challenge/${pageNumber}`)
     }
 
     function pageInputOnBlur(num){
@@ -579,7 +589,7 @@ function ChallengePage( {pageHash, navigateTo} ) {
                 <Spinner/>
             </>:
             <div className='notebook-pages'>
-                <div className='animation-page' ref={animationPageRef}>
+                <div className='animation-page' ref={setRefs}>
                     <div className='animation-page-inner'>
                         <div className='front'>
                             <NotebookPages 
@@ -588,7 +598,7 @@ function ChallengePage( {pageHash, navigateTo} ) {
                                 setSelectedWork={selectWork}
                                 pageNum={topPage}
                                 works={works}
-                                flipPage={flipPage}
+                                navigateToPage={navigateToPage}
                                 completedWork = {completedWork}
                                 setCompletedWork = {setCompletedWork}
                             />
@@ -610,7 +620,7 @@ function ChallengePage( {pageHash, navigateTo} ) {
                         className="front"
                         pageNum={bottomPage}
                         works={works}
-                        flipPage={flipPage}
+                        navigateToPage={navigateToPage}
                         completedWork = {completedWork}
                         setCompletedWork = {setCompletedWork}
                     />
@@ -689,7 +699,7 @@ function ChallengePage( {pageHash, navigateTo} ) {
             <div className={`challenge-page-nav ${animationPlaying?"inactive":""}`}>
                 <div 
                     className={`direction-buttons ${currentPage == 0 ? "disabled":""}`}
-                    onClick={()=>flipPage(currentPage-1)}>
+                    onClick={()=>navigateToPage(currentPage-1)}>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M169.4 297.4C156.9 309.9 156.9 330.2 169.4 342.7L361.4 534.7C373.9 547.2 394.2 547.2 406.7 534.7C419.2 522.2 419.2 501.9 406.7 489.4L237.3 320L406.6 150.6C419.1 138.1 419.1 117.8 406.6 105.3C394.1 92.8 373.8 92.8 361.3 105.3L169.3 297.3z"/></svg>
                 </div>
                 <button 
@@ -699,7 +709,7 @@ function ChallengePage( {pageHash, navigateTo} ) {
                     </button>
                 <div 
                     className= {`direction-buttons ${currentPage == recommendations.length-1? "disabled":""}`}
-                    onClick={()=>flipPage(currentPage+1)}>
+                    onClick={()=>navigateToPage(currentPage+1)}>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M471.1 297.4C483.6 309.9 483.6 330.2 471.1 342.7L279.1 534.7C266.6 547.2 246.3 547.2 233.8 534.7C221.3 522.2 221.3 501.9 233.8 489.4L403.2 320L233.9 150.6C221.4 138.1 221.4 117.8 233.9 105.3C246.4 92.8 266.7 92.8 279.2 105.3L471.2 297.3z"/></svg>
                 </div>
             </div>
@@ -793,7 +803,7 @@ function ChallengePage( {pageHash, navigateTo} ) {
                     <div className='navigation-popup flex flex-col'>
                         <div className='page-selectors flex'>
                             {Array.from({ length: 35 }).map((_, index)=>(
-                                <div className={'page-selector' + (index == currentPage ? ' active':'')} key={index} onClick={()=>flipPage(index)}>
+                                <div className={'page-selector' + (index == currentPage ? ' active':'')} key={index} onClick={()=>navigateToPage(index)}>
                                     {getPageDisplayText(index)}
                                 </div>
                             ))}
@@ -810,14 +820,14 @@ function ChallengePage( {pageHash, navigateTo} ) {
                                         ></input>
                                     <button 
                                         className='pop-up-buttons'
-                                        onClick={()=>flipPage(pageInput + 2)}>页</button>
+                                        onClick={()=>navigateToPage(pageInput + 2)}>页</button>
                                 </div>
                                 <div>到
                                     <select 
                                         name="page-number" 
                                         id="page-number" 
                                         className='page-select'
-                                        onChange={(e)=>flipPage(parseInt(e.target.value))}
+                                        onChange={(e)=>navigateToPage(parseInt(e.target.value))}
                                         >
                                         {Array.from({ length: 35 }).map((_, index)=>(
                                             <option className='page-select-options' key={index} value={index}>
@@ -830,7 +840,7 @@ function ChallengePage( {pageHash, navigateTo} ) {
                             </div>
                             <button 
                                 className='pop-up-buttons last-visted-button'
-                                onClick={()=>{flipPage(lastVisited)}}
+                                onClick={()=>{navigateToPage(lastVisited)}}
                                 >上次阅览</button>
                         </div>
                     </div>
