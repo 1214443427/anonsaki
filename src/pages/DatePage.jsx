@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import PopUpModal from '../components/PopupModal'
+import PopUpModal from '../components/PopUpModal'
 
 function DatePage() {
   const doNotRemind = useState(()=>localStorage.getItem("doNotRemind")||false)
