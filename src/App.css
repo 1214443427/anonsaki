@@ -158,7 +158,6 @@ h1, h2, h3, h4, h5, h6 {
   aspect-ratio: 1;
 }
 
-
 .buttons{
   display: flex;
   justify-content: space-between;
@@ -632,9 +631,9 @@ h1, h2, h3, h4, h5, h6 {
 .canvas-dialog{
   position: absolute;
   border: 2px solid rgb(var(--combined-color));
-  left: 10%;
-  width: 80%;
-  border-radius: 5px;
+  right: 5%;
+  width: 90%;
+  border-radius: 15px;
   background-color: rgba(255, 255, 255, 0.75);
   min-height: 4rem;
   padding: 1rem;
@@ -645,9 +644,9 @@ h1, h2, h3, h4, h5, h6 {
 .character-page #gl_canvas{
   z-index: 3;
   right: calc(10vw + 10px);
-  aspect-ratio: 3/4;
+  aspect-ratio: 1;
   height: 50vh;
-  min-height: 280px;
+  min-height: 200px;
 }
 
 
@@ -1431,7 +1430,7 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   .character-page #gl_canvas{
-    height: 40vh;
+    height: 35vh;
   }
   
   .dialog-box{

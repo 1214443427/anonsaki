@@ -264,7 +264,7 @@ function CharacterPage({navigateTo, collectEasterEgg}) {
     <div className='page character-page'>
       <div className='character-page-background'></div>
       <div className='character-curtain curtain'></div>
-      <L2dCanvas character={character} offsetBottom={offsetBottom} width={600} height={800}/> 
+      <L2dCanvas character={character} offsetBottom={offsetBottom} width={800} height={800}/> 
       <section className='character-section saki-section'>
         <div className='dialog-box saki-border'>
           <img src={isChristmasTime?'/assets/happy-saki-octo-winter.webp':"/assets/happy_saki_octo_matching.webp"} className='character-page-octo' onClick={()=>collectEasterEgg("character-page-saki")}/>
@@ -290,6 +290,11 @@ function CharacterPage({navigateTo, collectEasterEgg}) {
             <ToolTips displayText={"爱音的宿敌"} 
               content={"假如千早爱音和丰川祥子是宿敌"} 
               link={"https://www.bilibili.com/video/BV1SpKWzjEdx"}
+              style = "spoiler"
+              />
+            <ToolTips displayText={"亘古的忘却之主"} 
+              content={"魔王与勇者的新世纪世界旅程"} 
+              link={"https://ngabbs.com/read.php?tid=44870534"}
               style = "spoiler"
               />
         </div>
@@ -336,6 +341,11 @@ function CharacterPage({navigateTo, collectEasterEgg}) {
             <ToolTips displayText={`"下一个我，也应该遇到的美好"`} 
               content={"千早爱音在6：50醒来"} 
               link={"https://www.bilibili.com/video/BV1qtUtYME6v"}
+              style = "spoiler"
+              />
+            <ToolTips displayText={"红雾议员"} 
+              content={"丰川祥子似乎正在成为神明的样子"} 
+              link={"https://ngabbs.com/read.php?tid=43877379"}
               style = "spoiler"
               />
         </div>

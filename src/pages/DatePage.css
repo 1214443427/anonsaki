@@ -1,0 +1,88 @@
+.PWA-hint-modal{
+    width: 80%;
+    max-width: 400px;
+    height: auto;
+    color: rgb(var(--combined-color));
+    transform: translate(-50%, -50%);
+    background-color: color-mix(in srgb, rgb(var(--anon-color)) 15%, white 85%);
+}
+
+.pwa-buttons{
+    width: 100%;
+    justify-content: space-evenly;
+}
+
+.confirmation-modal-back-drop{
+    align-items: center;
+}
+
+.inline-svg{
+    width: 1.25rem;
+    height: 1.25rem;
+    align-self: center;
+}
+
+.date-page{
+    height: 100dvh;
+    background-color: rgb(var(--anon-color-alpha));
+    align-items: center;
+    gap: 20px;
+    padding-block: 10%;
+    padding-inline: 2%;
+}
+
+.date-page .dialog-box.saki-border{
+    justify-content: center;
+    background-image: none;
+    gap: 7.5px;
+    flex: 1 1 0px;
+    height: 0px;
+    min-height: 0px;
+}
+
+.date-page-images{
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.photo-sample{
+    object-fit: cover;
+    transform: translateY(-10px);
+}
+
+.camera-overlay{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@media screen and (min-width: 2550px){
+}
+
+@media screen and (min-width: 1900px), (min-height: 1000px){
+}
+
+@media screen and (min-width: 1200px){
+    .date-page{
+        flex-direction: row;
+    }
+
+    .date-page .dialog-box.saki-border{
+        height: auto;
+        aspect-ratio: 1;
+    }
+}
+
+
+@media screen and (min-width: 768px){
+    .date-page{
+        padding-block: 15%;
+    }
+
+    .date-page .dialog-box.saki-border{
+        width: 50%;
+    }
+}

@@ -19,12 +19,12 @@ function PopUpModal({children, className, showModal, closeModal}) {
         gsap.fromTo(".confirmation-modal", 
           {
             scale: 0.8,
-            y: +20
+            yPercent: +20
           },
           {
             duration: 0.25,
             scale: 1,
-            y: 0
+            yPercent: -50
           },
         ) 
       }else{
@@ -39,7 +39,7 @@ function PopUpModal({children, className, showModal, closeModal}) {
   return (
     <>
         <div className='confirmation-modal-back-drop' onClick={(e)=>closeModal(e)} ref={modalRef}>
-          <div className={`confirmation-modal`} onClick={(e)=>e.stopPropagation()}>
+          <div className={`confirmation-modal `+className} onClick={(e)=>e.stopPropagation()}>
             {children}
           </div>
         </div>

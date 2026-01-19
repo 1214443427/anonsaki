@@ -250,7 +250,7 @@ function ChallengePage( {pageHash, navigateTo} ) {
 
     const animationRefCallback = ()=>{
         const handle = requestAnimationFrame(()=>{
-            console.log(animationPageRef.current)
+            // console.log(animationPageRef.current)
             if(animationPageRef.current!=null){
                 const pageNum = parseInt(pageHash)
                 if(isLegalPageNum(pageNum)){

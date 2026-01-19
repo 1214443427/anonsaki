@@ -8,6 +8,7 @@ import Draggable from 'gsap/src/Draggable';
 import { useFetchData } from '../hooks/useFetchData';
 import html2canvas from 'html2canvas';
 import { createPortal } from 'react-dom';
+import PopUpModal from '../components/PopUpModal';
 
 const INITIALL2DCONFIGS = 
 [
@@ -194,14 +195,7 @@ const DECORATION_TEMPLATES = [
         width: 200,
         height: 100
     },
-    {
-        id: 'christmas-hat',
-        name: '圣诞帽',
-        type: 'decoration',
-        url: "/assets/christmas-hat.webp",
-        width: 140,
-        height: 140
-    },
+
     {
         id: 'sunglasses',
         name: '墨镜',
@@ -250,7 +244,15 @@ const DECORATION_TEMPLATES = [
         width: 200,
         height: 200
     },
-        {
+    {
+        id: 'mask',
+        name: '面具',
+        type: 'decoration',
+        url: "/assets/photobooth-assets/decorations/mask.png",
+        width: 100,
+        height: 75
+    },
+    {
         id: 'angry',
         name: '生气',
         type: 'decoration',
@@ -464,7 +466,15 @@ const DECORATION_TEMPLATES = [
         },
         width: 160,
         height: 80
-    }
+    },
+    {
+        id: 'christmas-hat',
+        name: '圣诞帽',
+        type: 'decoration',
+        url: "/assets/christmas-hat.webp",
+        width: 140,
+        height: 140
+    },
 ];
 
 const FILTER_PRESET = [
@@ -995,11 +1005,13 @@ function Decorations({url, isSelected, svg, textConfig, width, height, onClick, 
                         {(svg || textConfig) && 
                             <div className='flex layer-input'>                            
                                 <p>颜色</p>
-                                <div 
+                                <input
+                                    type='color'
+                                    list="colorOptions" 
                                     className='color-picker-block' 
-                                    style={{"--background-color":color}}
-                                    onClick={()=>colorPickerRef.current.click()}
-                                    ></div>
+                                    // style={{"--background-color":color}}
+                                    value={color} onChange={(e)=>setColor(e.target.value)}
+                                    />
                             </div>
                         }
                     </div>
@@ -1079,6 +1091,7 @@ function PhotoBoothPage() {
     const [popupAnimationState, setPopupAnimationState] = useState("closed")
     const [isFlashing, setIsFlashing] = useState(false)
     const shutterAudioRef = useRef(null)
+    const [isRemoveAllShown, setIsRemoveAllShown] = useState(false)
 
     async function fetchData(models, textures){
         try{
@@ -1107,7 +1120,6 @@ function PhotoBoothPage() {
         fetchData(MODEL_PATHS.both.models, MODEL_PATHS.both.textures)
         fetchModelData()
         setCharacter("both")
-
     }, [])
 
     useEffect(()=>{
@@ -1266,6 +1278,13 @@ function PhotoBoothPage() {
         )))
     }
 
+    function changeCloth(modelName){
+        setCharacter(modelName)
+        setLive2dConfigs(prev=> prev.map((config)=>(
+            {...config, paused:false}
+        )))
+    }
+
     function resetConfig(){
         setLive2dConfigs(prev => prev.map((config, index)=>(
             index == selectedCharacter? {
@@ -1413,6 +1432,15 @@ function PhotoBoothPage() {
             callback(imageDataUrl)
         }
         reader.readAsDataURL(file);
+    }
+
+    function handleDeleteAll(){
+        setDecorations([])
+        setIsRemoveAllShown(false)
+    }
+
+    function deleteAllToggle(){
+        setIsRemoveAllShown(prev=>!prev)
     }
 
     if(error && error.type == "fetch"){
@@ -1611,7 +1639,7 @@ function PhotoBoothPage() {
                                         return(
                                         <SectionButtons
                                             key={key}
-                                            onClick={()=>setCharacter(key)}
+                                            onClick={()=>changeCloth(key)}
                                             displayText={model.display_name}
                                             image={model.imgUrl}
                                             active={character == key}
@@ -1632,6 +1660,58 @@ function PhotoBoothPage() {
                             {/* {portal destination} */}
                         </div> 
                         <div className='tools-subsections decor-subsection'>
+                            <SectionButtons 
+                                key={"delete-all"}
+                                onClick={deleteAllToggle}
+                                displayText={"清空所有"}
+                                svg={(
+                                    <svg
+                                        fill="#000000"
+                                        viewBox="-6.51 0 122.88 122.88"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        xmlSpace="preserve"
+                                        >
+                                        <path
+                                            fillRule="evenodd"
+                                            clipRule="evenodd"
+                                            d="M50.04,48.8l11.91-0.04c2.15-0.01,3.62,0.38,5.03,2.24L70.35,57l3.41-2.11l-5.87,10.27L56,65.11l3.63-2.11
+                                            l-6.12-10.36c-0.58-0.98-1-1.76-1.84-2.58C51.18,49.58,50.62,49.16,50.04,48.8z
+                                            M52.91,98.61l-11.43,0.02c-2.53-0.39-4.15-1.76-4.63-3.67c-0.42-1.65-0.01-2.41,0.71-3.83
+                                            c0.85-1.69,1.86-3.32,2.83-4.97l12.65,0.04L52.91,98.61z
+                                            M34.71,94.16l-5.99-10.29c-1.08-1.86-1.48-3.33-0.58-5.48l3.52-5.91l-3.53-1.9
+                                            l11.83-0.05l5.9,10.31l-3.64-2.09l-5.91,10.48
+                                            c-0.56,0.99-1.03,1.75-1.31,2.88C34.83,92.79,34.74,93.47,34.71,94.16z
+                                            M75.98,67.25l5.73,9.88c0.93,2.38,0.55,4.47-0.86,5.84
+                                            c-1.22,1.18-2.08,1.21-3.67,1.3c-1.89,0.11-3.81,0.05-5.72,0.03
+                                            l-6.29-10.98L75.98,67.25z
+                                            M81.22,85.24L75.3,95.57c-1.07,1.87-2.14,2.95-4.45,3.24l-6.88-0.09l0.12,4
+                                            l-5.95-10.22l5.98-10.27l0.01,4.2l12.03-0.12
+                                            c1.14-0.01,2.03,0.01,3.15-0.3C79.98,85.83,80.61,85.56,81.22,85.24z
+                                            M37.09,62.33l5.69-9.91c1.6-2,3.6-2.71,5.49-2.18
+                                            c1.63,0.46,2.09,1.2,2.96,2.53c1.04,1.59,1.95,3.28,2.89,4.94
+                                            l-6.37,10.94L37.09,62.33z
+                                            M4.02,9.36h35.47V5.4c0-1.49,0.61-2.84,1.58-3.81
+                                            C42.06,0.61,43.41,0,44.89,0h20.54c1.49,0,2.83,0.61,3.81,1.58
+                                            c0.98,0.98,1.58,2.33,1.58,3.81v3.97h35.02
+                                            c1.1,0,2.11,0.45,2.84,1.19c0.73,0.73,1.18,1.73,1.18,2.84v11.19H0V13.38
+                                            c0-1.1,0.45-2.11,1.18-2.84C1.91,9.82,2.92,9.36,4.02,9.36z
+                                            M41.23,12.84H4.02c-0.15,0-0.29,0.06-0.38,0.15
+                                            c-0.1,0.1-0.16,0.24-0.16,0.39v9.45h102.9v-9.45
+                                            c0-0.15-0.06-0.29-0.16-0.39c-0.09-0.09-0.23-0.15-0.38-0.15H69.08
+                                            V5.39c0-0.52-0.22-1-0.56-1.35c-0.35-0.35-0.82-0.56-1.35-0.56H44.89
+                                            c-0.53,0-1.01,0.21-1.35,0.56c-0.35,0.35-0.56,0.83-0.56,1.35v7.45z
+                                            M10.18,28.77h90.29c1.24,0.11,2.4,0.67,3.25,1.5
+                                            c0.89,0.88,1.46,2.06,1.46,3.38l-7.64,83.78
+                                            c-0.12,1.37-0.71,2.62-1.62,3.53
+                                            c-0.91,0.91-2.13,1.47-3.53,1.47h-75.11
+                                            c-1.4,0-2.62-0.56-3.54-1.47
+                                            c-0.91-0.91-1.49-2.17-1.62-3.54L5.03,34.08
+                                            c0-1.32,0.57-2.5,1.46-3.38
+                                            c0.85-0.83,2.01-1.39,3.26-1.5z"
+                                        />
+                                    </svg>
+                                  )}
+                             />
                             <FileUploadButton handleCustomImageUpload={(e)=>handleCustomImageUpload(e, decorationUploadCallback)}/>
                             {DECORATION_TEMPLATES.map(decoration=>(
                                 <SectionButtons 
@@ -1736,6 +1816,19 @@ function PhotoBoothPage() {
            <div className='loading-popup'>
                 <Spinner />
             </div>}
+            {(isRemoveAllShown&&
+                <PopUpModal showModal={isRemoveAllShown} closeModal={deleteAllToggle}>
+                    <p>确定要忘却一切吗？</p>
+                    <div className='flex pwa-buttons'>
+                        <button className='menu-button' onClick={handleDeleteAll}>
+                            确定
+                        </button>
+                        <button className='menu-button' onClick={deleteAllToggle}>
+                            取消
+                        </button>
+                    </div>
+                </PopUpModal>
+            )}
         </div>
     )
     }

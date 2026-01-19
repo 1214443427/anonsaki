@@ -42,7 +42,7 @@
     width: 50%;
 }
 
-.enemy-section, .team-section{
+.team-section, .enemy-lane{
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     place-items: center;
@@ -53,16 +53,15 @@
 }
 
 .enemy-section{
-    background: rgba(255, 0, 0, 0.3);
 }
 
 .team-section{
-    background: rgba(0, 255, 0, 0.3);
     left: 0px;
 }
 
-.shop-section{
-    background: rgba(0, 0, 255, 0.3);
+.shop-section, .enemy-section{
+    flex-direction: column-reverse;
+    padding-bottom: 30px;
 }
 
 .slot{
@@ -85,7 +84,10 @@
 .unit-image{
     width: auto;
     height: 60px;
+    font-size: 2.5rem;
 }
+
+
 
 @media (min-width: 1024px) {
     .arcade-page{

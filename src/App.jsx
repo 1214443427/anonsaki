@@ -242,7 +242,7 @@ function App() {
         case "student":
             return <StudentCouncilPage />
         case "date":
-            return <DatePage />
+            return <DatePage navigateTo={navigateTo}/>
         case "arcade":
             return <ArcadePage />
         }

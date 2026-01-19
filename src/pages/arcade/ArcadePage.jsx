@@ -6,14 +6,14 @@ import "./ArcadePage.css"
 const CARDS = [
     { emoji: '🍬', name: 'Anon',  baseAttack: 1, baseHealth: 6, cost: 3, 
       description: '粉色章鱼' ,
-      imageUrl: "/assets/game-assets/anon.webp",
+      imageUrl: "/assets/game-assets/Anon.webp",
       ability:{},
       display_name:"",
       color:"#FF8899"
     },
     { emoji: '🐙', name: 'Saki',  baseAttack: 2, baseHealth: 3, cost: 3, 
       description: '蓝色章鱼' ,
-      imageUrl: "/assets/game-assets/saki.webp",
+      imageUrl: "/assets/game-assets/Saki.webp",
       ability:{},
       display_name:"",
       color:"#7799CC"
@@ -417,12 +417,13 @@ function generateShop(state){
   const unit = []
   for (let i = 0; i < 3; i++) {
     const randomUnit = gsap.utils.random(CARDS)
-    unit.push(randomUnit)
+    unit.push({key: state.shop.nextKey, ...randomUnit})
   }
   const randomItem = gsap.utils.random(ITEMS)
   return {
     ...state,
     shop: {
+      nextKey: state.shop.nextKey + 1,
       locked: false,
       units: unit,
       items: [randomItem],
@@ -434,6 +435,9 @@ function purchaseUnit(state, position){
   const shopUnitsArray = state.shop.units;
   const playerUnitsArray = state.team.board;
   const unitToPurchase = shopUnitsArray[position];
+  if(unitToPurchase.name === "empty"){
+    return state
+  }
   const newShopUnits = shopUnitsArray.toSpliced(position, 1, {
     name: "empty",
   });
@@ -526,8 +530,15 @@ const initialState = {
     },
     shop: {
         locked: false,
-        units:[],
-        items:[],
+        nextKey: 0,
+        units:Array.from({ length: 3 }, () => ({
+          name: "empty",
+          level: 0,
+          xp: 0,
+        })),
+        items:[{
+          name: "empty",
+        }],
     },
     enemies: [],
     combat: {
@@ -547,10 +558,15 @@ function Unit({unit}){
   return(
     <div className='unit-container flex flex-col'>
       <div className='levels-container'>{unit.level}</div>
-      <img 
+      {
+        unit.imageUrl ? 
+        <img 
         className='unit-image'
-        src={unit.imageUrl} />
-      {unit.emoji}
+        src={unit.imageUrl} />:
+        <p className='unit-image'>
+          {unit.emoji}
+        </p>
+      }
       <div className='flex'>
         <div className='attack-indicator'>{unit.currentAttack}</div>
         <div className='health-indicator'>{unit.currentHealth}</div>
@@ -571,30 +587,34 @@ function ArcadePage() {
     <div className='pages flex flex-col arcade-page'>
       <div className='game-container flex flex-col'>
         <div className='arcade-top-section flex'>   
-          <div className='shop-section'>
-            <div className='unit-section'>
-              {state.shop.units.map((unit, index)=>(
-                <div className='slot' key={index} onClick={()=>dispatch({type: "PURCHASE_UNIT", position: index})}>
+          <div className='shop-section flex'>
+            <div className='flex shop-section-lane'>
+              <div className='unit-section flex'>
+                {state.shop.units.map((unit, index)=>(
+                  <div className='slot' key={index} onClick={()=>dispatch({type: "PURCHASE_UNIT", position: index})}>
+                    <Unit unit={unit}/>
+                  </div>
+                ))}
+              </div>
+              <div className='item-section flex'>
+                <div className='slot'>
+                  {state.shop.items.length > 0 && 
+                    <div>
+                      {state.shop.items[0].name}
+                    </div>
+                    }
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className='enemy-section flex'>
+            <div className='enemy-lane'>
+              {state.phase == PHASE.battle && state.enemies.map((unit, index)=>(
+                <div className='slot' key={index}>
                   <Unit unit={unit}/>
                 </div>
               ))}
             </div>
-            <div className='item-section'>
-              <div className='slot'>
-                {state.shop.items.length > 0 && 
-                  <div>
-                    {state.shop.items[0].name}
-                  </div>
-                  }
-              </div>
-            </div>
-          </div>
-          <div className='enemy-section'>
-            {state.phase == PHASE.battle && state.enemies.map((unit, index)=>(
-              <div className='slot'>
-                <Unit unit={unit}/>
-              </div>
-            ))}
           </div>
         </div>
         <div className='arcade-bottom-section'>

@@ -2,8 +2,8 @@
   "version": "Sample 1.0.0",
   "layout": {
     "center_x": 0,
-    "center_y": 0,
-    "width": 2
+    "center_y": 0.15,
+    "width": 1.75
   },
   "hit_areas_custom": {
     "body_x": [
