@@ -965,15 +965,16 @@ function Decorations({url, selected, id, svg, textConfig, width, height, onClick
                 timeoutRef.current = setTimeout(()=>{
                     setShowPortal(false);
                     timeoutRef.current = null;
-                }, 250)
+                }, 500)
             }else{
+                clearTimeout(timeoutRef.current)
                 setShowPortal(false)
             }
         }else{
             clearTimeout(timeoutRef.current)
             setShowPortal(true)
         }
-    }, [isSelected])
+    }, [isSelected, selected])
 
     return(
         <>
