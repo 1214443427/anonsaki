@@ -1,6 +1,6 @@
 import { useGSAP } from '@gsap/react';
 import { gsap } from 'gsap/gsap-core';
-import React, { useEffect, useReducer, useState } from 'react'
+import React, { useEffect, useReducer, useRef, useState } from 'react'
 import "./ArcadePage.css"
 
 const CARDS = [
@@ -407,6 +407,7 @@ function startRound(state){
     }
     return {
       ...state,
+      phase: PHASE.battle,
       enemies: enemies
     }
 }
@@ -443,15 +444,29 @@ function purchaseUnit(state, position){
   });
   const existingUnitIndex = playerUnitsArray.findIndex((x)=> x.name == unitToPurchase.name);
   let newPlayerUnitArray = playerUnitsArray
+  const events = [];
   if (existingUnitIndex !== -1){
     const existingUnit = playerUnitsArray[existingUnitIndex]
     console.log(existingUnitIndex, existingUnit)
-    newPlayerUnitArray = playerUnitsArray.toSpliced(existingUnitIndex, 1)
-                                          .toSpliced(existingUnitIndex, 0, {
-                                            ...existingUnit,
-                                            xp: existingUnit.xp + 1
-                                          })
-  }else{
+    let newXp = existingUnit.xp + 1;
+    if(newXp>= Math.pow(2, existingUnit.level)){
+      newPlayerUnitArray = playerUnitsArray.toSpliced(existingUnitIndex, 1)
+                                      .toSpliced(existingUnitIndex, 0, {
+                                        ...existingUnit,
+                                        xp: 0,
+                                        level: existingUnit.level +1,
+                                        currentAttack: existingUnit.currentAttack + existingUnit.baseAttack * Math.pow(2, existingUnit.level - 1) ,
+                                        currentHealth: existingUnit.currentHealth + existingUnit.baseHealth * Math.pow(2, existingUnit.level - 1),
+                                      })
+      events.push({name: existingUnit.name, type: "level-up"})
+      }else{
+        newPlayerUnitArray = playerUnitsArray.toSpliced(existingUnitIndex, 1)
+        .toSpliced(existingUnitIndex, 0, {
+          ...existingUnit,
+          xp: newXp,
+        })
+      }
+    }else{
     const emptySlot = playerUnitsArray.findIndex((x)=>x.name=="empty")
     if(emptySlot === -1){
       return state
@@ -459,6 +474,9 @@ function purchaseUnit(state, position){
     newPlayerUnitArray = playerUnitsArray.toSpliced(emptySlot, 1, {
       ...unitToPurchase,
       xp: 0,
+      level: 1,
+      currentAttack: unitToPurchase.baseAttack,
+      currentHealth: unitToPurchase.baseHealth
     })
   }
   return({
@@ -527,6 +545,7 @@ const initialState = {
           level: 0,
           xp: 0,
         })),
+        events: [],
     },
     shop: {
         locked: false,
@@ -549,15 +568,52 @@ const initialState = {
     }
 }
 
-function Unit({unit}){
+function Unit({unit, mode}){
+  const unitRef = useRef(null)
+  const [displayLevel, setDisplayLevel] = useState(1) //change to use display level and update display level after animation finishes.
+  const [displayXp, setDisplayXp] = useState(0) //change to use display level and update display level after animation finishes.
+  const level = unit.level
+  useGSAP(()=>{
+    if(level > 1){
+      setDisplayXp(Math.pow(2, level))
+      gsap.to(".unit-image", {
+        rotateY: "+=360",
+        duration: 1,
+        onComplete: ()=>{
+          setDisplayLevel(prev=>prev+1);
+          setDisplayXp(0)
+        }
+      })
+    }
+  }, {scope: unitRef.current, dependencies: [level]})
+
+  useEffect(()=>{
+    if(unit.xp!=0){
+      setDisplayXp(unit.xp)
+    }    
+  }, [unit.xp])
 
   if(unit.name == "empty"){
     return
   }
 
   return(
-    <div className='unit-container flex flex-col'>
-      <div className='levels-container'>{unit.level}</div>
+    <div className='unit-container flex flex-col' ref={unitRef}>
+      {unit.level && <div className='levels-container'>
+        <p className='levels-text' data-text={`Lv${displayLevel}`}>Lv
+          <span className='levels-number'>{displayLevel}</span>
+        </p>
+        <div className='xp-progress-bar flex'>
+          {Array.from({length: Math.pow(2, displayLevel)}).map((_, index)=>
+            (
+            <div 
+              className={`xp-block ${index<displayXp?"filled":""}`} 
+              style={displayXp>0?{transition: "background-position 0.5s ease-out"}:{}}
+              key={index}>
+            </div>)
+          )}
+        </div>
+      </div>}
       {
         unit.imageUrl ? 
         <img 
@@ -568,8 +624,14 @@ function Unit({unit}){
         </p>
       }
       <div className='flex'>
-        <div className='attack-indicator'>{unit.currentAttack}</div>
-        <div className='health-indicator'>{unit.currentHealth}</div>
+        <div className='attack-indicator'>
+          <img src='/assets/game-assets/attack.webp'></img>
+          <p id='attack-text'>{mode == "shop"? unit.baseAttack : unit.currentAttack}</p>
+        </div>
+        <div className='health-indicator'>
+            <img src='/assets/game-assets/hp.webp'></img>
+            <p id='hp-text'>{mode == "shop"? unit.baseHealth : unit.currentHealth}</p>
+        </div>
       </div>
     </div>
   )
@@ -579,9 +641,19 @@ function ArcadePage() {
 
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  // useGSAP(()=>{
-  //     //render animation. 
-  // }, [state.combat.events])
+  useGSAP(()=>{
+    const phase = state.phase
+    let intervalId;
+    if(phase == PHASE.battle){
+      gsap.to(".game-container", {duration: 2, scrollTo: {x: 1000}})
+      intervalId = setInterval(()=>dispatch({type: "TICK"}), 2000)
+    }
+    if(phase == PHASE.shopping){
+      clearInterval(intervalId)
+      gsap.to(".game-container", {duration: 2, scrollTo: {x: 0}})
+    }
+    return ()=> clearInterval(intervalId)
+  }, [state.phase])
 
   return (
     <div className='pages flex flex-col arcade-page'>
@@ -592,7 +664,7 @@ function ArcadePage() {
               <div className='unit-section flex'>
                 {state.shop.units.map((unit, index)=>(
                   <div className='slot' key={index} onClick={()=>dispatch({type: "PURCHASE_UNIT", position: index})}>
-                    <Unit unit={unit}/>
+                    <Unit unit={unit} mode={"shop"}/>
                   </div>
                 ))}
               </div>
@@ -611,7 +683,7 @@ function ArcadePage() {
             <div className='enemy-lane'>
               {state.phase == PHASE.battle && state.enemies.map((unit, index)=>(
                 <div className='slot' key={index}>
-                  <Unit unit={unit}/>
+                  <Unit unit={unit} mode={"enemy"}/>
                 </div>
               ))}
             </div>
@@ -621,7 +693,7 @@ function ArcadePage() {
           <div className='team-section'>
             {state.team.board.map((unit, index)=>(
               <div className='slot' key={index}>
-                <Unit unit={unit}/>
+                <Unit unit={unit} mode={"team"}/>
               </div>
             ))}
           </div>

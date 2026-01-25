@@ -115,6 +115,7 @@
 
 .decor-tab, .background-tab{
     padding: 10px;
+    padding-top: 0px;
     gap: 10px;
 }
 .decor-tab .button-background-images{
@@ -494,6 +495,8 @@
 .decoration-assets-container svg{
     width: 85%;
     fill: var(--color, white);
+    stroke: var(--color, black);
+    color: var(--color, black);
 }
 
 .text-decoration{

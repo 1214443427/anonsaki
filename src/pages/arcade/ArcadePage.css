@@ -72,6 +72,30 @@
     background-position-y: bottom -20px;
 }
 
+.team-section .unit-container{
+    transform: translateY(-40%);
+}
+
+.xp-progress-bar{
+    height: 12px;
+    width: 48px;
+    border-radius: 10px;
+    border: 2px solid black;
+    background: black;
+}
+
+.xp-block{
+    flex: 1;
+    border-radius: 10px;
+    background-image: linear-gradient(to left, #9b7200 50%, gold 50%);    
+    background-size: 200% 100%;
+    background-position: right;
+}
+
+.xp-block.filled{
+  background-position: left;
+}
+
 .game-overlay{
     position: absolute;
     z-index: 100;
@@ -79,6 +103,7 @@
 
 .unit-container{
     align-items: center; 
+    font-family: "Comic Sans MS", "Comic Sans", cursive;
 }
 
 .unit-image{
@@ -87,7 +112,57 @@
     font-size: 2.5rem;
 }
 
+.xp-progress-bar{
+    
+}
 
+.levels-text{
+    color: gold;
+    font-weight: 800;
+    font-size: 1.05rem;
+    -webkit-text-stroke-width: 1px; 
+    -webkit-text-stroke-color: black; 
+    position: relative;
+    z-index: 1;
+    -webkit-filter:drop-shadow(0.5px 0.5px white) drop-shadow(0.5px -0.5px white) drop-shadow(-0.5px 0.5px white) drop-shadow(-0.5px -0.5px white);
+    filter:drop-shadow(0.5px 0.5px white) drop-shadow(0.5px -0.5px white) drop-shadow(-0.5px 0.5px white) drop-shadow(-0.5px -0.5px white);
+}
+
+.levels-number{
+    color: gold;
+    font-weight: 900;
+    font-size: 1.35rem;
+}
+
+.health-indicator, .attack-indicator{
+    width: 50%;
+    position: relative;
+}
+.health-indicator img, .attack-indicator img{
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+}
+
+#attack-text, #hp-text{
+    position: absolute;
+    color: white;
+    font-weight: 900;
+    font-size: 1.25rem;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -webkit-text-stroke-width: 1px; 
+    -webkit-text-stroke-color: black; 
+}
+
+#attack-text{
+    left: 20px;
+}
+
+#hp-text{
+
+}
 
 @media (min-width: 1024px) {
     .arcade-page{

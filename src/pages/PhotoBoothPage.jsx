@@ -213,6 +213,115 @@ const DECORATION_TEMPLATES = [
         height: 60
     },
     {
+        id: 'speech-bubble',
+        name: '对话气泡',
+        type: 'decoration',
+        svg: (
+            <svg
+            viewBox="-1 0 34 32"
+            xmlns="http://www.w3.org/2000/svg"
+            >
+            {/* Outer shape (black outline area) */}
+            <path
+                d="M16 2c-8.838 0-16 5.373-16 12 0 4.127 2.446 7.724 6.675 9.886 0 0.026-0.008 0.044-0.008 0.073 0 1.793-1.005 3.765-1.594 4.779h0.002c-0.046 0.109-0.074 0.229-0.074 0.357 0 0.503 0.405 0.906 0.907 0.906 0.075 0 0.196-0.015 0.239-0.015 0.011 0 0.016 0 0.016 0.003 3.125-0.511 6.561-3.271 7.245-4.104 0.703 0.105 1.177 0.12 1.765 0.12 0.248 0 0.515-0.003 0.829-0.003 8.836 0 16-5.372 16-12 0-6.627-7.164-12-16-12z"
+            />
+            {/* Inner shape (white fill) */}
+            <path
+                d="M16 4c7.72 0 14 4.486 14 10s-6.28 10-14 10l-0.829 0.003c-0.55 0-0.909-0.015-1.471-0.099l-1.12-0.16-0.719 0.87c-0.331 0.399-2.017 1.785-3.878 2.677 0.378-1.001 0.657-2.094 0.683-3.175l0.010-0.059v-1.395l-1.090-0.556c-3.55-1.816-5.585-4.77-5.585-8.106 0-5.514 6.28-10 14-10z"
+                fill="#ffffff"
+            />
+            </svg>
+        ),
+        width: 160,
+        height: 140
+    },
+        {
+        id: 'thinking-bubble',
+        name: '思考气泡',
+        type: 'decoration',
+        svg: (
+            <svg
+            viewBox="0 0 128 128"
+            xmlns="http://www.w3.org/2000/svg"
+            >
+            {/* Main bubble */}
+            <path
+                d="M120.44 51.23a29.87 29.87 0 0 0 2.96-13.02c0-16.6-13.45-30.05-30.05-30.05c-3.89 0-7.61.75-11.03 2.1C77.95 6.45 72.22 4.1 66 4.1c-7.6 0-14.4 3.4-18.9 8.7c-3.5-1.9-7.5-3-11.7-3c-13.4.1-24.3 10.9-24.3 24.3c0 5 1.5 9.7 4.2 13.6c-5 4-8.5 9.9-9.2 16.8C4.8 77.9 14.7 90 28.3 91.3c3.2.3 6.2 0 9.1-.8c1.1 10.7 10.1 19 21.1 19c7 0 13.2-3.4 17-8.6c3.6 2.8 8.1 4.6 13.1 4.6c11 0 20.1-8.5 20.9-19.2C118 82.4 124 73.8 124 63.8c0-4.59-1.33-8.92-3.56-12.57z"
+                fill="#ffffff"
+                stroke="currentcolor"
+                strokeWidth="6"
+                strokeMiterlimit="10"
+            />
+
+            {/* Small bubble */}
+            <path
+                d="M24.3 97.3c-4.5-.5-8.5 2.8-9 7.3s2.8 8.5 7.3 8.9c4.5.5 8.5-2.8 9-7.3s-2.8-8.5-7.3-8.9z"
+                fill="#ffffff"
+                stroke="currentColor"
+                strokeWidth="4.5"
+                strokeMiterlimit="10"
+            />
+
+            {/* Tiny bubble */}
+            <path
+                d="M9 114.3c-3-.3-5.7 1.9-6 4.9s1.9 5.6 4.9 5.9s5.7-1.9 6-4.9c.3-2.9-1.9-5.6-4.9-5.9z"
+                fill="#ffffff"
+                stroke="currentColor"
+                strokeWidth="4.5"
+                strokeMiterlimit="10"
+            />
+            </svg>
+
+        ),
+        width: 160,
+        height: 140
+    },
+        {
+        id: 'text-box',
+        name: '对话框',
+        type: 'decoration',
+        svg: (
+            <svg
+            viewBox="0 0 400 124"
+            xmlns="http://www.w3.org/2000/svg"
+            >
+            {/* Shadow */}
+            <rect
+                x="4"
+                y="24"
+                width="392"
+                height="92"
+                rx="16"
+                fill="#000000"
+                opacity="0.15"
+            />
+
+            {/* Main box */}
+            <rect
+                x="0"
+                y="20"
+                width="392"
+                height="92"
+                rx="16"
+                fill="rgba(255,255,255,0.92)"
+                strokeWidth="2"
+            />
+
+            {/* Name tag */}
+            <rect
+                x="16"
+                y="0"
+                width="110"
+                height="28"
+                rx="14"
+            />
+            </svg>
+
+        ),
+        width: 260,
+        height: 100
+    },
+    {
         id: 'heart-blue',
         name: '蓝心',
         type: 'decoration',
@@ -698,7 +807,7 @@ M18 20H4V6h9V4H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-9h-2v9zm-7.
     )
 }
 
-function Decorations({url, isSelected, svg, textConfig, width, height, onClick, onDelete, canvasContainerRef}){
+function Decorations({url, selected, id, svg, textConfig, width, height, onClick, onDelete, canvasContainerRef}){
     const [scale, setScale] = useState(1)
     const [rotation, setRotation] = useState(0)
     const [center, setCenter] = useState({x: 200, y: 200})
@@ -750,6 +859,10 @@ function Decorations({url, isSelected, svg, textConfig, width, height, onClick, 
     const [isRotating, setIsRotating] = useState(false)
     const [anchorStart, setAnchorStart] = useState()
     const colorPickerRef = useRef(null)
+    const timeoutRef = useRef(null)
+    
+    const isSelected = selected == id
+    const [showPortal, setShowPortal] = useState(isSelected)
 
     function handleDragStart(e){
         onClick() //select the element
@@ -845,6 +958,22 @@ function Decorations({url, isSelected, svg, textConfig, width, height, onClick, 
             textRef.current.focus()
         }
     }, [isEditingText, isSelected])
+
+    useEffect(()=>{
+        if(!isSelected){
+            if(selected == null){
+                timeoutRef.current = setTimeout(()=>{
+                    setShowPortal(false);
+                    timeoutRef.current = null;
+                }, 250)
+            }else{
+                setShowPortal(false)
+            }
+        }else{
+            clearTimeout(timeoutRef.current)
+            setShowPortal(true)
+        }
+    }, [isSelected])
 
     return(
         <>
@@ -975,56 +1104,56 @@ function Decorations({url, isSelected, svg, textConfig, width, height, onClick, 
             }
         </div>
 
-            {isSelected && createPortal(
-                <div onClick={(e)=>e.stopPropagation()} className='detailed-control-inner-container flex flex-col'>
-                    <Slider 
-                        config={{label: "大小", min: 0.3, max: 3, step: 0.1, value: scale}} 
-                        onChange={(e)=>{
-                            setScale(parseFloat(e.target.value))}
-                        }
-                        reset={()=>setScale(1)}
-                    />
-                    <Slider 
-                        config={{label: "旋转", min: -180, max: 180, step: 1, value: rotation}} 
-                        onChange={(e)=>{
-                            setRotation(parseInt(e.target.value))}
-                        }
-                        reset={()=>setRotation(0)}
-                    />
-                    <div className='flex detailed-control-bottom'>
-                        <div className='flex layer-input'>
-                            <label htmlFor="z-index-input">层次</label>
-                            <input 
-                                id='z-index-input' 
-                                type='number' 
-                                value={zIndex}
-                                onChange={(e)=>{
-                                setZIindex(parseInt(e.target.value)||1)
-                            }}></input>
-                        </div>
-                        {(svg || textConfig) && 
-                            <div className='flex layer-input'>                            
-                                <p>颜色</p>
-                                <input
-                                    type='color'
-                                    list="colorOptions" 
-                                    className='color-picker-block' 
-                                    // style={{"--background-color":color}}
-                                    value={color} onChange={(e)=>setColor(e.target.value)}
-                                    />
-                            </div>
-                        }
+        {showPortal && createPortal(
+            <div onClick={(e)=>e.stopPropagation()} className='detailed-control-inner-container flex flex-col'>
+                <Slider 
+                    config={{label: "大小", min: 0.3, max: 3, step: 0.1, value: scale}} 
+                    onChange={(e)=>{
+                        setScale(parseFloat(e.target.value))}
+                    }
+                    reset={()=>setScale(1)}
+                />
+                <Slider 
+                    config={{label: "旋转", min: -180, max: 180, step: 1, value: rotation}} 
+                    onChange={(e)=>{
+                        setRotation(parseInt(e.target.value))}
+                    }
+                    reset={()=>setRotation(0)}
+                />
+                <div className='flex detailed-control-bottom'>
+                    <div className='flex layer-input'>
+                        <label htmlFor="z-index-input">层次</label>
+                        <input 
+                            id='z-index-input' 
+                            type='number' 
+                            value={zIndex}
+                            onChange={(e)=>{
+                            setZIindex(parseInt(e.target.value)||1)
+                        }}></input>
                     </div>
-                    {
-                        textConfig &&
-                        <div className='flex layer-input'>
-                            <p>文字</p>
-                            <input type='text' value={text} onChange={(e)=>setText(e.target.value)}></input>
+                    {(svg || textConfig) && 
+                        <div className='flex layer-input'>                            
+                            <p>颜色</p>
+                            <input
+                                type='color'
+                                list="colorOptions" 
+                                className='color-picker-block' 
+                                // style={{"--background-color":color}}
+                                value={color} onChange={(e)=>setColor(e.target.value)}
+                                />
                         </div>
                     }
-                    <button className="detailed-delete-button tools-section-buttons" onClick={onDelete}>删除</button>
-                </div>, document.getElementsByClassName("decoration-detailed-control")[0]
-            )}
+                </div>
+                {
+                    textConfig &&
+                    <div className='flex layer-input'>
+                        <p>文字</p>
+                        <input type='text' value={text} onChange={(e)=>setText(e.target.value)}></input>
+                    </div>
+                }
+                <button className="detailed-delete-button tools-section-buttons" onClick={onDelete}>删除</button>
+            </div>, document.getElementsByClassName("decoration-detailed-control")[0]
+        )}
         </>
     )
 }
@@ -1434,9 +1563,15 @@ function PhotoBoothPage() {
         reader.readAsDataURL(file);
     }
 
+    function deleteDecoration(id){
+        setSelectedDecorations(null);
+        setDecorations((prev)=>prev.filter((decor)=>decor.id!=id))
+    }
+
     function handleDeleteAll(){
         setDecorations([])
         setIsRemoveAllShown(false)
+        setSelectedDecorations(null)
     }
 
     function deleteAllToggle(){
@@ -1478,7 +1613,8 @@ function PhotoBoothPage() {
                             url={decoration.url}
                             svg={decoration.svg}
                             textConfig={decoration.textConfig}
-                            isSelected={selectedDecorations == decoration.id}
+                            selected={selectedDecorations}
+                            id={decoration.id}
                             // rotation={decoration.rotation}
                             width={decoration.width}
                             height={decoration.height}
@@ -1486,7 +1622,7 @@ function PhotoBoothPage() {
                             onClick={()=>{
                                 setSelectedDecorations(decoration.id)
                             }}
-                            onDelete={()=>setDecorations((prev)=>prev.filter((decor)=>decor.id!=decoration.id))}
+                            onDelete={()=>deleteDecoration(decoration.id)}
                         />))
                     }
                 </div>
@@ -1653,7 +1789,7 @@ function PhotoBoothPage() {
                         <div
                             className='decoration-detailed-control flex flex-col'
                             style={{
-                                "--height": selectedDecorations!==null? "80%":"0%",
+                                "--height": selectedDecorations!==null? "100%":"0%",
                                 "--borderWidth": selectedDecorations!==null? "1px": "0px",
                             }}
                         > 

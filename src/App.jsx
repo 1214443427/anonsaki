@@ -19,10 +19,11 @@ import { isChristmas } from './utils/util';
 import StudentCouncilPage from './pages/StudentCouncilPage';
 import DatePage from './pages/DatePage';
 import ArcadePage from './pages/arcade/ArcadePage';
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 
 
 const isChristmasTime = isChristmas()
-gsap.registerPlugin(useGSAP, MotionPathPlugin, MorphSVGPlugin, DrawSVGPlugin, Draggable);
+gsap.registerPlugin(useGSAP, MotionPathPlugin, MorphSVGPlugin, DrawSVGPlugin, Draggable, ScrollToPlugin);
 
 function SnowShowerElement(){
   const ref = useRef(null)
