@@ -3,3 +3,7 @@ export function isChristmas(){
     const isChristmasTime = date.getMonth() == 11 && date.getDate() > 15
     return isChristmasTime
 }
+
+export function isInt(value){
+    return !isNaN(value) && !isNaN(parseInt(value))
+}

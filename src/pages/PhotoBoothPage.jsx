@@ -9,6 +9,7 @@ import { useFetchData } from '../hooks/useFetchData';
 import html2canvas from 'html2canvas';
 import { createPortal } from 'react-dom';
 import PopUpModal from '../components/PopUpModal';
+import { isInt } from '../utils/util';
 
 const INITIALL2DCONFIGS = 
 [
@@ -236,7 +237,7 @@ const DECORATION_TEMPLATES = [
         height: 140
     },
         {
-        id: 'thinking-bubble',
+        id: 'thought-bubble',
         name: '思考气泡',
         type: 'decoration',
         svg: (
@@ -818,7 +819,8 @@ function Decorations({url, selected, id, svg, textConfig, width, height, onClick
     const [text, setText] = useState(textConfig? textConfig.text : null)
     const [isEditingText, setIsEditingText] = useState(false)
     const textRef = useRef(null)
-    const [zIndex, setZIindex] = useState(1)
+    const [zIndex, setZIndex] = useState(51)
+    const [zIndexDisplay, setZIndexDisplay] = useState(1)
 
     // useGSAP(()=>{
     //     parentDragRef.current = Draggable.create(ref.current,
@@ -976,10 +978,38 @@ function Decorations({url, selected, id, svg, textConfig, width, height, onClick
         }
     }, [isSelected, selected])
 
+    useEffect(()=>{
+        if(Number.isInteger(zIndexDisplay)){
+            const numericAmount = parseInt(zIndexDisplay)
+            setZIndex(numericAmount+50)
+        }
+    }, [zIndexDisplay])
+
+    function handleZIndexChange(amount, set=false){
+        if(set == true){
+            const value = amount.target.value
+            if(isInt(value)){
+                const numericAmount = parseInt(value)
+                setZIndexDisplay(gsap.utils.clamp(-49, 49, numericAmount))
+            }else{
+                setZIndexDisplay(value)
+            }
+        }else if(zIndex + amount < 100 && zIndex + amount > 0){
+            setZIndex(prev=>prev+amount)
+            setZIndexDisplay(prev=>{
+                if (isInt(prev)){
+                    return prev+amount
+                }else{
+                    return 1
+                }
+            })
+        }
+    }
+
     return(
         <>
         <div 
-            className='decoration-container flex' 
+            className={`decoration-container flex ${zIndex>50?"decoration-infront":"decoration-behind"}`} 
             ref={ref}
             style={{
                 "--width": textConfig? "auto":`${width * scale}px`,
@@ -1088,14 +1118,14 @@ function Decorations({url, selected, id, svg, textConfig, width, height, onClick
                             <div 
                             className='overlay-buttons flex' 
                             id='z-index-button-1'
-                            onPointerUp={()=>{setZIindex(prev=>prev+1)}}
+                            onPointerUp={()=>{handleZIndexChange(1)}}
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M256 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 160-160 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l160 0 0 160c0 17.7 14.3 32 32 32s32-14.3 32-32l0-160 160 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-160 0 0-160z"/></svg>                    
                             </div>
                             <div 
                                 className='overlay-buttons flex' 
                                 id='z-index-button-2'
-                                onPointerUp={()=>{setZIindex(prev=>prev-1)}}
+                                onPointerUp={()=>{handleZIndexChange(-1)}}
                                 >
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M0 256c0-17.7 14.3-32 32-32l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 288c-17.7 0-32-14.3-32-32z"/></svg>
                             </div>
@@ -1127,10 +1157,16 @@ function Decorations({url, selected, id, svg, textConfig, width, height, onClick
                         <input 
                             id='z-index-input' 
                             type='number' 
-                            value={zIndex}
+                            value={zIndexDisplay}
                             onChange={(e)=>{
-                            setZIindex(parseInt(e.target.value)||1)
-                        }}></input>
+                                handleZIndexChange(e, true)
+                            }}
+                            onBlur={(e)=>{
+                                if(!isInt(e.target.value)){
+                                    setZIndexDisplay(1)
+                                }
+                            }}
+                            ></input>
                     </div>
                     {(svg || textConfig) && 
                         <div className='flex layer-input'>                            
@@ -1434,43 +1470,50 @@ function PhotoBoothPage() {
 
     const propContainerRef = useRef(null)
 
-    function captureCanvas(){
+    async function captureCanvas(){
         if(isGenerating) return;
         setIsGenerating(true)
         canvasFlash()
-        html2canvas(propContainerRef.current, {
+        const decorationBehindCanvas = await html2canvas(propContainerRef.current, {
                 backgroundColor: null,
                 logging: false,
-                ignoreElements: el => el.classList.contains('edit-overlay'),
-            }).then(
-            function(canvas) {
-                const glCanvas = l2dCanvasRef.current;
-                const out = new OffscreenCanvas(canvas.width, canvas.height)
-                const img = new Image()
-                img.src = background;
-                const ctx = out.getContext('2d');
-                img.onload = ()=>{                
-                    ctx.drawImage(img, 0, 0, out.width, out.height);
-                    requestAnimationFrame(async () => {
-                        ctx.filter = `brightness(${getFilterValue("brightness")})
-                                        hue-rotate(${getFilterValue("hue")})
-                                        saturate(${getFilterValue("saturation")})
-                                        contrast(${getFilterValue("contrast")})`
-                        ctx.drawImage(
-                            glCanvas, 
-                            0, 0, glCanvas.width, glCanvas.height,
-                            0, 0, canvas.width, canvas.height
-                        )
-                        ctx.drawImage(canvas, 0, 0)
-                        const blob = await out.convertToBlob({ type: 'image/png' })
-                        setGeneratedImage(URL.createObjectURL(blob))
-                        setIsGenerating(false)
-                        setPopupAnimationState("opening")
-                        ctx.reset(); 
-                    })
-                }
-            }
-        )
+                ignoreElements: el => el.classList.contains('edit-overlay')||el.classList.contains('decoration-infront'),
+            })
+        
+        const decorationInfrontCanvas = await html2canvas(propContainerRef.current, {
+                backgroundColor: null,
+                logging: false,
+                ignoreElements: el => el.classList.contains('edit-overlay')||el.classList.contains('decoration-behind'),
+            })
+
+        const glCanvas = l2dCanvasRef.current;
+        const out = new OffscreenCanvas(decorationBehindCanvas.width, decorationBehindCanvas.height)
+        const img = new Image()
+        img.src = background;
+        const ctx = out.getContext('2d');
+        img.onload = ()=>{                
+            ctx.drawImage(img, 0, 0, out.width, out.height);
+            requestAnimationFrame(async () => {
+                ctx.filter = `brightness(${getFilterValue("brightness")})
+                                hue-rotate(${getFilterValue("hue")})
+                                saturate(${getFilterValue("saturation")})
+                                contrast(${getFilterValue("contrast")})`
+                ctx.drawImage(decorationBehindCanvas, 0, 0)
+                ctx.drawImage(
+                    glCanvas, 
+                    0, 0, glCanvas.width, glCanvas.height,
+                    0, 0, decorationBehindCanvas.width, decorationBehindCanvas.height
+                )
+                ctx.drawImage(decorationInfrontCanvas, 0, 0)
+                const blob = await out.convertToBlob({ type: 'image/png' })
+                setGeneratedImage(URL.createObjectURL(blob))
+                setIsGenerating(false)
+                setPopupAnimationState("opening")
+                ctx.reset(); 
+            })
+            
+        }
+        
     }
 
     const handleDownload = () => {
