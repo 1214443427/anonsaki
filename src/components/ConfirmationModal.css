@@ -38,3 +38,11 @@
 .confirmation-link-div.hidden .link{
     pointer-events: none;
 }
+
+@media screen and (min-width: 1920px) {
+    .confirmation-modal{
+        font-size: 1.5rem;
+        width: 500px;
+        height: auto;
+    }
+}

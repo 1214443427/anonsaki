@@ -4,8 +4,6 @@ import "./PhotoBoothPage.css"
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap/gsap-core';
 import Spinner from "../components/Spinner"
-import Draggable from 'gsap/src/Draggable';
-import { useFetchData } from '../hooks/useFetchData';
 import html2canvas from 'html2canvas';
 import { createPortal } from 'react-dom';
 import PopUpModal from '../components/PopUpModal';
@@ -212,6 +210,14 @@ const DECORATION_TEMPLATES = [
         url: "/assets/photobooth-assets/decorations/glasses.webp",
         width: 160,
         height: 60
+    },
+    {
+        id: 'butter',
+        name: '黄油',
+        type: 'decoration',
+        url: "/assets/photobooth-assets/decorations/butter.webp",
+        width: 100,
+        height: 100
     },
     {
         id: 'speech-bubble',
@@ -731,11 +737,48 @@ const subsections = [
         name: "capture",
         path: "M193.1 32c-18.7 0-36.2 9.4-46.6 24.9L120.5 96 64 96C28.7 96 0 124.7 0 160L0 416c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-256c0-35.3-28.7-64-64-64l-56.5 0-26-39.1C355.1 41.4 337.6 32 318.9 32L193.1 32zm-6.7 51.6c1.5-2.2 4-3.6 6.7-3.6l125.7 0c2.7 0 5.2 1.3 6.7 3.6l33.2 49.8c4.5 6.7 11.9 10.7 20 10.7l69.3 0c8.8 0 16 7.2 16 16l0 256c0 8.8-7.2 16-16 16L64 432c-8.8 0-16-7.2-16-16l0-256c0-8.8 7.2-16 16-16l69.3 0c8 0 15.5-4 20-10.7l33.2-49.8zM256 384a112 112 0 1 0 0-224 112 112 0 1 0 0 224zM192 272a64 64 0 1 1 128 0 64 64 0 1 1 -128 0z",        
         display: "拍照"
+    }, {
+        name: "help",
+        path: "M464 256a208 208 0 1 0 -416 0 208 208 0 1 0 416 0zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0zm256-80c-17.7 0-32 14.3-32 32 0 13.3-10.7 24-24 24s-24-10.7-24-24c0-44.2 35.8-80 80-80s80 35.8 80 80c0 47.2-36 67.2-56 74.5l0 3.8c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-8.1c0-20.5 14.8-35.2 30.1-40.2 6.4-2.1 13.2-5.5 18.2-10.3 4.3-4.2 7.7-10 7.7-19.6 0-17.7-14.3-32-32-32zM224 368a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z",
+        display: "帮助"
     }
 ]
 const shareData = {
     title: ""
 }
+
+const helpConfig = [
+    {
+        text: "如果看不到live2d，请尝试切换模型或者刷新。",
+        highlight: "#cloth",
+        height: "135px"
+    },    
+    {
+        text: "点击按钮来切换当前选择的live2d。",
+        highlight: ".character-toggle",
+        height: "120px"
+    },
+    {
+        text: "设置好想要的表情,动作，朝向，模型等等。",
+        highlight: "#position,#motion,#expression,#cloth",
+        height: "135px"
+    },    
+    {
+        text: "在合适的时机暂停当前live2d的动作。",
+        highlight: "#pause-button",
+        height: "135px"
+    },
+    {
+        text: "切换栏目来添加装饰物，切换背景，和调整滤镜。",
+        highlight: ".tab-selector",
+        height: "135px"
+    },
+    {
+        text: "按下拍照键或者截屏来拍摄。",
+        highlight: "#capture",
+        height: "120px"
+    }
+]
 
 
 // function transformViewX(deviceX)
@@ -986,6 +1029,7 @@ function Decorations({url, selected, id, svg, textConfig, width, height, onClick
     }, [zIndexDisplay])
 
     function handleZIndexChange(amount, set=false){
+        if(isResizing) return
         if(set == true){
             const value = amount.target.value
             if(isInt(value)){
@@ -1259,6 +1303,9 @@ function PhotoBoothPage() {
     const shutterAudioRef = useRef(null)
     const [isRemoveAllShown, setIsRemoveAllShown] = useState(false)
 
+    const [showHelp, setShowHelp] = useState(false)
+    const [helpStep, setHelpStep] = useState(0)
+
     async function fetchData(models, textures){
         try{
             setLoading(true)
@@ -1359,9 +1406,16 @@ function PhotoBoothPage() {
         };
     }, [generatedImage]);
     
+    function changeTab(tab){
+        if(!showHelp){
+            setActiveTab(tab)
+        }
+    }
+
     const switchSubsection = contextSafe((section)=>{
-        if (section == activeSubsection) return;
+        if (section == activeSubsection || showHelp) return;
         if (section == "capture") return captureCanvas();
+        if (section == "help") return handleShowHelp();
         const target = section !== "home"? "#home": "#back"
         const destination = section == "home"? "#home": "#back"
         const tl = gsap.timeline()
@@ -1622,6 +1676,48 @@ function PhotoBoothPage() {
         setIsRemoveAllShown(prev=>!prev)
     }
 
+    function handleShowHelp(){
+        setHelpStep(0)
+        setShowHelp(true)
+    }
+
+    function helpStepOnClick(){
+        if(helpStep == helpConfig.length-1){
+            handleCloseHelp()
+        }else{
+            setHelpStep(prev=>prev+1);
+        }
+    }
+
+    const handleCloseHelp = contextSafe(()=>{
+        gsap.set(helpConfig[helpStep].highlight, {
+            zIndex: 0,
+            clearProps: "filter",
+        })
+        setShowHelp(false)
+    })
+
+    useGSAP(()=>{
+        if(showHelp){
+            gsap.set(".tabs-container", {
+                clearProps: "transform"
+            })
+            gsap.set(helpConfig[helpStep].highlight, {
+                zIndex: 150,
+                filter: "drop-shadow(0 0 7.5px rgb(var(--saki-color)))",
+                onComplete: function() {
+                    this.targets()[0].scrollIntoView({behavior: 'smooth',  block: 'nearest' })
+                }
+            })
+            if(helpStep>0){
+                gsap.set(helpConfig[helpStep-1].highlight, {
+                zIndex: 0,
+                clearProps: "filter",
+                })
+            }
+        }
+    }, {dependencies: [helpStep, showHelp]})
+
     if(error && error.type == "fetch"){
         return(
             <div>{error.msg}</div>
@@ -1708,7 +1804,8 @@ function PhotoBoothPage() {
                                     {subsections.map((section, index)=>(
                                         <div 
                                             key={index} 
-                                            className='home-subsection-icon flex flex-col' 
+                                            className='home-subsection-icon flex flex-col'
+                                            id={section.name}
                                             onClick={()=>switchSubsection(section.name)}>
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox={section.viewBox?section.viewBox:"0 0 512 512"}>
                                                 <path d={section.path} />
@@ -1946,25 +2043,25 @@ function PhotoBoothPage() {
                 <div className='flex tab-selector'>
                     <div 
                         className={`tab-selector-button ${activeTab == "model"? "active":""}`}
-                        onClick={()=>{activeTab == "model" ? switchSubsection("home"):setActiveTab("model")}}
+                        onClick={()=>{activeTab == "model" ? switchSubsection("home"):changeTab("model")}}
                         >
                         <svg className="selection-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M464 256a208 208 0 1 0 -416 0 208 208 0 1 0 416 0zM0 256a256 256 0 1 1 512 0 256 256 0 1 1 -512 0zm177.3 63.4C192.3 335 218.4 352 256 352s63.7-17 78.7-32.6c9.2-9.6 24.4-9.9 33.9-.7s9.9 24.4 .7 33.9c-22.1 23-60 47.4-113.3 47.4s-91.2-24.4-113.3-47.4c-9.2-9.6-8.9-24.8 .7-33.9s24.8-8.9 33.9 .7zM144 208a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm164 8c0 11-9 20-20 20s-20-9-20-20c0-33.1 26.9-60 60-60l16 0c33.1 0 60 26.9 60 60 0 11-9 20-20 20s-20-9-20-20-9-20-20-20l-16 0c-11 0-20 9-20 20z"/></svg>
                         模型</div>
                     <div 
                         className={`tab-selector-button ${activeTab == "decor"? "active":""}`}
-                        onClick={()=>setActiveTab("decor")}
+                        onClick={()=>changeTab("decor")}
                         >
                         <svg className="selection-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2399 2399"><path className="fil0" d="M997 1050c-149 173.4375-338 356.25-594 320.3125-154 121.875-295 256.25-402 398.4375 187 104.6875 185 92.1875 417 39.0625-9 229.6875-57 401.5625-51 595.3125 237-356.25 556-701.5625 742-1226.5625-92-98.4375-55-64.0625-111-126.5625zm406-10.9375c149 173.4375 338 356.25 594 320.3125 154 121.875 295 256.25 402 398.4375-187 104.6875-185 92.1875-417 39.0625 9 229.6875 57 401.5625 51 595.3125-237-356.25-556-701.5625-742-1226.5625 92-98.4375 55-64.0625 111-126.5625zm1-542.1875c255-451.5625 905-901.5625 746 135.9375 167 787.5-318 859.375-729 343.75 35-171.875 20-346.875-16-478.125zm-43 0c-38-114.0625-299-120.3125-337 0-38 120.3125-42 389.0625 0 507.8125 42 118.75 294 123.4375 337 0 43-123.4375 38-393.75 0-507.8125zm-380 0c-255-451.5625-905-901.5625-746 135.9375-167 787.5 324 853.125 735 335.9375-35-171.875-26-339.0625 10-471.875z"/></svg>
                         装饰</div>
                     <div 
                         className={`tab-selector-button ${activeTab == "background"? "active":""}`}
-                        onClick={()=>setActiveTab("background")}
+                        onClick={()=>changeTab("background")}
                         >
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-320c0-35.3-28.7-64-64-64L64 32zm64 80a48 48 0 1 1 0 96 48 48 0 1 1 0-96zM272 224c8.4 0 16.1 4.4 20.5 11.5l88 144c4.5 7.4 4.7 16.7 .5 24.3S368.7 416 360 416L88 416c-8.9 0-17.2-5-21.3-12.9s-3.5-17.5 1.6-24.8l56-80c4.5-6.4 11.8-10.2 19.7-10.2s15.2 3.8 19.7 10.2l26.4 37.8 61.4-100.5c4.4-7.1 12.1-11.5 20.5-11.5z"/></svg>
                         背景</div>
                     <div 
                         className={`tab-selector-button ${activeTab == "filter"? "active":""}`}
-                        onClick={()=>setActiveTab("filter")}
+                        onClick={()=>changeTab("filter")}
                         >
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M263.4-27L278.2 9.8 315 24.6c3 1.2 5 4.2 5 7.4s-2 6.2-5 7.4L278.2 54.2 263.4 91c-1.2 3-4.2 5-7.4 5s-6.2-2-7.4-5L233.8 54.2 197 39.4c-3-1.2-5-4.2-5-7.4s2-6.2 5-7.4L233.8 9.8 248.6-27c1.2-3 4.2-5 7.4-5s6.2 2 7.4 5zM110.7 41.7l21.5 50.1 50.1 21.5c5.9 2.5 9.7 8.3 9.7 14.7s-3.8 12.2-9.7 14.7l-50.1 21.5-21.5 50.1c-2.5 5.9-8.3 9.7-14.7 9.7s-12.2-3.8-14.7-9.7L59.8 164.2 9.7 142.7C3.8 140.2 0 134.4 0 128s3.8-12.2 9.7-14.7L59.8 91.8 81.3 41.7C83.8 35.8 89.6 32 96 32s12.2 3.8 14.7 9.7zM464 304c6.4 0 12.2 3.8 14.7 9.7l21.5 50.1 50.1 21.5c5.9 2.5 9.7 8.3 9.7 14.7s-3.8 12.2-9.7 14.7l-50.1 21.5-21.5 50.1c-2.5 5.9-8.3 9.7-14.7 9.7s-12.2-3.8-14.7-9.7l-21.5-50.1-50.1-21.5c-5.9-2.5-9.7-8.3-9.7-14.7s3.8-12.2 9.7-14.7l50.1-21.5 21.5-50.1c2.5-5.9 8.3-9.7 14.7-9.7zM460 0c11 0 21.6 4.4 29.5 12.2l42.3 42.3C539.6 62.4 544 73 544 84s-4.4 21.6-12.2 29.5l-88.2 88.2-101.3-101.3 88.2-88.2C438.4 4.4 449 0 460 0zM44.2 398.5L308.4 134.3 409.7 235.6 145.5 499.8C137.6 507.6 127 512 116 512s-21.6-4.4-29.5-12.2L44.2 457.5C36.4 449.6 32 439 32 428s4.4-21.6 12.2-29.5z"/></svg>
                         滤镜</div>
@@ -1996,19 +2093,38 @@ function PhotoBoothPage() {
            <div className='loading-popup'>
                 <Spinner />
             </div>}
-            {(isRemoveAllShown&&
-                <PopUpModal showModal={isRemoveAllShown} closeModal={deleteAllToggle}>
-                    <p>确定要忘却一切吗？</p>
-                    <div className='flex pwa-buttons'>
-                        <button className='menu-button' onClick={handleDeleteAll}>
-                            确定
-                        </button>
-                        <button className='menu-button' onClick={deleteAllToggle}>
-                            取消
-                        </button>
-                    </div>
-                </PopUpModal>
-            )}
+
+            <PopUpModal showModal={isRemoveAllShown} closeModal={deleteAllToggle}>
+                <p>确定要忘却一切吗？</p>
+                <div className='flex pwa-buttons'>
+                    <button className='menu-button' onClick={handleDeleteAll}>
+                        确定
+                    </button>
+                    <button className='menu-button' onClick={deleteAllToggle}>
+                        取消
+                    </button>
+                </div>
+            </PopUpModal>
+            
+            <PopUpModal 
+                showModal={showHelp} 
+                closeModal={helpStepOnClick}
+                className={"photo-help-modal flex flex-col"}
+                style={{"--height":helpConfig[helpStep].height}}
+                >
+                <p>
+                    {helpConfig[helpStep].text}
+                </p>
+                <div className='flex pwa-buttons'>
+                    {helpStep!=helpConfig.length-1 && <button className='menu-button' onClick={helpStepOnClick}>
+                        下一步
+                    </button>}
+                    <button className='menu-button' onClick={handleCloseHelp}>
+                        关闭
+                    </button>
+                    <span className='help-count'>{helpStep+1} / {helpConfig.length}</span>
+                </div>
+            </PopUpModal>
         </div>
     )
     }

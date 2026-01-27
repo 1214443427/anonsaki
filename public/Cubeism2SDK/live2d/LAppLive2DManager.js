@@ -50,8 +50,8 @@ LAppLive2DManager.prototype.changeModel = function(gl, model)
         var thisRef = this;
         if(LAppDefine.DEBUG_LOG){
         }
-        console.log("changeModel", model)
-        console.log(this.models)
+        // console.log("changeModel", model)
+        // console.log(this.models)
         switch (model)
         {
             case 0: 

@@ -5,28 +5,30 @@ import { useGSAP } from '@gsap/react';
 import { gsap } from 'gsap/gsap-core';
 
 
-function PopUpModal({children, className, showModal, closeModal}) {
+function PopUpModal({children, className, style, showModal, closeModal}) {
     const modalRef = useRef(null)
     
     const { contextSafe } = useGSAP(()=>{
-      if(showModal === true){
+      if(showModal != 0){
         gsap.to(modalRef.current,
           {
             duration: 0.25,
             pointerEvents: "all",
             opacity:1,
           })
-        gsap.fromTo(".confirmation-modal", 
-          {
-            scale: 0.8,
-            yPercent: +20
-          },
-          {
-            duration: 0.25,
-            scale: 1,
-            yPercent: -50
-          },
-        ) 
+        if(showModal == 1){
+          gsap.fromTo(".confirmation-modal", 
+            {
+              scale: 0.8,
+              yPercent: +20
+            },
+            {
+              duration: 0.25,
+              scale: 1,
+              yPercent: -50
+            },
+          ) 
+        }
       }else{
         gsap.to(modalRef.current, {
           opacity: 0,
@@ -38,7 +40,7 @@ function PopUpModal({children, className, showModal, closeModal}) {
 
   return (
     <>
-        <div className='confirmation-modal-back-drop' onClick={(e)=>closeModal(e)} ref={modalRef}>
+        <div className='confirmation-modal-back-drop' style={style} onClick={(e)=>closeModal(e)} ref={modalRef}>
           <div className={`confirmation-modal `+className} onClick={(e)=>e.stopPropagation()}>
             {children}
           </div>

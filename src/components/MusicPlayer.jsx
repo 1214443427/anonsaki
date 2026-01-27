@@ -9,7 +9,7 @@ function MusicPlayer() {
     const audioRef = useRef(null);
     const [songs, setSongs] = useState([{
         name: "亚麻色头发的少女",
-        url: "/assets/La fille aux cheveux de lin.mp3",
+        url: "/assets/sound-effects/La fille aux cheveux de lin.mp3",
         author: "德彪西"
     }])
     const [currentIndex, setCurrentIndex] = useState(0)

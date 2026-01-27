@@ -21,7 +21,6 @@
     /* padding-inline: 10px; */
     padding-top: 10px;
     background-color: rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(5px);
     overflow-x: hidden;
     user-select: none;
 }
@@ -81,10 +80,8 @@
 }
 
 .character-selection{
-    position: sticky;
-    padding-bottom: 7.5px;
+    padding-block: 7.5px;
     border-bottom: 1px solid gray;
-    top: 0px;
 }
 
 .character-toggle{
@@ -92,6 +89,7 @@
     border: 2px solid rgb(var(--saki-color));
     flex-grow: 1;
     position: relative;
+    background-color: #f8b9c2;
 }
 
 .character-toggle button{
@@ -244,6 +242,7 @@
     height: 50px;
     transition: all 0.25s ease-in-out;
     cursor: pointer;
+    background-color: #f8b9c2;
 }
 
 .tabs svg{
@@ -397,9 +396,9 @@
     pointer-events: none;
 }
 
-.photo-booth-canvas-container, .tools-section{
+/* .photo-booth-canvas-container, .tools-section{
     z-index: 1;
-}
+} */
 
 .photo-booth-canvas-container{
     border: 5px solid rgb(var(--combined-color));
@@ -716,6 +715,18 @@
     display: none;
 }
 
+.photo-help-modal{
+    height: var(--height);
+    justify-content: space-between;
+    transition: height 0.5s;
+    top: 35%;
+}
+
+.help-count{
+    margin-top: auto;
+    margin-bottom: 10px;
+}
+
 @media (min-width: 480px) {
     .motion-subsection, .expression-subsection, .decor-subsection, .background-subsection, .filter-subsection, .cloth-subsection{
         grid-template-columns: repeat(3, 1fr)
@@ -806,5 +817,14 @@
         max-width: 40%;
     }
     
+    .photo-help-modal{
+        top: 50%;
+    }
 
+}
+
+@media screen and (min-width: 1920px) {
+    .photo-help-modal{
+        height: auto
+    }
 }

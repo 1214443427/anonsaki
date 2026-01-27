@@ -39,7 +39,7 @@ function DatePage({navigateTo}) {
   }
 
   function handleArcadeOnClick(){
-    navigateTo("/arcade")
+    // navigateTo("/arcade")
   }
 
 
