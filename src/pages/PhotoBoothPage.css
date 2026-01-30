@@ -701,14 +701,19 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 150px;
-    height: 100px;
+    width: 180px;
+    height: 150px;
     background: white;
     opacity: 0.8;
     border: 2px solid rgb(var(--combined-color));
     transform: translate(-50%, -50%);
     border-radius: 20px;
     z-index: 100;
+}
+
+.loading-popup .spinner-container{
+    justify-content: center;
+    align-items: center;
 }
 
 .upload-input{

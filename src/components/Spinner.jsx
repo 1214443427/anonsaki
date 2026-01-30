@@ -1,10 +1,16 @@
 import React from 'react'
 
-function Spinner() {
+function Spinner({children}) {
   return (
     <div className='spinner-container flex'>
         <div className='spinner'></div>
-        <p>加载中...</p>
+        {children == null?
+          <p>加载中...</p>
+          :
+          <>
+            {children}
+          </>
+        }
     </div>
   )
 }
