@@ -449,6 +449,10 @@
     color: white;
 }
 
+.loading-popup .spinner-container{
+    width: 100%;
+}
+
 .photo-booth-canvas-container #gl_canvas{
     width: 100%;
     height: 100%;
