@@ -22,16 +22,24 @@
     align-self: center;
 }
 
-.date-page{
+.date-page, .sc-room-page{
     height: 100dvh;
-    background-color: rgb(var(--anon-color-alpha));
     align-items: center;
     gap: 20px;
     padding-block: 10%;
     padding-inline: 2%;
+    overflow: hidden;
 }
 
-.date-page .dialog-box.saki-border{
+.date-page{
+    background-color: rgb(var(--anon-color-alpha));
+}
+
+.sc-room-page{
+    background-color: rgb(var(--saki-color-alpha));
+}
+
+.date-page .dialog-box.saki-border, .sc-room-page .dialog-box.anon-border{
     justify-content: center;
     background-image: none;
     gap: 7.5px;
@@ -59,6 +67,22 @@
     transform: translate(-50%, -50%);
 }
 
+.sc-room-page>div{
+    flex: 1 1 0;
+    max-height: 50%;
+}
+
+.sc-room-page img{
+    max-height: 100%;
+}
+
+.sc-room-page .polaroid-container{
+    position: relative;
+    height: auto;
+    width: 70%;
+    aspect-ratio: 5/6;
+}
+
 @media screen and (min-width: 2550px){
 }
 
@@ -70,7 +94,7 @@
         flex-direction: row;
     }
 
-    .date-page .dialog-box.saki-border{
+    .date-page .dialog-box.saki-border, .sc-room-page .dialog-box.anon-border{
         height: auto;
         aspect-ratio: 1;
     }
@@ -82,7 +106,7 @@
         padding-block: 15%;
     }
 
-    .date-page .dialog-box.saki-border{
+    .date-page .dialog-box.saki-border, .sc-room-page .dialog-box.anon-border{
         width: 50%;
     }
 }

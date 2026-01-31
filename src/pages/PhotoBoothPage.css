@@ -27,12 +27,16 @@
 
 
 .tools-section button{
-    all: unset;
+    height: unset;
+    width: unset;
+    background-color: unset;
+    padding: unset;
     text-align: center;
     cursor: pointer;
     box-sizing:border-box;
     text-align: center;
 }
+
 
 .tab-selector{
     margin-top: auto;
@@ -95,6 +99,8 @@
 .character-toggle button{
     padding-inline: auto;
     width: 50%;
+    border: unset;
+    color: black;
 }
 
 .subsection-container, .decor-tab, .background-tab{
@@ -136,14 +142,18 @@
     padding-right: 10px;
 }
 
+.character-toggle-button{
+    z-index: 1  !important;
+}
+
 .pill{
     position: absolute;
     width: 50%;
     height: 100%;
     background-color: rgb(var(--saki-color-alpha));
-    z-index: -1;
+    z-index: 0;
     border-radius: 25px;
-    transition-property: background-color
+    transition-property: background-color;
 }
 
 #pause-button{

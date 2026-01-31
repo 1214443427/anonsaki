@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import PopUpModal from '../components/PopUpModal'
-import "./DatePage.css"
+import "./RedirectPages.css"
 
 function DatePage({navigateTo}) {
   const isStandalone = window.matchMedia("(display-mode: standalone)").matches || navigator.standalone === true

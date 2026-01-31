@@ -1803,8 +1803,8 @@ function PhotoBoothPage() {
                                 </svg>
                             </span>
                             <div className='character-toggle flex'>
-                                <button className={""} onClick={()=>{selectCharacter(0)}}>Anon</button>
-                                <button className={""} onClick={()=>{selectCharacter(1)}}>Saki</button>
+                                <button className={"character-toggle-button"} onClick={()=>{selectCharacter(0)}}>Anon</button>
+                                <button className={"character-toggle-button"} onClick={()=>{selectCharacter(1)}}>Saki</button>
                                 <div className='pill'></div>
                             </div>
                             <button className='tools-section-buttons' id={"pause-button"} onClick={()=>{toggleCharacter(selectedCharacter)}}>{live2DConfigs[selectedCharacter].paused?"继续live2d":"暂停live2d"}</button>
