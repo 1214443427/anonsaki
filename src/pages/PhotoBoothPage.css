@@ -146,6 +146,10 @@
     z-index: 1  !important;
 }
 
+.character-toggle-button:focus {
+    outline: none;
+}
+
 .pill{
     position: absolute;
     width: 50%;
@@ -169,8 +173,6 @@
 }
 
 .home-subsection-icon{
-    height: 70px;
-    width: 70px;
     justify-content: center;
     align-items: center;
     padding: 5px;
@@ -450,6 +452,7 @@
 }
 
 .loading-popup .spinner-container{
+    line-break: anywhere;
     width: 100%;
 }
 
@@ -757,7 +760,11 @@
         max-width: 60%;
     }
     .home-subsection{
-        grid-template-columns: repeat(6, 1fr);
+        grid-template-columns: repeat(5, 1fr);
+    }
+    .home-subsection-icon{
+        height: 70px;
+        width: 70px;
     }
 }
 
@@ -839,6 +846,11 @@
     .photo-help-modal{
         top: 50%;
     }
+
+    .subsection-container{
+        overflow-y: hidden;
+    }
+    
 
 }
 

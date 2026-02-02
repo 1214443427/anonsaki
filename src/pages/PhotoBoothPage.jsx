@@ -4,12 +4,12 @@ import "./PhotoBoothPage.css"
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap/gsap-core';
 import Spinner from "../components/Spinner"
-import html2canvas from 'html2canvas';
 import { createPortal } from 'react-dom';
 import PopUpModal from '../components/PopUpModal';
 import { isInt } from '../utils/util';
 import Toast from '../components/Toast';
 import useError from '../hooks/useError';
+import { snapdom } from '@zumer/snapdom';
 
 const INITIALL2DCONFIGS = 
 [
@@ -1530,20 +1530,14 @@ function PhotoBoothPage() {
         if(isGenerating) return;
         setIsGenerating(true)
         canvasFlash()
-        const decorationBehindCanvas = await html2canvas(propContainerRef.current, {
-                backgroundColor: null,
-                logging: false,
-                useCORS: false,
-                scale: Math.min(window.devicePixelRatio, 2),
-                ignoreElements: el => el.classList.contains('edit-overlay')||el.classList.contains('decoration-infront'),
+        const decorationBehindCanvas = await snapdom.toCanvas(propContainerRef.current, {
+                scale: 1,
+                filter: el => !el.classList.contains('edit-overlay')&&!el.classList.contains('decoration-infront'),
             })
         
-        const decorationInfrontCanvas = await html2canvas(propContainerRef.current, {
-                backgroundColor: null,
-                logging: false,
-                useCORS: false,
-                scale: Math.min(window.devicePixelRatio, 2),
-                ignoreElements: el => el.classList.contains('edit-overlay')||el.classList.contains('decoration-behind'),
+        const decorationInfrontCanvas = await snapdom.toCanvas(propContainerRef.current, {
+                scale: 1,
+                filter: el => !el.classList.contains('edit-overlay')&&!el.classList.contains('decoration-behind'),
             })
         
         if(!decorationBehindCanvas || !decorationInfrontCanvas){
@@ -1551,6 +1545,10 @@ function PhotoBoothPage() {
             setError({type:"generation", msg:"❌生成失败，请尝试截图"})
             return
         }
+
+
+        document.body.appendChild(decorationBehindCanvas)
+
         const glCanvas = l2dCanvasRef.current;
         const out = new OffscreenCanvas(decorationBehindCanvas.width, decorationBehindCanvas.height)
         const img = new Image()
