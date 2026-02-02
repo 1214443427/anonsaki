@@ -1546,9 +1546,6 @@ function PhotoBoothPage() {
             return
         }
 
-
-        document.body.appendChild(decorationBehindCanvas)
-
         const glCanvas = l2dCanvasRef.current;
         const out = new OffscreenCanvas(decorationBehindCanvas.width, decorationBehindCanvas.height)
         const img = new Image()
