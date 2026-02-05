@@ -1,7 +1,8 @@
 import { useGSAP } from '@gsap/react';
 import { gsap } from 'gsap/gsap-core';
-import React, { useEffect, useReducer, useRef, useState } from 'react'
+import React, { use, useEffect, useReducer, useRef, useState } from 'react'
 import "./ArcadePage.css"
+import BulletElement from '../../components/BulletElement';
 
 const CARDS = [
     { emoji: '🍬', name: 'Anon',  baseAttack: 1, baseHealth: 6, cost: 3, 
@@ -498,7 +499,8 @@ function purchaseUnit(state, position){
 function reducer(state, action){
     switch(action.type){
       case 'START_GAME': 
-        // const newState = 
+        const initialShop = generateShop(state);
+        return {...initialState, ...initialShop};
       case 'TICK': {
         if (state.phase != PHASE.battle) return state
         if (state.combat.animating) return state
@@ -535,11 +537,24 @@ const initialState = {
         star: 10,
     },
     team: {
-        board: Array.from({ length: 5 }, () => ({
+        board: [
+          {...CARDS[0],
+            xp: 0,
+            level: 1,
+            currentAttack: CARDS[0].baseAttack,
+            currentHealth: CARDS[0].baseHealth
+          }, //default card 1
+          {...CARDS[1],
+            xp: 0,
+            level: 1,
+            currentAttack: CARDS[1].baseAttack,
+            currentHealth: CARDS[1].baseHealth
+          }, //default card 2
+          ...Array.from({ length: 3 }, () => ({
           name: "empty",
           level: 0,
           xp: 0,
-        })),
+        }))],
         bench: Array.from({ length: 5 }, () => ({
           name: "empty",
           level: 0,
@@ -568,21 +583,46 @@ const initialState = {
     }
 }
 
+function ParticleElement({elements}){
+  const ref = useRef(null)
+  useGSAP(()=>{
+    gsap.fromTo(ref.current, {
+      top: "100%"
+    },{
+      top: "0%",
+      xPercent: gsap.utils.random(-100, 100),
+      duration: 1, 
+    })
+  }, [])
+  return(
+    <div className='particle' ref={ref}>
+      {gsap.utils.random(elements)}
+    </div>
+  )
+}
+
 function Unit({unit, mode}){
   const unitRef = useRef(null)
-  const [displayLevel, setDisplayLevel] = useState(1) //change to use display level and update display level after animation finishes.
-  const [displayXp, setDisplayXp] = useState(0) //change to use display level and update display level after animation finishes.
+  const [displayLevel, setDisplayLevel] = useState(1) 
+  const [displayXp, setDisplayXp] = useState(0) 
   const level = unit.level
+
   useGSAP(()=>{
     if(level > 1){
       setDisplayXp(Math.pow(2, level))
-      gsap.to(".unit-image", {
+      gsap.timeline().to(".unit-image", {
         rotateY: "+=360",
         duration: 1,
+        filter: "drop-shadow(0px 0px 20px rgba(255,245,46,0.9))",
+        ease: "power2.inOut",
         onComplete: ()=>{
           setDisplayLevel(prev=>prev+1);
           setDisplayXp(0)
         }
+      }).to(".unit-image", {
+        filter: "drop-shadow(0px 0px 10px rgba(196, 196, 195, 0.9))",
+        duration: 0.5,
+        ease: "power2.inOut",
       })
     }
   }, {scope: unitRef.current, dependencies: [level]})
@@ -592,6 +632,7 @@ function Unit({unit, mode}){
       setDisplayXp(unit.xp)
     }    
   }, [unit.xp])
+
 
   if(unit.name == "empty"){
     return
@@ -614,15 +655,17 @@ function Unit({unit, mode}){
           )}
         </div>
       </div>}
-      {
-        unit.imageUrl ? 
-        <img 
-        className='unit-image'
-        src={unit.imageUrl} />:
-        <p className='unit-image'>
-          {unit.emoji}
-        </p>
-      }
+      <div className='unit-image-container'>
+        {
+          unit.imageUrl ? 
+          <img 
+          className='unit-image'
+          src={unit.imageUrl} />:
+          <p className='unit-image'>
+            {unit.emoji}
+          </p>
+        }
+      </div>
       <div className='flex'>
         <div className='attack-indicator'>
           <img src='/assets/game-assets/attack.webp'></img>
@@ -640,6 +683,10 @@ function Unit({unit, mode}){
 function ArcadePage() {
 
   const [state, dispatch] = useReducer(reducer, initialState)
+  
+  useEffect(()=>{
+    dispatch({type: "START_GAME"})
+  }, [])
 
   useGSAP(()=>{
     const phase = state.phase
@@ -654,6 +701,7 @@ function ArcadePage() {
     }
     return ()=> clearInterval(intervalId)
   }, [state.phase])
+
 
   return (
     <div className='pages flex flex-col arcade-page'>

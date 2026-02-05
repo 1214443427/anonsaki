@@ -10,6 +10,7 @@ import { isInt } from '../utils/util';
 import Toast from '../components/Toast';
 import useError from '../hooks/useError';
 import { snapdom } from '@zumer/snapdom';
+import 'context-filter-polyfill';
 
 const INITIALL2DCONFIGS = 
 [
@@ -572,7 +573,7 @@ const DECORATION_TEMPLATES = [
             style: "basic-text"
         },
         width: 160,
-        height: 80
+        height: 60
     },
     {
         id: 'bubbly-text',
@@ -583,7 +584,7 @@ const DECORATION_TEMPLATES = [
             style: "bubbly-text"
         },
         width: 160,
-        height: 80
+        height: 60
     },
     {
         id: 'christmas-hat',
@@ -1532,17 +1533,19 @@ function PhotoBoothPage() {
         canvasFlash()
         const decorationBehindCanvas = await snapdom.toCanvas(propContainerRef.current, {
                 scale: 1,
+                embedFonts: true,
                 filter: el => !el.classList.contains('edit-overlay')&&!el.classList.contains('decoration-infront'),
             })
         
         const decorationInfrontCanvas = await snapdom.toCanvas(propContainerRef.current, {
                 scale: 1,
+                embedFonts: true,
                 filter: el => !el.classList.contains('edit-overlay')&&!el.classList.contains('decoration-behind'),
             })
         
-        if(!decorationBehindCanvas || !decorationInfrontCanvas){
+        if(!decorationBehindCanvas || !decorationInfrontCanvas || decorationBehindCanvas.width == 0 || decorationInfrontCanvas.width == 0){
             setIsGenerating(false)
-            setError({type:"generation", msg:"❌生成失败，请尝试截图"})
+            setError({type:"generation", msg:"❌生成失败，请重试或截图"})
             return
         }
 

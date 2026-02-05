@@ -12,9 +12,9 @@ export default defineConfig({
         name: '爱爱的祥',
         short_name: '爱爱的祥',
         description: '爱祥cp网站',
-        start_url: '/',
+        start_url: '/#/date',
         display: 'standalone',
-        background_color: '#ba91cc',
+        background_color: '#ba91cc',  
         theme_color: '#ba91cc',
         icons: [
           {

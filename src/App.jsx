@@ -241,7 +241,7 @@ function App() {
         case "challenge":
             return <ChallengePage pageHash={queryParam} navigateTo={navigateTo} />
         case "student":
-            return <StudentCouncilPage />
+            return <StudentCouncilPage navigateTo={navigateTo}/>
         case "date":
             return <DatePage navigateTo={navigateTo}/>
         case "arcade":
