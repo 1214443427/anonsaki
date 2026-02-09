@@ -24,11 +24,21 @@
 
 .date-page, .sc-room-page{
     height: 100dvh;
+    width: 100vw;
+    overflow: hidden;
     align-items: center;
+    justify-content: center;
+}
+
+.max-content-container{
     gap: 20px;
     padding-block: 10%;
     padding-inline: 2%;
-    overflow: hidden;
+    max-width: 1400px;
+    width: 100%;
+    height: 100%;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .date-page{
@@ -39,11 +49,6 @@
     background-color: rgb(var(--saki-color-alpha));
 }
 
-.sc-room-page>div{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
 
 .date-page .dialog-box.saki-border, .sc-room-page .dialog-box.anon-border{
     justify-content: center;
@@ -73,9 +78,13 @@
     transform: translate(-50%, -50%);
 }
 
-.sc-room-page>div{
-    flex: 1 1 0;
-    max-height: 50%;
+.max-content-container>div{
+    flex: 0 0 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 0px;
+    min-height: 0px;
 }
 
 .sc-room-page img{
@@ -89,9 +98,15 @@
 .sc-room-page .polaroid-container{
     position: relative;
     height: auto;
-    width: 60%;
+    max-width: 500px;
     aspect-ratio: 5/6;
     rotate: -5deg;
+    padding: 7px 7px 10px 7px;
+    width: fit-content;
+}
+
+.sc-room-page .polaroids-content-container{
+    width: 100%;
 }
 
 .notebook-img, .sc-room-page .polaroid-container{
@@ -103,6 +118,27 @@
     scale: 1.1;
     rotate: 0deg;
     transition: scale 0.3s ease-in-out, rotate 0.3s ease-in-out;
+    z-index: 2;
+}
+
+.sc-room-title{
+    font-size: 1.15rem;
+}
+
+#notebook-title{
+    margin-bottom: 5%;
+}
+
+.sc-room-sub-title{
+    font-size: 0.75rem;
+}
+
+@media screen and (max-width: 767px){
+    .sc-room-page .polaroids-content-container > img{
+        width: 180px;
+        height: 200px;
+    }
+
 }
 
 @media screen and (min-width: 2550px){
@@ -112,7 +148,7 @@
 }
 
 @media screen and (min-width: 1200px){
-    .date-page, .sc-room-page{
+    .max-content-container{
         flex-direction: row;
     }
 
@@ -120,11 +156,19 @@
         height: auto;
         aspect-ratio: 1;
     }
+
+    .sc-room-title{
+        font-size: 1.5rem;
+    }
+
+    .sc-room-sub-title{
+        font-size: 1.25rem;
+    }
 }
 
 
 @media screen and (min-width: 768px){
-    .date-page, .sc-room-page{
+    .max-content-container{
         padding-block: 15%;
     }
 

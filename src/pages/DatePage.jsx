@@ -45,6 +45,7 @@ function DatePage({navigateTo}) {
 
   return (
     <div className='date-page page flex flex-col'>
+      <div className='max-content-container flex-col flex'>
         <div className='dialog-box saki-border'>
           <div className='date-page-images' onClick={handlePhotoBoothOnClick}>
             <img src='/assets/photobooth-assets/sample.webp' className='photo-sample'></img>
@@ -118,6 +119,7 @@ function DatePage({navigateTo}) {
             </div>
           </PopUpModal>
         }
+        </div>
     </div>
   )
 }

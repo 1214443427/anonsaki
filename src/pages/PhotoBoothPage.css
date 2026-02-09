@@ -104,7 +104,7 @@
 }
 
 .subsection-container, .decor-tab, .background-tab{
-    overflow-y: scroll;
+    overflow-y: auto;
     scroll-snap-type: y mandatory;
 }
 
@@ -140,6 +140,7 @@
 .tools-subsections{
     min-height: 100px;
     padding-right: 10px;
+    /* overflow-y: scroll; */
 }
 
 .character-toggle-button{
@@ -327,8 +328,11 @@
     gap: 10px
 }
 
+.detailed-control-bottom{
+    justify-content: space-between;
+}
+
 .tools-section-buttons, .layer-input{
-    width: 50%;
     gap: 10px;
 }
 
@@ -348,6 +352,20 @@
     width: 6ch;
     height: 34px;
     border-radius: 5px;
+}
+#saki-color-picker{
+    background-color: rgb(var(--saki-color));
+}
+
+.class-picker-container{
+    position: relative;
+}
+
+.color-picker-icon{
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    transform: translate(25%,25%);
 }
 
 
@@ -532,7 +550,7 @@
 
 .bubbly-text{
     color: var(--color, #7799CC);
-    -webkit-text-stroke: 1px white;
+    text-shadow: 0 2px 0 #fff, 0 -2px 0 #fff, 2px 0 0 #fff, -2px 0 0 #fff, 1.5px 1.5px 0 #fff, -1.5px 1.5px 0 #fff, 1.5px -1.5px 0 #fff, -1.5px -1.5px 0 #fff;
 
 }
 
@@ -845,10 +863,6 @@
     
     .photo-help-modal{
         top: 50%;
-    }
-
-    .subsection-container{
-        overflow-y: hidden;
     }
     
 
