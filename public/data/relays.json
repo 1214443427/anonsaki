@@ -1,5 +1,5 @@
 [
-    {
+  {
     "name": "爱的交祥曲",
     "details": {
         "tag": "#爱的交祥曲",
@@ -11,7 +11,7 @@
         "poster": "/assets/relays/爱的交祥曲海报.webp"
     },
   "total_count": 62
-    },
+  },
   {
     "name": "AAA TGW财团发布会",
     "details": {
@@ -38,7 +38,7 @@
     },
   "total_count": 35
   },
-    {
+  {
     "name": "圣诞祥农草莓蛋糕",
     "details": {
         "tag": "#祥农蛋糕",

@@ -240,6 +240,7 @@ function L2dCanvas( {character, offsetBottom, width, height, className="", ref,
                 }else{
                     live2DMgr.getModel(i).paused = false
                 }
+                // console.log(dragMgr[i])
                 dragMgr[i].setPoint(config.faceDirectionX, config.faceDirectionY)
                 const modelMatrix = live2DMgr.getModel(i).modelMatrix
                 if(modelMatrix){

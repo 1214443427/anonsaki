@@ -1542,9 +1542,16 @@ function PhotoBoothPage() {
 
     function changeCloth(modelName){
         setCharacter(modelName)
-        setLive2dConfigs(prev=> prev.map((config)=>(
-            {...config, paused:false}
-        )))
+        setTimeout(()=>
+            setLive2dConfigs(prev=> prev.map((config)=>(
+                {...config,
+                    // faceDirectionX: INITIALL2DCONFIGS.faceDirectionX,
+                    // faceDirectionY: INITIALL2DCONFIGS.faceDirectionY,
+                    // positionX: INITIALL2DCONFIGS.positionX,
+                    // positionY: INITIALL2DCONFIGS.positionY,
+                    paused:false}
+            ))), 0
+        )
     }
 
     function resetConfig(){

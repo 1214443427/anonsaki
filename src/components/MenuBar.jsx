@@ -60,9 +60,9 @@ function MenuBar({navigateTo, currentlyActive}) { //, isOpen, setIsOpen
             <button 
               className={`menu-button ${currentlyActive=="student-council"?"active":""}`} 
               onClick={()=>buttonOnClick("/student-council")}>学生会档案</button>
-            {/* <button 
+            <button 
               className={`menu-button ${currentlyActive=="challenge"?"active":""}`} 
-              onClick={()=>buttonOnClick("/challenge")}>粉蓝笔记</button> */}
+              onClick={()=>buttonOnClick("/date")}>游戏厅</button>
             <button 
               className={`menu-button ${currentlyActive=="invitation"?"active":""}`} 
               onClick={()=>buttonOnClick("/invitation")}>邀请函</button>
