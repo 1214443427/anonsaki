@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import Spinner from "../components/Spinner"
 import ExternalLink from '../components/ExternalLink';
 import ConfirmationModal from '../components/ConfirmationModal';
+import LoadingPage from './LoadingPage';
 
 gsap.registerPlugin(Flip) 
 
@@ -229,9 +230,7 @@ function RelayPage({navigateTo}) {
     }
     if(loading || !isImagesLoaded){
         return(
-            <div className='relays-page'>
-                <Spinner />
-            </div>
+            <LoadingPage from={"relays"}/>
         )
     }
     return (

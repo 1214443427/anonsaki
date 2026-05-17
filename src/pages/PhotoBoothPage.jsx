@@ -1367,6 +1367,8 @@ function PhotoBoothPage() {
     }
 
    useEffect(()=>{
+
+        //add a different loading state for this. Block motion until finish fetching. 
         async function fetchModelData(){
             const sakiData = await fetch("/assets/l2d/saki/model-matching-outfit.json").then(res => res.json())
             const anonData = await fetch("/assets/l2d/anon/model-matching-outfit.json").then(res => res.json())
@@ -1404,7 +1406,10 @@ function PhotoBoothPage() {
         const tl = gsap.timeline()
         if(popupAnimationState == "opening"){
             tl.fromTo(".sticky-note-popup", 
-                {opacity: 0},
+                {
+                    opacity: 0,
+                    pointerEvents: "none"
+                },
                 {
                     opacity: 1,
                     duration: 0.25,
@@ -1648,7 +1653,7 @@ function PhotoBoothPage() {
             await navigator.share({
                 files: [file],
                 title: '图片分享',
-                text: '爱爱的祥生产图片'
+                text: '爱爱的祥产生的图片'
             });
             } else {
                 setError({type: "share", msg: "❌错误:无法获得分享许可。请下载图片。"});
@@ -1856,18 +1861,23 @@ function PhotoBoothPage() {
                         <div className='subsection-container'>
                             {activeSubsection == "home" &&
                                 <div className='tools-subsections home-subsection flex'>
-                                    {subsections.map((section, index)=>(
-                                        <div 
+                                    {
+                                    modelData.length?
+                                    subsections.map((section, index)=>
+                                        (<div 
                                             key={index} 
                                             className='home-subsection-icon flex flex-col'
                                             id={section.name}
                                             onClick={()=>switchSubsection(section.name)}>
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox={section.viewBox?section.viewBox:"0 0 512 512"}>
-                                                <path d={section.path} />
-                                            </svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox={section.viewBox?section.viewBox:"0 0 512 512"}>
+                                                    <path d={section.path} />
+                                                </svg>
+                                                
                                             {section.display}
-                                        </div>
-                                    ))}
+                                        </div>))
+                                        :
+                                        <Spinner />    
+                                    }
                                 </div>
                             }
                             {activeSubsection == "position" && 

@@ -181,6 +181,8 @@
     background-color: rgb(var(--anon-color-alpha));
     border-radius: 15px;
     cursor: pointer;
+    width: 70px;
+    height: 70px;
 }
 
 .tools-subsections .home-subsection-icon svg{
@@ -697,6 +699,7 @@
 }
 
 .photobooth-page .sticky-note-popup{
+    pointer-events: none;
     position: absolute;
     width: 100%;
     height: 100%;

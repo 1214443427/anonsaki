@@ -98,6 +98,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .page{
   justify-content: center;
+  height: 100vh;
   width: 100vw;
   overscroll-behavior: none;
 }
@@ -125,7 +126,8 @@ h1, h2, h3, h4, h5, h6 {
   position: fixed;
   justify-content: space-between;
   align-items: center;
-  left: 5%;
+  left: 50%;
+  transform: translateX(-50%);
   top: 1%;
   width: 90vw;
   height: 100px;
@@ -137,6 +139,7 @@ h1, h2, h3, h4, h5, h6 {
   backdrop-filter: blur(20px);
   z-index: 99;
   border-radius: 25px;
+  max-width: 1440px;
 }
 
 
@@ -1468,6 +1471,7 @@ h1, h2, h3, h4, h5, h6 {
   .relay-grid{
     grid-template-columns: 1fr 1fr;
     gap: 5px;
+    row-gap: 30px;
     overflow-x: hidden;
   }
 

@@ -1,7 +1,26 @@
-import React from 'react'
+import React, { useEffect, useMemo } from 'react'
 import "./RedirectPages.css"
+import useDelayedImport from '../hooks/useDelayedImport';
 
 function StudentCouncilPage({navigateTo}) {
+
+    // useEffect(() => {
+    //     const id = setTimeout(() => {
+    //         import("./ChallengePage");
+    //         import("./RelayPage");
+    //     }, 1000); // wait 1s after entering page
+
+    //     return () => clearTimeout(id);
+    // }, []);
+
+    const imports = useMemo(()=> //useMemo function
+        ()=>{ //import functions
+            import("./ChallengePage")
+            import("./RelayPage");
+        }
+    )
+    useDelayedImport(imports)
+
     return (
         <div className='sc-room-page flex'>
             <div className='max-content-container flex-col flex'>

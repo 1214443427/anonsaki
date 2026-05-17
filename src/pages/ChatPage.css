@@ -1,0 +1,14 @@
+.chat-page{
+    background-color: rgb(var(--saki-color-alpha));
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.phone{
+    height: 80%;
+    max-width: 1080px;
+    max-height: 1920px;
+    aspect-ratio: 9/16;
+    margin-bottom: 2.5%;    
+}

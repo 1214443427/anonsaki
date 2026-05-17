@@ -1,29 +1,38 @@
-import { useEffect, useRef, useState } from 'react'
+import React, { Suspense, useEffect, useRef, useState} from 'react'
 import './App.css'
 import LandingPage from './pages/LandingPage'
 import CharacterPage from './pages/CharacterPage'
 import MenuBar from './components/MenuBar';
-import RelayPage from './pages/RelayPage';
-import RelayDetailsPage from './pages/RelayDetailsPage';
+// import RelayPage from './pages/RelayPage';
+// import RelayDetailsPage from './pages/RelayDetailsPage';
 import InvitationPage from './pages/InvitationPage';
-import PhotoBoothPage from './pages/PhotoBoothPage';
+// import PhotoBoothPage from './pages/PhotoBoothPage';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { prefetchContentAssets } from './utils/preFetchData';
-import ChallengePage from './pages/ChallengePage';
-import MotionPathPlugin from 'gsap/MotionPathPlugin';
+// import ChallengePage from './pages/ChallengePage';
+// import MotionPathPlugin from 'gsap/MotionPathPlugin';
 import MorphSVGPlugin from 'gsap/src/MorphSVGPlugin';
 import DrawSVGPlugin from 'gsap/src/DrawSVGPlugin';
-import Draggable from 'gsap/src/Draggable';
+// import Draggable from 'gsap/src/Draggable';
 import { isChristmas } from './utils/util';
 import StudentCouncilPage from './pages/StudentCouncilPage';
 import DatePage from './pages/DatePage';
-import ArcadePage from './pages/arcade/ArcadePage';
+// import ArcadePage from './pages/arcade/ArcadePage';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
+import LoadingPage from './pages/LoadingPage';
+// import ChatPage from './pages/ChatPage';
 
 
 const isChristmasTime = isChristmas()
-gsap.registerPlugin(useGSAP, MotionPathPlugin, MorphSVGPlugin, DrawSVGPlugin, Draggable, ScrollToPlugin);
+const PhotoBoothPage = React.lazy(()=> import('./pages/PhotoBoothPage'))
+const ChallengePage = React.lazy(()=> import('./pages/ChallengePage'))
+const RelayPage = React.lazy(()=> import('./pages/RelayPage'))
+const RelayDetailsPage = React.lazy(()=> import('./pages/RelayDetailsPage'))
+const ArcadePage = React.lazy(()=> import('./pages/arcade/ArcadePage'))
+const ChatPage = React.lazy(()=> import('./pages/ChatPage'))
+
+gsap.registerPlugin(useGSAP, MorphSVGPlugin, DrawSVGPlugin, ScrollToPlugin); //, Draggable,MotionPathPlugin
 
 function SnowShowerElement(){
   const ref = useRef(null)
@@ -196,6 +205,8 @@ function App() {
       return {route: 'date', relayId: null}
     }else if (hash === '/arcade'){
       return {route: 'arcade', relayId: null}
+    }else if (hash === '/chat'){
+      return {route: 'chat', relayId: null}
     }
     return {route: 'landing', relayId: null}
   }
@@ -223,31 +234,35 @@ function App() {
        </div>
        }
       <MenuBar navigateTo={navigateTo} currentlyActive={currentRoute}/>
-      {(()=>{ 
-        switch(currentRoute){
-        case 'landing':
-          return <LandingPage navigateTo={navigateTo} collectEasterEgg={collectEasterEgg}/>;
-        case 'character':
-          return <CharacterPage navigateTo={navigateTo} collectEasterEgg={collectEasterEgg}/> 
-        case 'relays':
-          if(queryParam == null)
-            return <RelayPage navigateTo={navigateTo} collectEasterEgg={collectEasterEgg}/>
-          else
-            return <RelayDetailsPage filename={decodeURI(queryParam)}></RelayDetailsPage>
-        case "invitation":
-            return <InvitationPage collectEasterEgg={collectEasterEgg} easterEggProgress={easterEgg}/>
-        case "photo-booth":
-            return <PhotoBoothPage />
-        case "challenge":
-            return <ChallengePage pageHash={queryParam} navigateTo={navigateTo} />
-        case "student":
-            return <StudentCouncilPage navigateTo={navigateTo}/>
-        case "date":
-            return <DatePage navigateTo={navigateTo}/>
-        case "arcade":
-            return <ArcadePage />
-        }
-      })()}
+      <Suspense fallback={<LoadingPage from={currentRoute}/>}>
+        {(()=>{ 
+          switch(currentRoute){
+          case 'landing':
+            return <LandingPage navigateTo={navigateTo} collectEasterEgg={collectEasterEgg}/>;
+          case 'character':
+            return <CharacterPage navigateTo={navigateTo} collectEasterEgg={collectEasterEgg}/> 
+          case 'relays':
+            if(queryParam == null)
+              return <RelayPage navigateTo={navigateTo} collectEasterEgg={collectEasterEgg}/>
+            else
+              return <RelayDetailsPage filename={decodeURI(queryParam)}></RelayDetailsPage>
+          case "invitation":
+              return <InvitationPage collectEasterEgg={collectEasterEgg} easterEggProgress={easterEgg}/>
+          case "photo-booth":
+              return <PhotoBoothPage />
+          case "challenge":
+              return <ChallengePage pageHash={queryParam} navigateTo={navigateTo} />
+          case "student":
+              return <StudentCouncilPage navigateTo={navigateTo}/>
+          case "date":
+              return <DatePage navigateTo={navigateTo}/>
+          case "arcade":
+              return <ArcadePage />
+          case "chat":
+              return <ChatPage />
+          }
+        })()}
+      </Suspense>
     </div>
   )
 }

@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import PopUpModal from '../components/PopUpModal'
 import "./RedirectPages.css"
+import useDelayedImport from '../hooks/useDelayedImport'
 
 function DatePage({navigateTo}) {
   const isStandalone = window.matchMedia("(display-mode: standalone)").matches || navigator.standalone === true
@@ -42,6 +43,14 @@ function DatePage({navigateTo}) {
     // navigateTo("/arcade")
   }
 
+  const imports = useMemo(()=> //useMemo function
+      ()=>{ //import functions
+          import("./PhotoBoothPage")
+          import("./ChatPage");
+      }
+  )
+  useDelayedImport(imports)
+
 
   return (
     <div className='date-page page flex flex-col'>
@@ -59,6 +68,7 @@ function DatePage({navigateTo}) {
             🚧正在施工🚧
           </div>
           {/* <button className='menu-button'></button> */}
+
         </div>
 
 
