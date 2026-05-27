@@ -40,7 +40,7 @@ function StudentCouncilPage({navigateTo}) {
                         <div className='flex flex-col polaroids-content-container'>
                             <img src='/assets/relays/爱的交祥曲封面.webp'></img>
                             <p className='sc-room-title'>接力记录</p>
-                            <p className='sc-room-sub-title'>最后更新:  2026年, 2月, 14日</p>
+                            <p className='sc-room-sub-title'>最后更新:  2026年, 5月, 20日</p>
                         </div>
                     </div>
                 </div>
