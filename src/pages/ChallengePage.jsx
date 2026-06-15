@@ -677,6 +677,7 @@ function ChallengePage( {pageHash, navigateTo} ) {
                         <div className='nameplate-container'>
                             <div className='nameplate-top flex'>
                                 <span>15行</span>
+                                <span class="date">更新于2025, 10月</span>
                                 <span>がくしゅうノート</span>
                             </div>
                             <div className='nameplate-bottom flex'>

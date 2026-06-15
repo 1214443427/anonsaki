@@ -329,7 +329,7 @@
     justify-content: space-evenly;
 }
 
-.nameplate-bottom > *:last-child{
+.nameplate-bottom > *:last-child, .nameplate-top > *:nth-child(2){
     font-family: "KuaiLe";
     color: #3f3f3f;
 }

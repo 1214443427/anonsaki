@@ -460,6 +460,14 @@ const DECORATION_TEMPLATES = [
         height: 160
     },
     {
+        id: 'look',
+        name: '快看',
+        type: 'decoration',
+        url: "/assets/photobooth-assets/decorations/laugh-at-qian-ma.avif",
+        width: 160,
+        height: 160
+    },
+    {
         id: 'rose',
         name: '玫瑰',
         type: 'decoration',
