@@ -1,853 +1,984 @@
-import React, { useEffect, useRef, useState } from 'react'
-import "./ChallengePage.css"
-import Spinner from '../components/Spinner';
-import { gsap } from 'gsap/gsap-core';
-import { useGSAP } from '@gsap/react';
-import ConfirmationModal from '../components/ConfirmationModal';
-import ExternalLink from '../components/ExternalLink';
-import { isChristmas } from '../utils/util';
+import React, { useEffect, useRef, useState } from "react";
+import "./ChallengePage.css";
+import Spinner from "../components/Spinner";
+import { gsap } from "gsap/gsap-core";
+import { useGSAP } from "@gsap/react";
+import ConfirmationModal from "../components/ConfirmationModal";
+import ExternalLink from "../components/ExternalLink";
+import { isChristmas } from "../utils/util";
 
+const PASTEL_COLORS = ["#FEF08A", "#FBCFE8", "#BFDBFE", "#BBF7D0", "#FED7AA"];
 
-const PASTEL_COLORS = ["#FEF08A", "#FBCFE8", "#BFDBFE", "#BBF7D0", "#FED7AA"]
+function CheckMarkSVG({ animate }) {
+  const pathRef = useRef(null);
 
-function CheckMarkSVG({animate}){
-    
-    const pathRef = useRef(null)
+  useGSAP(() => {
+    if (animate) {
+      gsap.fromTo(
+        pathRef.current,
+        { drawSVG: "0%" },
+        { drawSVG: "100%", duration: 0.7, ease: "power1.inOut" },
+      );
+    }
+  }, [animate]);
 
-    useGSAP(()=>{
-        if(animate){
-            gsap.fromTo(pathRef.current, {drawSVG: "0%"}, {drawSVG: "100%", duration: 0.7, ease:"power1.inOut"})
-        }
-    }, [animate])
+  return (
+    <span>
+      <svg
+        className="draw-check"
+        stroke="currentColor"
+        strokeWidth="2"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path ref={pathRef} d="M3.4 13.2L 3.4 13.2 9.2 19l11.4-11.4" />
+      </svg>
+    </span>
+  );
+}
 
-    return(
-        <span>
-            <svg className="draw-check" 
-            stroke="currentColor" strokeWidth="2" 
-            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path ref={pathRef}
-                    d="M3.4 13.2L 3.4 13.2 9.2 19l11.4-11.4"/>                                    
+function NotebookPages({
+  title,
+  list,
+  className,
+  pageNum,
+  setSelectedWork,
+  works,
+  navigateToPage,
+  completedWork,
+  setCompletedWork,
+}) {
+  const [newlyAdded, setNewlyAdded] = useState([]);
+  const [copyStatus, setCopyStatus] = useState();
+  const timeoutRef = useRef(null);
+  const copyTimeoutRef = useRef(null);
+
+  function toggleWork(item) {
+    setNewlyAdded((prev) => [...prev, item]);
+    setCompletedWork((prev) =>
+      completedWork.includes(item)
+        ? completedWork.filter((work) => work != item)
+        : [...completedWork, item],
+    );
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    timeoutRef.current = setTimeout(() => {
+      setNewlyAdded([]);
+    }, 700);
+  }
+
+  function copy() {
+    if (copyTimeoutRef.current === null) {
+      navigator.clipboard
+        .writeText("462035074")
+        .then(() => {
+          setCopyStatus("success");
+        })
+        .catch((err) => {
+          setCopyStatus("error");
+        });
+      copyTimeoutRef.current = setTimeout(() => {
+        copyTimeoutRef.current = null;
+        setCopyStatus("copy");
+      }, 5000);
+    }
+  }
+
+  useGSAP(() => {
+    if (pageNum != 33) return;
+    const id = copyStatus === "success" ? "#check" : copyStatus === "error" ? "#cross" : "#copy";
+    gsap.to("#copy", {
+      morphSVG: id,
+      duration: 1,
+    });
+  }, [copyStatus]);
+
+  return (
+    // <div className={`notebook-pages ${className}`} ref={ref}>
+    //     <div className='notebook-page-inner'>
+    //         <div className='front'>
+
+    <div className={`notebook-page ${className}`}>
+      <div className="notebook-header">
+        <h3>{title}</h3>
+        {title && <p>{title != "目录" && title != "后记" && "Day" + (pageNum - 2)}</p>}
+        {title == "目录" && <p>页</p>}
+      </div>
+      <div className="notebook-content">
+        {title == "后记" ? (
+          <div>
+            本推荐集收录于爱祥吧吧群的群友，欢迎来玩！
+            <br />
+            <span className="flex">
+              群号🐧 462035074
+              <svg
+                id="copy-icon"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 448 512"
+                onClick={copy}
+              >
+                <defs>
+                  <path
+                    id="check"
+                    d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"
+                  />
+                  <path
+                    id="cross"
+                    d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"
+                  />
+                </defs>
+                <path
+                  id="copy"
+                  d="M192 0c-35.3 0-64 28.7-64 64l0 256c0 35.3 28.7 64 64 64l192 0c35.3 0 64-28.7 64-64l0-200.6c0-17.4-7.1-34.1-19.7-46.2L370.6 17.8C358.7 6.4 342.8 0 326.3 0L192 0zM64 128c-35.3 0-64 28.7-64 64L0 448c0 35.3 28.7 64 64 64l192 0c35.3 0 64-28.7 64-64l0-16-64 0 0 16-192 0 0-256 16 0 0-64-16 0z"
+                />
+              </svg>
+              <br />
+            </span>
+            特别鸣谢
+            <ConfirmationModal
+              url={
+                "https://tieba.baidu.com/home/main/?id=tb.1.35920242.mqYFfUu1nNU8iWRXiG6MdA&fr=frs"
+              }
+            >
+              <span className="link">昵称暂无法保存</span>
+            </ConfirmationModal>
+            老师的主持。
+            <br />
+            封面图来自
+            <ConfirmationModal url={"https://yuhong01.lofter.com/post/77b6c044_34c80349d"}>
+              <span className="link">千羽.鸿漪</span>
+            </ConfirmationModal>
+            💙
+            <br />
+            更多作品收录: <br />
+            <ConfirmationModal
+              url={"https://www.bilibili.com/read/readlist/rl927730"}
+              className={"link"}
+            >
+              <div className="flex note-link">
+                <img src="assets/bilibili-icon.webp" className="icons"></img>
+                Bilibili视频收录
+              </div>
+            </ConfirmationModal>
+            <ConfirmationModal
+              url={"https://www.bilibili.com/opus/1081595906150629415"}
+              className={"link"}
+            >
+              <div className="flex note-link">
+                <img src="assets/nga-icon.webp" className="icons"></img>
+                安科收录
+              </div>
+            </ConfirmationModal>
+            <ConfirmationModal url={"https://tieba.baidu.com/p/9893219524#"} className={"link"}>
+              <div className="flex note-link">
+                <img src="assets/baidu-tieba.svg" className="icons"></img>
+                作品补档
+              </div>
+            </ConfirmationModal>
+          </div>
+        ) : (
+          list.map((item, i) =>
+            title != "目录" ? (
+              <div key={i} className="notebook-items flex">
+                <div className="flex" onClick={() => setSelectedWork(item)}>
+                  <p className="work-index">{`${i + 1}. `}</p>
+                  <p className={`${works[item].spoiler ? "cross" : ""}`}> {item} </p>
+                </div>
+                <div className={`check-box`} onClick={() => toggleWork(item)}>
+                  {completedWork.includes(item) && (
+                    // <span>
+                    //     <svg className="draw-check"
+                    //     stroke="currentColor" strokeWidth="2"
+                    //     viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    //         <path className={newlyAdded.includes(item)?"animate":""}
+                    //             d="M3.4 13.2L 3.4 13.2 9.2 19l11.4-11.4"/>
+                    //     </svg>
+                    // </span>
+                    <CheckMarkSVG animate={newlyAdded.includes(item)} />
+                  )}
+                </div>
+              </div>
+            ) : (
+              <div
+                key={i}
+                onClick={() => navigateToPage(i + 3 + (pageNum - 1) * list.length)}
+                className="notebook-items flex"
+              >
+                <span>{item}</span>
+                <span>{i + 1 + (pageNum - 1) * list.length}</span>
+              </div>
+            ),
+          )
+        )}
+        {title == "来自《Ave Mujica》播出之前的作品" && (
+          <div className="sticker-container">
+            <svg id="sticker-arrow" viewBox="-13 0 148 148" xmlns="http://www.w3.org/2000/svg">
+              <path d="M0 2.65037C6.14938 -1.37392 12.2988 -0.103094 17.812 1.80315C25.4458 4.55662 32.8674 8.1573 39.6529 12.3934C70.3998 32.7267 88.8479 61.744 96.4816 97.539C98.39 106.647 99.0262 116.178 100.299 126.556C108.78 121.685 113.233 112.154 121.715 106.647C122.776 110.883 120.655 113.636 118.959 115.966C111.961 125.497 104.752 135.028 97.3299 144.348C93.725 148.796 90.9684 149.219 87.1515 145.407C79.0937 137.57 74.2167 128.039 72.7323 117.025C72.7323 116.601 73.3684 115.966 74.2166 114.907C83.3347 117.237 81.2142 128.886 89.06 133.122C92.4527 118.508 89.9082 104.529 86.0913 90.973C82.0624 76.7821 76.7612 63.2266 68.2793 51.1537C60.0095 39.2926 49.6191 29.7614 38.1686 20.8656C26.93 11.758 14.2072 6.03925 0 2.65037Z"></path>
             </svg>
-        </span>
-    )
+            <div className="sticker">
+              <div className="tape"></div>
+              点击打开转跳界面
+            </div>
+          </div>
+        )}
+      </div>
+      <div className="notebook-footer"></div>
+    </div>
+
+    //         </div>
+    //         <div className='back'>
+    //             test
+    //         </div>
+    //     </div>
+    // </div>
+  );
 }
 
+function ChallengePage({ pageHash, navigateTo }) {
+  const animationPageRef = useRef(null);
+  const contentPageRef = useRef(null);
+  const [recommendations, setRecommendations] = useState([]);
+  const [works, setWorks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [bottomPage, setBottomPage] = useState(0);
+  const [topPage, setTopPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [selectedWork, setSelectedWork] = useState(null);
+  const [completedWork, setCompletedWork] = useState(
+    () => JSON.parse(localStorage.getItem("completedWorks")) || [],
+  );
+  const [lastVisited, setLastVisited] = useState(
+    () => JSON.parse(localStorage.getItem("lastVisited")) ?? 0,
+  );
+  const [showNavigation, setShowNavigation] = useState(false);
+  const [pageInput, setPageInput] = useState(1);
+  const [animationPlaying, setAnimationPlaying] = useState(false);
 
-function NotebookPages({title, list, className, pageNum, setSelectedWork, works, navigateToPage, completedWork, setCompletedWork}){
-    
-    const [newlyAdded, setNewlyAdded] = useState([])
-    const [copyStatus, setCopyStatus] = useState()
-    const timeoutRef = useRef(null)
-    const copyTimeoutRef = useRef(null)
+  function selectWork(work) {
+    if (selectedWork) return;
+    else setSelectedWork(work);
+  }
 
-    function toggleWork(item){
-        setNewlyAdded((prev)=>[...prev, item])
-        setCompletedWork((prev)=>
-            completedWork.includes(item) ? completedWork.filter((work)=>work != item): [...completedWork, item])
-        if(timeoutRef.current){
-            clearTimeout(timeoutRef.current)
-        }
-        timeoutRef.current = setTimeout(()=>{
-            setNewlyAdded([])
-        }, 700)
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        setLoading(true);
+        const data = await fetch("/data/recommendations.json").then((res) => res.json());
+        setRecommendations(data.days);
+        setWorks(data.works);
+        // console.log(data)
+        setLoading(false);
+      } catch (err) {
+        console.error("Failed to fetch data", err);
+        setError("无法获取信息！请联系作者B站");
+      }
     }
+    fetchData();
+  }, []);
 
-    function copy(){
-        if(copyTimeoutRef.current === null){
-            navigator.clipboard.writeText("462035074")
-                .then(() => {
-                    setCopyStatus("success")
-                })
-                .catch(err => {
-                    setCopyStatus("error")
-            });
-            copyTimeoutRef.current = setTimeout(()=>{
-                copyTimeoutRef.current = null;
-                setCopyStatus("copy")
-            }, 5000)
-        }
+  useEffect(() => {
+    localStorage.setItem("completedWorks", JSON.stringify(completedWork));
+    if (currentPage > 0) {
+      localStorage.setItem("lastVisited", JSON.stringify(currentPage));
     }
+  }, [completedWork, currentPage]);
 
-    useGSAP(()=>{
-        if(pageNum != 33) return
-        const id = copyStatus === "success" ? "#check": 
-                   copyStatus === "error" ? "#cross" : "#copy";
-        gsap.to("#copy",{
-            morphSVG: id,
+  const animationRefCallback = () => {
+    const handle = requestAnimationFrame(() => {
+      // console.log(animationPageRef.current)
+      if (animationPageRef.current != null) {
+        const pageNum = parseInt(pageHash);
+        if (isLegalPageNum(pageNum)) {
+          flipPage(pageNum);
+        }
+      }
+    });
+    return () => cancelAnimationFrame(handle);
+  };
+
+  const setRefs = (node) => {
+    animationPageRef.current = node;
+    animationRefCallback();
+  };
+
+  useGSAP(() => {
+    if (animationPageRef.current == null) return;
+    const tl = gsap.timeline({ paused: true, onComplete: () => setAnimationPlaying(false) });
+    // console.log(currentPage, bottomPage, topPage)
+    if (currentPage == bottomPage) {
+      // console.log("forward")
+      tl.set(animationPageRef.current, { pointerEvents: "none" });
+      tl.set(".animation-page-inner", {
+        rotateY: 0,
+        opacity: 1,
+        zIndex: 2,
+      });
+      tl.to(
+        ".animation-page-inner",
+        {
+          rotateY: -180,
+          duration: 1,
+          ease: "power1.in",
+        },
+        "<",
+      );
+      if (topPage == 0) {
+        // console.log("also flip the front cover forward")
+        tl.to(
+          ".front-cover",
+          {
+            rotateY: -180,
             duration: 1,
+            ease: "power1.in",
+            zIndex: 1,
+          },
+          "<",
+        );
+      }
+      if (bottomPage == 34) {
+        tl.set(
+          ".content-page",
+          {
+            zIndex: 3,
+          },
+          "<",
+        );
+        tl.set(
+          ".content-page .front",
+          {
+            opacity: 0,
+          },
+          "<",
+        );
+        tl.to(
+          ".content-page",
+          {
+            rotateY: -180,
+            duration: 1,
+            ease: "power1.in",
+          },
+          "<",
+        );
+        tl.to(
+          ".notebook-pages",
+          {
+            xPercent: 100,
+            duration: 1.5,
+          },
+          "<",
+        );
+      }
+    } else {
+      // console.log("reverse")
+      tl.set(".animation-page-inner", {
+        rotateY: -180,
+        opacity: 1,
+        zIndex: 2,
+      });
+      tl.set(animationPageRef.current, { pointerEvents: "all" });
+      tl.to(".animation-page-inner", {
+        rotateY: 0,
+        duration: 1,
+        ease: "power1.out",
+      });
+      if (currentPage == 0) {
+        // console.log("also flip the front cover back")
+        tl.to(
+          ".front-cover",
+          {
+            rotateY: 0,
+            duration: 1,
+            ease: "power1.out",
+            zIndex: 3,
+          },
+          "<",
+        );
+      }
+      if (bottomPage == 34) {
+        tl.to(
+          ".content-page",
+          {
+            rotateY: 0,
+            duration: 1,
+            ease: "power1.out",
+          },
+          "<",
+        );
+        tl.to(
+          ".notebook-pages",
+          {
+            xPercent: 0,
+            duration: 1,
+          },
+          "<",
+        );
+        tl.set(
+          ".content-page .front",
+          {
+            opacity: 1,
+          },
+          ">",
+        );
+        tl.set(
+          ".content-page",
+          {
+            zIndex: 1,
+          },
+          ">",
+        );
+      }
+    }
+    tl.restart();
+  }, [currentPage]);
+
+  const { contextSafe } = useGSAP(() => {
+    if (selectedWork !== null) {
+      const tl = gsap.timeline();
+      tl.set(".sticky-note", {
+        yPercent: 50,
+        xPercent: 50,
+      })
+        .to(".sticky-note-popup", {
+          opacity: 1,
+          duration: 0.5,
+          pointerEvents: "all",
         })
-    },[copyStatus])
+        .to(
+          ".sticky-note",
+          {
+            motionPath: {
+              path: [
+                { xPercent: 50, yPercent: 50 },
+                { xPercent: 0, yPercent: 30 },
+                { xPercent: -30, yPercent: 10 },
+                { xPercent: -50, yPercent: -50 },
+              ],
+              curviness: 1.5, // controls how smooth/bendy the curve is
+              type: "cubic", // Bezier cubic interpolation
+            },
+            duration: 0.5,
+          },
+          "<",
+        );
+    }
+  }, [selectedWork]);
 
-    return(
-        // <div className={`notebook-pages ${className}`} ref={ref}>
-        //     <div className='notebook-page-inner'>
-        //         <div className='front'>
+  useGSAP(() => {
+    if (showNavigation) {
+      gsap.to(".navigation-popup-container", {
+        opacity: 1,
+        duration: 0.35,
+        pointerEvents: "all",
+      });
+      gsap.to(".navigation-popup", {
+        duration: 0.35,
+        scale: 1,
+      });
+    } else {
+      gsap.to(".navigation-popup-container", {
+        opacity: 0,
+        duration: 0.35,
+        pointerEvents: "none",
+      });
+      gsap.to(".navigation-popup", {
+        duration: 0.35,
+        scale: 0.1,
+      });
+    }
+  }, [showNavigation]);
 
-        <div className={`notebook-page ${className}`}>
-                <div className='notebook-header'>
-                    <h3>{title}</h3>
-                    {title&&<p>{title != "目录" && title !="后记" && "Day" + (pageNum-2)}</p>}
-                    {title == "目录" && <p>页</p>}
+  const unselectWork = contextSafe(() => {
+    const tl = gsap.timeline({
+      onComplete: () => {
+        setSelectedWork(null);
+      },
+    });
+    tl.to(".sticky-note", {
+      motionPath: {
+        path: [
+          { xPercent: -50, yPercent: -50 },
+          { xPercent: -30, yPercent: -90 },
+          { xPercent: -0, yPercent: -110 },
+          { xPercent: 50, yPercent: -150 },
+        ],
+        curviness: 1.5, // controls how smooth/bendy the curve is
+        type: "cubic", // Bezier cubic interpolation
+      },
+      duration: 0.5,
+    }).to(
+      ".sticky-note-popup",
+      {
+        opacity: 0,
+        duration: 0.35,
+        pointerEvents: "none",
+      },
+      "<0.15",
+    );
+  });
+
+  function matchLofterSlug(url) {
+    const regex = /^(https:\/\/[a-zA-Z0-9_-]+\.lofter\.com\/?)/;
+    const match = url.match(regex);
+    return match ? match[1] : null; // returns slug or null
+  }
+
+  const authorUrl = works[selectedWork]?.lofter
+    ? matchLofterSlug(works[selectedWork].lofter) //use lofter if exist. If not, use author link. if both null, return empty
+    : works[selectedWork]?.author_link
+      ? works[selectedWork].author_link
+      : null;
+
+  function isLegalPageNum(pageNumber) {
+    return pageNumber >= 0 && pageNumber <= 34;
+  }
+
+  const navigateToPage = (pageNumber) => {
+    if (!isLegalPageNum(pageNumber) || animationPlaying || pageNumber == currentPage) return;
+    navigateTo(`/challenge/${pageNumber}`);
+  };
+
+  const flipPage = (pageNumber) => {
+    if (!isLegalPageNum(pageNumber) || animationPlaying || pageNumber == currentPage) return;
+    setShowNavigation(false);
+    const current = currentPage;
+    // console.log(pageNumber, current)
+    // if (pageNumber >= 0 && pageNumber <= 30){
+    if (pageNumber > current) {
+      // console.log("foward")
+      setBottomPage(pageNumber);
+      setTopPage(current);
+    } else {
+      // console.log("reverse")
+      setBottomPage(current);
+      setTopPage(pageNumber);
+    }
+    // }
+    setAnimationPlaying(true);
+    setCurrentPage(pageNumber);
+  };
+
+  function pageInputOnBlur(num) {
+    const intValue = parseInt(num);
+    if (!Number.isNaN(intValue)) {
+      setPageInput(intValue);
+    } else setPageInput(1);
+  }
+
+  function getPageDisplayText(pageNumber) {
+    switch (pageNumber) {
+      case 0:
+        return "封面";
+      case 34:
+        return "封底";
+      case 1:
+      case 2:
+        return "目录";
+      case 33:
+        return "后记";
+      default:
+        return pageNumber - 2;
+    }
+  }
+
+  const isChristmasTime = isChristmas();
+
+  useGSAP(() => {
+    if (isChristmasTime) {
+      gsap.to(".spinning-snow-flake", {
+        yoyo: true,
+        fill: "#ecfffd",
+        duration: 20,
+        opacity: 0.5,
+        repeat: -1,
+        stagger: 5,
+      });
+      function rotateAnimation(target, direction) {
+        gsap.to(target, {
+          rotate: 360 * direction,
+          duration: 30,
+          repeat: -1,
+          ease: "none",
+        });
+      }
+      rotateAnimation("#flake-1", -1);
+      rotateAnimation("#flake-2", gsap.utils.random([-1, 1]));
+      rotateAnimation("#flake-3", 1);
+    }
+  }, []);
+
+  return (
+    <div className="challenge-page">
+      {isChristmasTime && (
+        <>
+          <svg
+            className="spinning-snow-flake"
+            id="flake-1"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 512 512"
+            fill="#000000"
+          >
+            <path d="M296.067,251.121l-15.807-9.076v-18.197c0-1.977-1.038-3.81-2.734-4.826 c-1.697-1.018-3.802-1.068-5.546-0.135l-15.982,8.545l-15.981-8.545c-1.744-0.93-3.848-0.881-5.546,0.135 c-1.697,1.016-2.734,2.849-2.734,4.826v18.197l-15.807,9.076l0.006,0.023c-0.836,0.48-1.57,1.159-2.085,2.055 c-1.545,2.696-0.615,6.134,2.079,7.682l15.807,9.071v18.198c0,1.977,1.038,3.81,2.734,4.826c0.889,0.533,1.89,0.8,2.892,0.8 c0.911,0,1.823-0.221,2.653-0.664l15.981-8.544l15.983,8.544c0.83,0.444,1.743,0.664,2.653,0.664c1.003,0,2.003-0.268,2.892-0.8 c1.695-1.016,2.734-2.849,2.734-4.826v-18.199l15.782-9.057l0.003-0.001l0.023-0.013l-0.001-0.001 c0.838-0.48,1.564-1.18,2.079-2.078C299.692,256.106,298.762,252.668,296.067,251.121z M271.833,261.813 c-1.747,1.004-2.826,2.864-2.826,4.88v12.067l-10.356-5.538c-1.722-0.919-3.705-0.853-5.305,0.003l-0.001-0.003l-10.355,5.538 v-12.067c0-2.015-1.078-3.877-2.826-4.88l-10.132-5.814l10.132-5.816c1.747-1.003,2.826-2.864,2.826-4.879v-12.065l10.355,5.538 l0.001-0.003c1.6,0.853,3.583,0.918,5.305,0.003l10.356-5.538v12.065c0,2.014,1.078,3.877,2.826,4.879l10.132,5.816 L271.833,261.813z"></path>{" "}
+            <path d="M476.543,374.705l-29.224-16.58l22.655-13.669c2.661-1.604,3.516-5.064,1.909-7.724 c-1.604-2.659-5.062-3.515-7.724-1.909l-28.065,16.934l-30.77-17.457l58.185-35.418c2.654-1.615,3.496-5.077,1.88-7.732 c-1.615-2.656-5.079-3.495-7.732-1.88l-63.535,38.675l-30.897-17.529l22.569-13.738c2.654-1.615,3.496-5.077,1.88-7.732 c-1.615-2.656-5.077-3.496-7.732-1.88l-27.918,16.996l-37.097-21.046l38.573-22.136c2.694-1.547,3.625-4.985,2.079-7.682 c-0.514-0.896-1.249-1.577-2.085-2.057l0.006-0.023l-38.475-22.084l37.202-21.106l27.92,16.999 c0.913,0.556,1.923,0.821,2.921,0.821c1.898,0,3.751-0.963,4.811-2.702c1.615-2.653,0.774-6.115-1.88-7.732l-22.57-13.741 l30.893-17.528l63.54,38.674c0.915,0.556,1.923,0.821,2.921,0.821c1.899,0,3.752-0.963,4.811-2.702 c1.615-2.654,0.774-6.116-1.88-7.732l-58.19-35.417l30.897-17.529l27.925,16.996c0.914,0.556,1.923,0.821,2.921,0.821 c1.899,0,3.752-0.963,4.811-2.702c1.615-2.654,0.774-6.116-1.88-7.732l-22.574-13.739l28.921-16.408 c2.702-1.534,3.651-4.967,2.117-7.671c-1.534-2.702-4.969-3.648-7.671-2.117l-28.843,16.364v-26.33 c0-3.107-2.519-5.626-5.626-5.626s-5.626,2.519-5.626,5.626v32.718l-30.845,17.499V99.837c0-3.107-2.519-5.626-5.626-5.626 s-5.626,2.519-5.626,5.626v74.41l-30.846,17.5v-26.334c0-3.107-2.519-5.626-5.626-5.626s-5.626,2.519-5.626,5.626v32.718 l-37.721,21.399v-45.224c0-1.977-1.038-3.81-2.734-4.826c-1.697-1.016-3.802-1.068-5.546-0.135l-39.073,20.89v-41.442l28.562-15.9 c2.716-1.512,3.691-4.937,2.179-7.652c-1.513-2.716-4.94-3.693-7.652-2.179l-23.089,12.852v-35.526l64.993-36.176 c2.716-1.51,3.691-4.936,2.179-7.652c-1.51-2.716-4.939-3.692-7.652-2.179l-59.519,33.13V51.987l28.562-15.899 c2.716-1.512,3.691-4.937,2.179-7.652c-1.513-2.716-4.94-3.693-7.652-2.179L261.625,39.11V5.626c0-3.107-2.519-5.626-5.626-5.626 s-5.626,2.519-5.626,5.626v33.483l-23.088-12.852c-2.711-1.51-6.139-0.536-7.652,2.179c-1.512,2.714-0.536,6.14,2.179,7.652 l28.56,15.899v35.523l-59.519-33.13c-2.716-1.51-6.141-0.536-7.652,2.179c-1.512,2.714-0.536,6.141,2.179,7.652l64.99,36.176 v35.523l-23.088-12.852c-2.711-1.51-6.139-0.536-7.652,2.179c-1.512,2.714-0.536,6.14,2.179,7.652l28.56,15.899v41.443 l-39.072-20.89c-1.744-0.93-3.85-0.881-5.546,0.135c-1.695,1.018-2.733,2.849-2.733,4.826v45.224l-37.721-21.4v-32.716 c0-3.107-2.519-5.626-5.626-5.626s-5.626,2.519-5.626,5.626v26.332l-30.847-17.499V99.837c0-3.107-2.519-5.626-5.626-5.626 s-5.626,2.519-5.626,5.626v68.023L81.1,150.36v-32.715c0-3.107-2.519-5.626-5.626-5.626s-5.626,2.519-5.626,5.626v26.331 l-28.839-16.361c-2.699-1.532-6.136-0.585-7.671,2.117c-1.534,2.703-0.585,6.136,2.117,7.671l28.919,16.406l-22.573,13.741 c-2.654,1.615-3.496,5.077-1.88,7.732c1.06,1.742,2.912,2.702,4.811,2.702c0.998,0,2.008-0.265,2.921-0.821l27.923-16.998 l30.9,17.529l-58.19,35.418c-2.654,1.615-3.496,5.077-1.88,7.732c1.059,1.74,2.912,2.702,4.811,2.702 c0.998,0,2.005-0.265,2.921-0.821l63.54-38.675l30.895,17.528l-22.572,13.742c-2.654,1.617-3.496,5.079-1.88,7.732 c1.06,1.742,2.912,2.702,4.811,2.702c0.998,0,2.007-0.265,2.921-0.821l27.922-17l37.202,21.106l-38.478,22.084l0.013,0.021 c-0.839,0.479-1.575,1.16-2.092,2.058c-1.545,2.696-0.615,6.134,2.079,7.682l38.577,22.138l-37.099,21.047l-27.924-16.999 c-2.651-1.615-6.115-0.774-7.732,1.88c-1.615,2.654-0.774,6.116,1.88,7.732l22.573,13.741l-30.896,17.527L54.339,289.27 c-2.651-1.614-6.115-0.773-7.732,1.88c-1.615,2.654-0.774,6.116,1.88,7.732l58.187,35.42l-30.898,17.529l-27.922-16.996 c-2.651-1.615-6.115-0.774-7.732,1.88c-1.615,2.654-0.774,6.116,1.88,7.732l22.572,13.739l-29.121,16.52 c-2.702,1.534-3.651,4.967-2.117,7.671c1.036,1.825,2.939,2.851,4.899,2.851c0.941,0,1.895-0.236,2.772-0.734l29.044-16.478v26.336 c0,3.107,2.519,5.626,5.626,5.626s5.626-2.519,5.626-5.626v-32.72l30.845-17.499v68.026c0,3.107,2.519,5.626,5.626,5.626 s5.626-2.519,5.626-5.626v-74.41l30.843-17.498v26.334c0,3.107,2.519,5.626,5.626,5.626c3.107,0,5.626-2.519,5.626-5.626v-32.718 l37.523-21.286v45.111c0,1.977,1.038,3.81,2.733,4.825c0.889,0.534,1.89,0.801,2.893,0.801c0.911,0,1.823-0.221,2.652-0.664 l39.073-20.887v41.676l-28.56,15.896c-2.716,1.512-3.691,4.937-2.179,7.652c1.029,1.849,2.944,2.891,4.921,2.891 c0.925,0,1.865-0.23,2.732-0.711l23.088-12.852v35.523l-64.99,36.181c-2.716,1.512-3.691,4.937-2.179,7.652 c1.029,1.849,2.944,2.891,4.921,2.891c0.926,0,1.865-0.23,2.732-0.711l59.519-33.134v35.523l-28.56,15.899 c-2.716,1.512-3.691,4.937-2.179,7.652c1.029,1.849,2.944,2.891,4.921,2.891c0.926,0,1.865-0.23,2.732-0.711l23.088-12.852v33.253 c0,3.107,2.519,5.626,5.626,5.626c3.107,0,5.626-2.519,5.626-5.626v-33.253l23.089,12.852c0.865,0.483,1.804,0.711,2.732,0.711 c1.975,0,3.891-1.043,4.921-2.891c1.512-2.714,0.536-6.14-2.179-7.652l-28.562-15.9v-35.522l59.519,33.134 c0.865,0.483,1.804,0.711,2.732,0.711c1.975,0,3.891-1.043,4.921-2.891c1.512-2.714,0.536-6.14-2.179-7.652l-64.993-36.181v-35.523 l23.089,12.852c0.866,0.483,1.804,0.711,2.732,0.711c1.975,0,3.892-1.043,4.921-2.891c1.512-2.716,0.536-6.141-2.179-7.652 l-28.562-15.897v-41.676l39.074,20.887c0.829,0.443,1.742,0.664,2.652,0.664c1.003,0,2.003-0.268,2.892-0.801 c1.695-1.015,2.734-2.848,2.734-4.825v-45.113l37.519,21.285v32.721c0,3.107,2.519,5.626,5.626,5.626s5.626-2.519,5.626-5.626 v-26.336l30.846,17.499v74.412c0,3.107,2.519,5.626,5.626,5.626s5.626-2.519,5.626-5.626v-68.028l30.708,17.423v32.799 c0,3.107,2.519,5.626,5.626,5.626s5.626-2.519,5.626-5.626v-26.416l29.183,16.556c0.876,0.498,1.83,0.734,2.772,0.734 c1.958,0,3.863-1.025,4.899-2.851C480.193,379.673,479.245,376.239,476.543,374.705z M300.549,278.294 c-1.747,1.004-2.826,2.864-2.826,4.88v45.131l-39.074-20.887c-1.718-0.919-3.701-0.853-5.302,0.003l-0.001-0.003l-39.073,20.887 v-45.131c0-2.015-1.078-3.877-2.826-4.88L172.6,256l38.847-22.296c1.747-1.004,2.826-2.866,2.826-4.88v-45.131l39.072,20.89 l0.001-0.004c1.6,0.854,3.583,0.92,5.305,0.004l39.073-20.89v45.131c0,2.014,1.078,3.877,2.826,4.879l38.847,22.296 L300.549,278.294z"></path>
+          </svg>
+          <svg
+            className="spinning-snow-flake"
+            id="flake-2"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 512 512"
+            fill="#000000"
+          >
+            <path d="M296.067,251.121l-15.807-9.076v-18.197c0-1.977-1.038-3.81-2.734-4.826 c-1.697-1.018-3.802-1.068-5.546-0.135l-15.982,8.545l-15.981-8.545c-1.744-0.93-3.848-0.881-5.546,0.135 c-1.697,1.016-2.734,2.849-2.734,4.826v18.197l-15.807,9.076l0.006,0.023c-0.836,0.48-1.57,1.159-2.085,2.055 c-1.545,2.696-0.615,6.134,2.079,7.682l15.807,9.071v18.198c0,1.977,1.038,3.81,2.734,4.826c0.889,0.533,1.89,0.8,2.892,0.8 c0.911,0,1.823-0.221,2.653-0.664l15.981-8.544l15.983,8.544c0.83,0.444,1.743,0.664,2.653,0.664c1.003,0,2.003-0.268,2.892-0.8 c1.695-1.016,2.734-2.849,2.734-4.826v-18.199l15.782-9.057l0.003-0.001l0.023-0.013l-0.001-0.001 c0.838-0.48,1.564-1.18,2.079-2.078C299.692,256.106,298.762,252.668,296.067,251.121z M271.833,261.813 c-1.747,1.004-2.826,2.864-2.826,4.88v12.067l-10.356-5.538c-1.722-0.919-3.705-0.853-5.305,0.003l-0.001-0.003l-10.355,5.538 v-12.067c0-2.015-1.078-3.877-2.826-4.88l-10.132-5.814l10.132-5.816c1.747-1.003,2.826-2.864,2.826-4.879v-12.065l10.355,5.538 l0.001-0.003c1.6,0.853,3.583,0.918,5.305,0.003l10.356-5.538v12.065c0,2.014,1.078,3.877,2.826,4.879l10.132,5.816 L271.833,261.813z"></path>{" "}
+            <path d="M476.543,374.705l-29.224-16.58l22.655-13.669c2.661-1.604,3.516-5.064,1.909-7.724 c-1.604-2.659-5.062-3.515-7.724-1.909l-28.065,16.934l-30.77-17.457l58.185-35.418c2.654-1.615,3.496-5.077,1.88-7.732 c-1.615-2.656-5.079-3.495-7.732-1.88l-63.535,38.675l-30.897-17.529l22.569-13.738c2.654-1.615,3.496-5.077,1.88-7.732 c-1.615-2.656-5.077-3.496-7.732-1.88l-27.918,16.996l-37.097-21.046l38.573-22.136c2.694-1.547,3.625-4.985,2.079-7.682 c-0.514-0.896-1.249-1.577-2.085-2.057l0.006-0.023l-38.475-22.084l37.202-21.106l27.92,16.999 c0.913,0.556,1.923,0.821,2.921,0.821c1.898,0,3.751-0.963,4.811-2.702c1.615-2.653,0.774-6.115-1.88-7.732l-22.57-13.741 l30.893-17.528l63.54,38.674c0.915,0.556,1.923,0.821,2.921,0.821c1.899,0,3.752-0.963,4.811-2.702 c1.615-2.654,0.774-6.116-1.88-7.732l-58.19-35.417l30.897-17.529l27.925,16.996c0.914,0.556,1.923,0.821,2.921,0.821 c1.899,0,3.752-0.963,4.811-2.702c1.615-2.654,0.774-6.116-1.88-7.732l-22.574-13.739l28.921-16.408 c2.702-1.534,3.651-4.967,2.117-7.671c-1.534-2.702-4.969-3.648-7.671-2.117l-28.843,16.364v-26.33 c0-3.107-2.519-5.626-5.626-5.626s-5.626,2.519-5.626,5.626v32.718l-30.845,17.499V99.837c0-3.107-2.519-5.626-5.626-5.626 s-5.626,2.519-5.626,5.626v74.41l-30.846,17.5v-26.334c0-3.107-2.519-5.626-5.626-5.626s-5.626,2.519-5.626,5.626v32.718 l-37.721,21.399v-45.224c0-1.977-1.038-3.81-2.734-4.826c-1.697-1.016-3.802-1.068-5.546-0.135l-39.073,20.89v-41.442l28.562-15.9 c2.716-1.512,3.691-4.937,2.179-7.652c-1.513-2.716-4.94-3.693-7.652-2.179l-23.089,12.852v-35.526l64.993-36.176 c2.716-1.51,3.691-4.936,2.179-7.652c-1.51-2.716-4.939-3.692-7.652-2.179l-59.519,33.13V51.987l28.562-15.899 c2.716-1.512,3.691-4.937,2.179-7.652c-1.513-2.716-4.94-3.693-7.652-2.179L261.625,39.11V5.626c0-3.107-2.519-5.626-5.626-5.626 s-5.626,2.519-5.626,5.626v33.483l-23.088-12.852c-2.711-1.51-6.139-0.536-7.652,2.179c-1.512,2.714-0.536,6.14,2.179,7.652 l28.56,15.899v35.523l-59.519-33.13c-2.716-1.51-6.141-0.536-7.652,2.179c-1.512,2.714-0.536,6.141,2.179,7.652l64.99,36.176 v35.523l-23.088-12.852c-2.711-1.51-6.139-0.536-7.652,2.179c-1.512,2.714-0.536,6.14,2.179,7.652l28.56,15.899v41.443 l-39.072-20.89c-1.744-0.93-3.85-0.881-5.546,0.135c-1.695,1.018-2.733,2.849-2.733,4.826v45.224l-37.721-21.4v-32.716 c0-3.107-2.519-5.626-5.626-5.626s-5.626,2.519-5.626,5.626v26.332l-30.847-17.499V99.837c0-3.107-2.519-5.626-5.626-5.626 s-5.626,2.519-5.626,5.626v68.023L81.1,150.36v-32.715c0-3.107-2.519-5.626-5.626-5.626s-5.626,2.519-5.626,5.626v26.331 l-28.839-16.361c-2.699-1.532-6.136-0.585-7.671,2.117c-1.534,2.703-0.585,6.136,2.117,7.671l28.919,16.406l-22.573,13.741 c-2.654,1.615-3.496,5.077-1.88,7.732c1.06,1.742,2.912,2.702,4.811,2.702c0.998,0,2.008-0.265,2.921-0.821l27.923-16.998 l30.9,17.529l-58.19,35.418c-2.654,1.615-3.496,5.077-1.88,7.732c1.059,1.74,2.912,2.702,4.811,2.702 c0.998,0,2.005-0.265,2.921-0.821l63.54-38.675l30.895,17.528l-22.572,13.742c-2.654,1.617-3.496,5.079-1.88,7.732 c1.06,1.742,2.912,2.702,4.811,2.702c0.998,0,2.007-0.265,2.921-0.821l27.922-17l37.202,21.106l-38.478,22.084l0.013,0.021 c-0.839,0.479-1.575,1.16-2.092,2.058c-1.545,2.696-0.615,6.134,2.079,7.682l38.577,22.138l-37.099,21.047l-27.924-16.999 c-2.651-1.615-6.115-0.774-7.732,1.88c-1.615,2.654-0.774,6.116,1.88,7.732l22.573,13.741l-30.896,17.527L54.339,289.27 c-2.651-1.614-6.115-0.773-7.732,1.88c-1.615,2.654-0.774,6.116,1.88,7.732l58.187,35.42l-30.898,17.529l-27.922-16.996 c-2.651-1.615-6.115-0.774-7.732,1.88c-1.615,2.654-0.774,6.116,1.88,7.732l22.572,13.739l-29.121,16.52 c-2.702,1.534-3.651,4.967-2.117,7.671c1.036,1.825,2.939,2.851,4.899,2.851c0.941,0,1.895-0.236,2.772-0.734l29.044-16.478v26.336 c0,3.107,2.519,5.626,5.626,5.626s5.626-2.519,5.626-5.626v-32.72l30.845-17.499v68.026c0,3.107,2.519,5.626,5.626,5.626 s5.626-2.519,5.626-5.626v-74.41l30.843-17.498v26.334c0,3.107,2.519,5.626,5.626,5.626c3.107,0,5.626-2.519,5.626-5.626v-32.718 l37.523-21.286v45.111c0,1.977,1.038,3.81,2.733,4.825c0.889,0.534,1.89,0.801,2.893,0.801c0.911,0,1.823-0.221,2.652-0.664 l39.073-20.887v41.676l-28.56,15.896c-2.716,1.512-3.691,4.937-2.179,7.652c1.029,1.849,2.944,2.891,4.921,2.891 c0.925,0,1.865-0.23,2.732-0.711l23.088-12.852v35.523l-64.99,36.181c-2.716,1.512-3.691,4.937-2.179,7.652 c1.029,1.849,2.944,2.891,4.921,2.891c0.926,0,1.865-0.23,2.732-0.711l59.519-33.134v35.523l-28.56,15.899 c-2.716,1.512-3.691,4.937-2.179,7.652c1.029,1.849,2.944,2.891,4.921,2.891c0.926,0,1.865-0.23,2.732-0.711l23.088-12.852v33.253 c0,3.107,2.519,5.626,5.626,5.626c3.107,0,5.626-2.519,5.626-5.626v-33.253l23.089,12.852c0.865,0.483,1.804,0.711,2.732,0.711 c1.975,0,3.891-1.043,4.921-2.891c1.512-2.714,0.536-6.14-2.179-7.652l-28.562-15.9v-35.522l59.519,33.134 c0.865,0.483,1.804,0.711,2.732,0.711c1.975,0,3.891-1.043,4.921-2.891c1.512-2.714,0.536-6.14-2.179-7.652l-64.993-36.181v-35.523 l23.089,12.852c0.866,0.483,1.804,0.711,2.732,0.711c1.975,0,3.892-1.043,4.921-2.891c1.512-2.716,0.536-6.141-2.179-7.652 l-28.562-15.897v-41.676l39.074,20.887c0.829,0.443,1.742,0.664,2.652,0.664c1.003,0,2.003-0.268,2.892-0.801 c1.695-1.015,2.734-2.848,2.734-4.825v-45.113l37.519,21.285v32.721c0,3.107,2.519,5.626,5.626,5.626s5.626-2.519,5.626-5.626 v-26.336l30.846,17.499v74.412c0,3.107,2.519,5.626,5.626,5.626s5.626-2.519,5.626-5.626v-68.028l30.708,17.423v32.799 c0,3.107,2.519,5.626,5.626,5.626s5.626-2.519,5.626-5.626v-26.416l29.183,16.556c0.876,0.498,1.83,0.734,2.772,0.734 c1.958,0,3.863-1.025,4.899-2.851C480.193,379.673,479.245,376.239,476.543,374.705z M300.549,278.294 c-1.747,1.004-2.826,2.864-2.826,4.88v45.131l-39.074-20.887c-1.718-0.919-3.701-0.853-5.302,0.003l-0.001-0.003l-39.073,20.887 v-45.131c0-2.015-1.078-3.877-2.826-4.88L172.6,256l38.847-22.296c1.747-1.004,2.826-2.866,2.826-4.88v-45.131l39.072,20.89 l0.001-0.004c1.6,0.854,3.583,0.92,5.305,0.004l39.073-20.89v45.131c0,2.014,1.078,3.877,2.826,4.879l38.847,22.296 L300.549,278.294z"></path>
+          </svg>
+          <svg
+            className="spinning-snow-flake"
+            id="flake-3"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 512 512"
+            fill="#000000"
+          >
+            <g>
+              <g>
+                <g>
+                  <path d="M256,219.429c-5.047,0-9.143-4.087-9.143-9.143V9.143C246.857,4.087,250.953,0,256,0 c5.047,0,9.143,4.087,9.143,9.143v201.143C265.143,215.342,261.047,219.429,256,219.429"></path>
+                  <path d="M256,54.857c-2.441,0-4.773-0.969-6.491-2.706l-18.286-18.432 c-3.557-3.575-3.529-9.371,0.046-12.928c3.593-3.538,9.371-3.538,12.937,0.055L256,32.731l11.794-11.886 c3.557-3.593,9.344-3.602,12.937-0.055c3.575,3.557,3.602,9.353,0.046,12.928l-18.286,18.432 C260.773,53.888,258.441,54.857,256,54.857"></path>
+                  <path d="M256,192c-2.441,0-4.773-0.969-6.491-2.706l-18.286-18.432c-3.557-3.575-3.529-9.371,0.046-12.928 c3.593-3.547,9.371-3.529,12.937,0.055L256,169.874l11.794-11.886c3.557-3.593,9.344-3.611,12.937-0.055 c3.575,3.557,3.602,9.353,0.046,12.928l-18.286,18.432C260.773,191.031,258.441,192,256,192"></path>
+                  <path d="M256,109.714c-2.331,0-4.672-0.896-6.455-2.67l-36.571-36.453 c-3.575-3.566-3.584-9.353-0.018-12.928c3.557-3.593,9.344-3.584,12.928-0.018L256,87.662l30.117-30.016 c3.584-3.566,9.362-3.566,12.928,0.018c3.566,3.575,3.557,9.362-0.018,12.928l-36.571,36.453 C260.672,108.818,258.331,109.714,256,109.714"></path>
+                  <path d="M274.286,137.143h-36.571c-5.047,0-9.143-4.087-9.143-9.143c0-5.056,4.096-9.143,9.143-9.143 h36.571c5.047,0,9.143,4.087,9.143,9.143C283.429,133.056,279.333,137.143,274.286,137.143"></path>
+                  <path d="M256,512c-5.047,0-9.143-4.087-9.143-9.143V301.714c0-5.056,4.096-9.143,9.143-9.143 c5.047,0,9.143,4.087,9.143,9.143v201.143C265.143,507.913,261.047,512,256,512"></path>
+                  <path d="M274.286,493.857c-2.35,0-4.699-0.905-6.491-2.706L256,479.265l-11.794,11.886 c-3.566,3.593-9.344,3.602-12.937,0.055c-3.575-3.557-3.602-9.344-0.046-12.928l18.286-18.432c3.438-3.465,9.545-3.465,12.983,0 l18.286,18.432c3.557,3.584,3.529,9.371-0.046,12.928C278.939,492.97,276.617,493.857,274.286,493.857"></path>
+                  <path d="M274.286,356.714c-2.35,0-4.699-0.905-6.491-2.706L256,342.122l-11.794,11.886 c-3.566,3.593-9.344,3.611-12.937,0.055c-3.575-3.557-3.602-9.344-0.046-12.928l18.286-18.432c3.438-3.465,9.545-3.465,12.983,0 l18.286,18.432c3.557,3.584,3.529,9.371-0.046,12.928C278.939,355.827,276.617,356.714,274.286,356.714"></path>
+                  <path d="M292.571,457.027c-2.331,0-4.672-0.896-6.455-2.67L256,424.341l-30.117,30.016 c-3.584,3.566-9.362,3.566-12.928-0.018c-3.566-3.584-3.557-9.362,0.018-12.928l36.571-36.453c3.575-3.557,9.335-3.557,12.91,0 l36.571,36.453c3.575,3.566,3.584,9.344,0.018,12.928C297.262,456.131,294.912,457.027,292.571,457.027"></path>
+                  <path d="M274.286,393.143h-36.571c-5.047,0-9.143-4.087-9.143-9.143c0-5.056,4.096-9.143,9.143-9.143 h36.571c5.047,0,9.143,4.087,9.143,9.143C283.429,389.056,279.333,393.143,274.286,393.143"></path>
+                  <path d="M502.857,265.143H301.714c-5.047,0-9.143-4.087-9.143-9.143c0-5.056,4.096-9.143,9.143-9.143 h201.143c5.047,0,9.143,4.087,9.143,9.143C512,261.056,507.904,265.143,502.857,265.143"></path>
+                  <path d="M484.714,283.429c-2.331,0-4.654-0.887-6.446-2.651l-18.423-18.286 c-1.728-1.719-2.706-4.05-2.706-6.491c0-2.441,0.978-4.773,2.706-6.491l18.423-18.286c3.593-3.557,9.381-3.529,12.937,0.055 c3.557,3.584,3.529,9.371-0.046,12.928L479.265,256l11.895,11.794c3.575,3.557,3.602,9.353,0.046,12.928 C489.413,282.523,487.064,283.429,484.714,283.429"></path>
+                  <path d="M347.571,283.429c-2.331,0-4.654-0.887-6.446-2.651l-18.423-18.286 c-1.728-1.719-2.706-4.05-2.706-6.491c0-2.441,0.978-4.773,2.706-6.491l18.423-18.286c3.593-3.557,9.381-3.529,12.937,0.055 s3.529,9.371-0.046,12.928L342.122,256l11.895,11.794c3.575,3.557,3.602,9.353,0.046,12.928 C352.271,282.523,349.921,283.429,347.571,283.429"></path>
+                  <path d="M447.888,301.714c-2.341,0-4.69-0.896-6.473-2.688l-36.462-36.571 c-3.557-3.575-3.557-9.335,0-12.91l36.462-36.571c3.566-3.584,9.344-3.584,12.928-0.018c3.575,3.566,3.584,9.344,0.018,12.928 L424.336,256l30.025,30.117c3.566,3.584,3.557,9.362-0.018,12.928C452.56,300.818,450.22,301.714,447.888,301.714"></path>
+                  <path d="M384,283.429c-5.047,0-9.143-4.087-9.143-9.143v-36.571c0-5.056,4.096-9.143,9.143-9.143 c5.047,0,9.143,4.087,9.143,9.143v36.571C393.143,279.342,389.047,283.429,384,283.429"></path>
+                  <path d="M210.286,265.143H9.143C4.096,265.143,0,261.056,0,256c0-5.056,4.096-9.143,9.143-9.143h201.143 c5.047,0,9.143,4.087,9.143,9.143C219.429,261.056,215.333,265.143,210.286,265.143"></path>
+                  <path d="M27.286,283.429c-2.35,0-4.699-0.905-6.491-2.706c-3.557-3.575-3.529-9.371,0.046-12.928 L32.735,256L20.84,244.206c-3.575-3.557-3.602-9.344-0.046-12.928c3.557-3.602,9.344-3.621,12.937-0.055l18.423,18.286 c1.728,1.719,2.706,4.05,2.706,6.491c0,2.441-0.978,4.773-2.706,6.491l-18.423,18.286 C31.94,282.542,29.608,283.429,27.286,283.429"></path>
+                  <path d="M164.429,283.429c-2.35,0-4.699-0.905-6.491-2.706c-3.557-3.575-3.529-9.371,0.046-12.928 L169.878,256l-11.895-11.794c-3.575-3.557-3.602-9.344-0.046-12.928c3.557-3.602,9.344-3.621,12.937-0.055l18.423,18.286 c1.728,1.719,2.706,4.05,2.706,6.491c0,2.441-0.978,4.773-2.706,6.491l-18.423,18.286 C169.083,282.542,166.751,283.429,164.429,283.429"></path>
+                  <path d="M64.112,301.714c-2.331,0-4.672-0.896-6.455-2.67c-3.575-3.566-3.584-9.344-0.018-12.928 L87.664,256l-30.025-30.117c-3.566-3.584-3.557-9.362,0.018-12.928c3.575-3.566,9.362-3.566,12.928,0.018l36.462,36.571 c3.557,3.575,3.557,9.335,0,12.91l-36.462,36.571C68.802,300.818,66.452,301.714,64.112,301.714"></path>
+                  <path d="M128,283.429c-5.047,0-9.143-4.087-9.143-9.143v-36.571c0-5.056,4.096-9.143,9.143-9.143 c5.047,0,9.143,4.087,9.143,9.143v36.571C137.143,279.342,133.047,283.429,128,283.429"></path>
+                  <path d="M288.326,232.821c-2.341,0-4.681-0.896-6.464-2.679c-3.575-3.575-3.575-9.353,0-12.928 L423.247,75.82c3.575-3.566,9.362-3.566,12.928,0c3.575,3.575,3.575,9.362,0,12.928L294.789,230.142 C293.007,231.925,290.666,232.821,288.326,232.821"></path>
+                  <path d="M429.714,118.857h-27.429c-5.047,0-9.143-4.087-9.143-9.143V82.286 c0-5.056,4.096-9.143,9.143-9.143s9.143,4.087,9.143,9.143v18.286h18.286c5.047,0,9.143,4.087,9.143,9.143 C438.857,114.77,434.761,118.857,429.714,118.857"></path>
+                  <path d="M338.286,210.286h-27.429c-5.047,0-9.143-4.087-9.143-9.143v-27.429 c0-5.056,4.096-9.143,9.143-9.143s9.143,4.087,9.143,9.143V192h18.286c5.047,0,9.143,4.087,9.143,9.143 S343.333,210.286,338.286,210.286"></path>
+                  <path d="M420.571,155.322h-0.009l-54.665-0.082c-5.047-0.009-9.125-4.087-9.134-9.125l-0.082-54.665 c-0.009-5.056,4.078-9.152,9.134-9.161h0.009c5.047,0,9.134,4.078,9.143,9.125l0.073,45.55l45.541,0.073 c5.056,0.009,9.143,4.105,9.134,9.161C429.705,151.244,425.618,155.322,420.571,155.322"></path>
+                  <path d="M356.571,182.857c-2.341,0-4.681-0.896-6.464-2.679l-18.286-18.286 c-3.575-3.575-3.575-9.353,0-12.928c3.575-3.575,9.353-3.575,12.928,0l18.286,18.286c3.575,3.575,3.575,9.353,0,12.928 C361.253,181.961,358.912,182.857,356.571,182.857"></path>
+                  <path d="M82.286,438.857c-2.341,0-4.681-0.896-6.464-2.679c-3.575-3.575-3.575-9.353,0-12.928 l141.385-141.394c3.575-3.566,9.362-3.566,12.928,0c3.575,3.575,3.575,9.362,0,12.928L88.75,436.178 C86.967,437.961,84.626,438.857,82.286,438.857"></path>
+                  <path d="M109.714,438.857c-5.047,0-9.143-4.087-9.143-9.143v-18.286H82.286 c-5.047,0-9.143-4.087-9.143-9.143c0-5.056,4.096-9.143,9.143-9.143h27.429c5.047,0,9.143,4.087,9.143,9.143v27.429 C118.857,434.77,114.761,438.857,109.714,438.857"></path>
+                  <path d="M201.143,347.429c-5.047,0-9.143-4.087-9.143-9.143V320h-18.286c-5.047,0-9.143-4.087-9.143-9.143 c0-5.056,4.096-9.143,9.143-9.143h27.429c5.047,0,9.143,4.087,9.143,9.143v27.429C210.286,343.342,206.19,347.429,201.143,347.429 "></path>
+                  <path d="M146.174,429.714c-5.047,0-9.134-4.078-9.143-9.125l-0.064-45.55l-45.55-0.073 c-5.056-0.009-9.143-4.105-9.134-9.161c0.009-5.047,4.096-9.125,9.143-9.125h0.018l54.665,0.082c5.038,0,9.115,4.087,9.125,9.125 l0.082,54.665c0.009,5.056-4.078,9.152-9.134,9.161H146.174z"></path>
+                  <path d="M173.714,365.714c-2.341,0-4.681-0.896-6.464-2.679l-18.286-18.286 c-3.575-3.575-3.575-9.353,0-12.928c3.575-3.575,9.353-3.575,12.928,0l18.286,18.286c3.575,3.575,3.575,9.353,0,12.928 C178.395,364.818,176.055,365.714,173.714,365.714"></path>
+                  <path d="M429.714,438.857c-2.341,0-4.681-0.896-6.464-2.679L281.865,294.784 c-3.575-3.566-3.575-9.353,0-12.928c3.566-3.566,9.353-3.566,12.928,0L436.178,423.25c3.575,3.575,3.575,9.353,0,12.928 C434.395,437.961,432.055,438.857,429.714,438.857"></path>
+                  <path d="M402.286,438.857c-5.047,0-9.143-4.087-9.143-9.143v-27.429c0-5.056,4.096-9.143,9.143-9.143 h27.429c5.047,0,9.143,4.087,9.143,9.143c0,5.056-4.096,9.143-9.143,9.143h-18.286v18.286 C411.429,434.77,407.333,438.857,402.286,438.857"></path>
+                  <path d="M310.857,347.429c-5.047,0-9.143-4.087-9.143-9.143v-27.429c0-5.056,4.096-9.143,9.143-9.143 h27.429c5.047,0,9.143,4.087,9.143,9.143c0,5.056-4.096,9.143-9.143,9.143H320v18.286 C320,343.342,315.904,347.429,310.857,347.429"></path>
+                  <path d="M365.826,429.714h-0.009c-5.056-0.009-9.143-4.105-9.134-9.161l0.082-54.665 c0.009-5.038,4.087-9.125,9.125-9.125l54.665-0.082h0.018c5.047,0,9.134,4.078,9.143,9.125c0.009,5.056-4.078,9.152-9.134,9.161 l-45.55,0.073l-0.064,45.55C374.96,425.637,370.873,429.714,365.826,429.714"></path>
+                  <path d="M338.286,365.714c-2.341,0-4.681-0.896-6.464-2.679c-3.575-3.575-3.575-9.353,0-12.928 l18.286-18.286c3.575-3.575,9.353-3.575,12.928,0c3.575,3.575,3.575,9.353,0,12.928l-18.286,18.286 C342.967,364.818,340.626,365.714,338.286,365.714"></path>
+                  <path d="M223.675,232.821c-2.341,0-4.681-0.896-6.464-2.679L75.825,88.748 c-3.575-3.566-3.575-9.353,0-12.928c3.566-3.566,9.353-3.566,12.928,0l141.385,141.394c3.575,3.575,3.575,9.353,0,12.928 C228.356,231.925,226.015,232.821,223.675,232.821"></path>
+                  <path d="M109.714,118.857H82.286c-5.047,0-9.143-4.087-9.143-9.143c0-5.056,4.096-9.143,9.143-9.143h18.286 V82.286c0-5.056,4.096-9.143,9.143-9.143c5.047,0,9.143,4.087,9.143,9.143v27.429C118.857,114.77,114.761,118.857,109.714,118.857 "></path>
+                  <path d="M201.143,210.286h-27.429c-5.047,0-9.143-4.087-9.143-9.143s4.096-9.143,9.143-9.143H192v-18.286 c0-5.056,4.096-9.143,9.143-9.143s9.143,4.087,9.143,9.143v27.429C210.286,206.199,206.19,210.286,201.143,210.286"></path>
+                  <path d="M91.429,155.322c-5.047,0-9.134-4.078-9.143-9.125c-0.009-5.056,4.078-9.152,9.134-9.161 l45.541-0.073l0.073-45.55c0.009-5.047,4.096-9.125,9.143-9.125h0.009c5.056,0.009,9.143,4.105,9.134,9.161l-0.082,54.665 c-0.009,5.038-4.087,9.115-9.134,9.125l-54.665,0.082H91.429z"></path>
+                  <path d="M155.429,182.857c-2.341,0-4.681-0.896-6.464-2.679c-3.575-3.575-3.575-9.353,0-12.928 l18.286-18.286c3.575-3.575,9.353-3.575,12.928,0c3.575,3.575,3.575,9.353,0,12.928l-18.286,18.286 C160.11,181.961,157.769,182.857,155.429,182.857"></path>
+                </g>
+                <path d="M301.714,256c0,25.243-20.471,45.714-45.714,45.714c-25.243,0-45.714-20.471-45.714-45.714 c0-25.243,20.471-45.714,45.714-45.714C281.243,210.286,301.714,230.757,301.714,256"></path>
+              </g>
+            </g>
+          </svg>
+        </>
+      )}
+      {loading ? (
+        <>
+          <Spinner />
+        </>
+      ) : (
+        <div className="notebook-pages">
+          <div className="animation-page" ref={setRefs}>
+            <div className="animation-page-inner">
+              <div className="front">
+                <NotebookPages
+                  title={recommendations[topPage].category}
+                  list={recommendations[topPage].items}
+                  setSelectedWork={selectWork}
+                  pageNum={topPage}
+                  works={works}
+                  navigateToPage={navigateToPage}
+                  completedWork={completedWork}
+                  setCompletedWork={setCompletedWork}
+                />
+              </div>
+              <div className="back">
+                <NotebookPages title={""} list={[]} />
+              </div>
+            </div>
+          </div>
+          <div className="content-page">
+            <NotebookPages
+              ref={contentPageRef}
+              title={recommendations[bottomPage].category}
+              list={recommendations[bottomPage].items}
+              setSelectedWork={selectWork}
+              className="front"
+              pageNum={bottomPage}
+              works={works}
+              navigateToPage={navigateToPage}
+              completedWork={completedWork}
+              setCompletedWork={setCompletedWork}
+            />
+            <div className="back back-cover">
+              <div className="circle-clip">
+                <img
+                  className="notebook-cover-image back-image"
+                  src="assets/nemophila-insignis-baby-blue-eyes_01.webp"
+                ></img>
+              </div>
+              <div className="back-cover-text">
+                <p>
+                  <span>粉蝶花冷知识</span>
+                  <br />
+                  <br />
+                  <span>
+                    粉蝶花之所以得名，是因为其蓝色花瓣与粉蝶相似，且学名源自希腊语，意为「热爱小森林」。
+                  </span>
+                </p>
+              </div>
+
+              <div className="nameplate-container">
+                <div className="nameplate-top flex">
+                  <span>AP-98</span>
+                  <span>がくしゅうノート</span>
                 </div>
-                <div className='notebook-content'>
-                    {title == "后记"?
-                    <div>
-                        本推荐集收录于爱祥吧吧群的群友，欢迎来玩！<br/>
-                        <span className='flex'>
-                            群号🐧 462035074
-                            <svg 
-                                id='copy-icon' 
-                                xmlns="http://www.w3.org/2000/svg" 
-                                viewBox="0 0 448 512"
-                                onClick={copy}
-                                >
-                                    <defs>
-                                        <path id='check' d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"/>
-                                        <path id='cross' d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/>
-                                    </defs>
-                                    <path id='copy' d="M192 0c-35.3 0-64 28.7-64 64l0 256c0 35.3 28.7 64 64 64l192 0c35.3 0 64-28.7 64-64l0-200.6c0-17.4-7.1-34.1-19.7-46.2L370.6 17.8C358.7 6.4 342.8 0 326.3 0L192 0zM64 128c-35.3 0-64 28.7-64 64L0 448c0 35.3 28.7 64 64 64l192 0c35.3 0 64-28.7 64-64l0-16-64 0 0 16-192 0 0-256 16 0 0-64-16 0z"/>
-                            </svg><br/>
-                        </span> 
-                        特别鸣谢
-                         <ConfirmationModal url={"https://tieba.baidu.com/home/main/?id=tb.1.35920242.mqYFfUu1nNU8iWRXiG6MdA&fr=frs"}>
-                            <span className='link'>昵称暂无法保存</span>
-                         </ConfirmationModal>
-                        老师的主持。<br />
-                        封面图来自
-                        <ConfirmationModal url={"https://yuhong01.lofter.com/post/77b6c044_34c80349d"}>
-                            <span className='link'>千羽.鸿漪</span>
-                        </ConfirmationModal>💙
-                        <br/>
-                        更多作品收录: <br/>
-                        <ConfirmationModal url={"https://www.bilibili.com/read/readlist/rl927730"}
-                            className={"link"}>
-                                <div className='flex note-link'>
-                                    <img src='assets/bilibili-icon.webp' className='icons'></img>
-                                    Bilibili视频收录
-                                </div>
-                            </ConfirmationModal>
-                        <ConfirmationModal url={"https://www.bilibili.com/opus/1081595906150629415"}
-                            className={"link"}>
-                                <div className='flex note-link'>
-                                    <img src='assets/nga-icon.webp' className='icons'></img>
-                                    安科收录
-                                </div>
-                            </ConfirmationModal>
-                        <ConfirmationModal url={"https://tieba.baidu.com/p/9893219524#"}
-                            className={"link"}>
-                                <div className='flex note-link'>
-                                    <img src='assets/baidu-tieba.svg' className='icons'></img>
-                                    作品补档
-                                </div>
-                            </ConfirmationModal>
-                    </div>
-                    :
-                    list.map((item, i)=>
-                        title != "目录" ? 
-                            <div key={i} className='notebook-items flex'>
-                                <div className ="flex" onClick={()=>setSelectedWork(item)}>
-                                    <p className='work-index'>{`${i+1}. `}</p>
-                                    <p className={`${works[item].spoiler? "cross": ""}`}> {item} </p>
-                                </div>
-                                <div 
-                                    className={`check-box`}
-                                    onClick={()=>toggleWork(item)}
-                                    >
-                                    {
-                                    completedWork.includes(item)&&
-                                        // <span>
-                                        //     <svg className="draw-check" 
-                                        //     stroke="currentColor" strokeWidth="2" 
-                                        //     viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        //         <path className={newlyAdded.includes(item)?"animate":""}
-                                        //             d="M3.4 13.2L 3.4 13.2 9.2 19l11.4-11.4"/>                                    
-                                        //     </svg>
-                                        // </span>
-                                        <CheckMarkSVG animate={newlyAdded.includes(item)}/>
-                                    }
-                                </div>
-                            </div>
-                            :
-                            <div key={i} onClick={()=>navigateToPage(i + 3 + (pageNum-1)*list.length)} className='notebook-items flex'>
-                                    <span>{item}</span>
-                                    <span>{i + 1 + (pageNum-1)*list.length}</span>
-                            </div>
-                    )}
-                    {
-                        title == "来自《Ave Mujica》播出之前的作品" && 
-                        <div className='sticker-container'>
-                            <svg id='sticker-arrow' viewBox="-13 0 148 148" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M0 2.65037C6.14938 -1.37392 12.2988 -0.103094 17.812 1.80315C25.4458 4.55662 32.8674 8.1573 39.6529 12.3934C70.3998 32.7267 88.8479 61.744 96.4816 97.539C98.39 106.647 99.0262 116.178 100.299 126.556C108.78 121.685 113.233 112.154 121.715 106.647C122.776 110.883 120.655 113.636 118.959 115.966C111.961 125.497 104.752 135.028 97.3299 144.348C93.725 148.796 90.9684 149.219 87.1515 145.407C79.0937 137.57 74.2167 128.039 72.7323 117.025C72.7323 116.601 73.3684 115.966 74.2166 114.907C83.3347 117.237 81.2142 128.886 89.06 133.122C92.4527 118.508 89.9082 104.529 86.0913 90.973C82.0624 76.7821 76.7612 63.2266 68.2793 51.1537C60.0095 39.2926 49.6191 29.7614 38.1686 20.8656C26.93 11.758 14.2072 6.03925 0 2.65037Z"></path>
-                            </svg>
-                            <div className='sticker'>
-                                <div className='tape'></div>
-                                点击打开转跳界面
-                            </div>
-                        </div>
-                    }
+                <div className="nameplate-bottom flex">
+                  <span></span>
+                  <span>サ ン ジ ノ ー ト</span>
+                  <img src="assets/barcode.png"></img>
                 </div>
-                <div className='notebook-footer'>
-                </div>
-        </div>
-
-        //         </div>
-        //         <div className='back'>
-        //             test
-        //         </div>
-        //     </div>
-        // </div>
-    )
-}
-
-
-function ChallengePage( {pageHash, navigateTo} ) {
-    const animationPageRef = useRef(null)
-    const contentPageRef = useRef(null)
-    const [recommendations, setRecommendations] = useState([])
-    const [works, setWorks] = useState([])
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState(null)
-    const [bottomPage, setBottomPage] = useState(0)
-    const [topPage, setTopPage] = useState(0)
-    const [currentPage, setCurrentPage] = useState(0)
-    const [selectedWork, setSelectedWork] = useState(null)
-    const [completedWork, setCompletedWork] = useState(()=>JSON.parse(localStorage.getItem("completedWorks"))||[])
-    const [lastVisited, setLastVisited] = useState(()=>JSON.parse(localStorage.getItem("lastVisited"))??0)
-    const [showNavigation, setShowNavigation] = useState(false)
-    const [pageInput, setPageInput] = useState(1)
-    const [animationPlaying, setAnimationPlaying] = useState(false)
-    
-
-    function selectWork(work){
-        if(selectedWork) return
-        else setSelectedWork(work)
-    }
-
-    useEffect(()=>{
-        async function fetchData(){
-            try{
-                setLoading(true)
-                const data = await fetch('/data/recommendations.json').then(res => res.json())
-                setRecommendations(data.days)
-                setWorks(data.works)
-                // console.log(data)
-                setLoading(false)
-            }
-            catch (err){
-                console.error('Failed to fetch data', err);
-                setError("无法获取信息！请联系作者B站")
-            }
-        }   
-        fetchData();
-    }, [])
-
-    useEffect(()=>{
-        localStorage.setItem("completedWorks", JSON.stringify(completedWork))
-        if(currentPage > 0){
-            localStorage.setItem("lastVisited", JSON.stringify(currentPage))
-        }
-    }, [completedWork, currentPage])
-
-    const animationRefCallback = ()=>{
-        const handle = requestAnimationFrame(()=>{
-            // console.log(animationPageRef.current)
-            if(animationPageRef.current!=null){
-                const pageNum = parseInt(pageHash)
-                if(isLegalPageNum(pageNum)){
-                    flipPage(pageNum)
-                }
-            }
-        })
-        return () => cancelAnimationFrame(handle)
-    }
-
-    const setRefs = (node) => {
-        animationPageRef.current = node
-        animationRefCallback()
-    }
-
-    useGSAP(()=>{
-        if(animationPageRef.current == null) return
-        const tl = gsap.timeline({paused:true, onComplete:()=> setAnimationPlaying(false)})
-        // console.log(currentPage, bottomPage, topPage)
-        if(currentPage == bottomPage){
-            // console.log("forward")
-            tl.set(animationPageRef.current, {pointerEvents:"none"})
-            tl.set(".animation-page-inner", {
-                rotateY: 0,
-                opacity: 1,
-                zIndex: 2
-            })
-            tl.to(".animation-page-inner", {
-                rotateY:-180, 
-                duration: 1,
-                ease: "power1.in",
-            }, "<")
-            if(topPage == 0){
-                // console.log("also flip the front cover forward")
-                tl.to(".front-cover", {
-                    rotateY: -180,
-                    duration: 1,
-                    ease: "power1.in",
-                    zIndex: 1
-                }, "<")
-            }
-            if(bottomPage == 34){
-                tl.set(".content-page",{
-                    zIndex: 3
-                }, "<")
-                tl.set(".content-page .front", {
-                    opacity: 0,
-                }, "<")
-                tl.to(".content-page", {
-                    rotateY: -180,
-                    duration: 1,
-                    ease: "power1.in",
-                }, "<")
-                tl.to(".notebook-pages", {
-                    xPercent: 100,
-                    duration: 1.5
-                }, "<")
-            }
-        }else{
-            // console.log("reverse")
-            tl.set(".animation-page-inner", {
-                rotateY: -180,
-                opacity: 1,
-                zIndex: 2
-            })
-            tl.set(animationPageRef.current, {pointerEvents:"all"})
-            tl.to(".animation-page-inner", {
-                rotateY: 0, 
-                duration: 1,
-                ease: "power1.out",
-            })
-            if(currentPage == 0){
-                // console.log("also flip the front cover back")
-                tl.to(".front-cover", {
-                    rotateY: 0,
-                    duration: 1,
-                    ease: "power1.out",
-                    zIndex: 3
-                }, "<")
-            }
-            if(bottomPage == 34){
-                tl.to(".content-page", {
-                    rotateY: 0,
-                    duration: 1,
-                    ease: "power1.out",
-                }, "<")
-                tl.to(".notebook-pages", {
-                    xPercent: 0,
-                    duration: 1
-                }, "<")
-                tl.set(".content-page .front", {
-                    opacity: 1
-                }, ">")
-                tl.set(".content-page", {
-                    zIndex: 1,
-                }, ">")
-            }
-        }
-        tl.restart()
-        },[currentPage]
-    )
-
-    const {contextSafe} = useGSAP(()=>{
-        if(selectedWork !== null){
-            const tl = gsap.timeline()
-            tl.set(".sticky-note", 
-                {
-                    yPercent: 50,
-                    xPercent: 50,
-                }
-            ).to(".sticky-note-popup", 
-                {
-                    opacity: 1,
-                    duration: 0.5,
-                    pointerEvents: "all"
-                }
-            )
-            .to(".sticky-note", 
-                {
-                    motionPath:{
-                        path: [
-                        { xPercent: 50, yPercent: 50 },
-                        { xPercent: 0, yPercent: 30 },
-                        { xPercent: -30, yPercent: 10 },
-                        { xPercent: -50, yPercent: -50 }
-                        ],
-                        curviness: 1.5,   // controls how smooth/bendy the curve is
-                        type: "cubic",    // Bezier cubic interpolation
-                    },
-                    duration: 0.5,
-                },"<"
-            )
-        }
-    }, [selectedWork])
-
-    useGSAP(()=>{
-        if(showNavigation){
-            gsap.to(".navigation-popup-container", {
-                opacity:1, 
-                duration: 0.35,
-                pointerEvents: "all",
-            })
-            gsap.to(".navigation-popup",{
-                duration: 0.35,
-                scale: 1
-            })
-        }else{
-            gsap.to(".navigation-popup-container", {
-                opacity: 0,                
-                duration: 0.35,
-                pointerEvents: "none"
-            })
-            gsap.to(".navigation-popup", {
-                duration: 0.35,
-                scale: 0.1
-            })
-        }
-    }, [showNavigation])
-
-    const unselectWork = contextSafe(()=>{
-        const tl = gsap.timeline({onComplete:()=>{setSelectedWork(null)}})
-        tl.to(".sticky-note",
-            {
-                motionPath:{
-                    path: [
-                    { xPercent: -50, yPercent: -50 },
-                    { xPercent: -30, yPercent: -90 },
-                    { xPercent: -0, yPercent: -110 },
-                    { xPercent: 50, yPercent: -150 }
-                    ],
-                    curviness: 1.5,   // controls how smooth/bendy the curve is
-                    type: "cubic",    // Bezier cubic interpolation
-                },
-                duration: 0.5,
-            }
-        ).to(".sticky-note-popup", 
-            {
-                opacity: 0,
-                duration: 0.35,
-                pointerEvents: "none"
-            },"<0.15"
-        )
-    })
-
-    function matchLofterSlug(url) {
-        const regex = /^(https:\/\/[a-zA-Z0-9_-]+\.lofter\.com\/?)/;
-        const match = url.match(regex);
-        return match ? match[1] : null;   // returns slug or null
-    }
-
-    const authorUrl = works[selectedWork]?.lofter? 
-        matchLofterSlug(works[selectedWork].lofter): //use lofter if exist. If not, use author link. if both null, return empty
-            works[selectedWork]?.author_link? 
-            works[selectedWork].author_link: null
-    
-    function isLegalPageNum(pageNumber){
-        return (pageNumber>=0 && pageNumber<=34 )
-    }
-
-    const navigateToPage = (pageNumber) => {
-        if(!isLegalPageNum(pageNumber)|| animationPlaying || pageNumber == currentPage) return
-        navigateTo(`/challenge/${pageNumber}`)
-    }
-    
-    const flipPage = (pageNumber)=>{
-        if(!isLegalPageNum(pageNumber)|| animationPlaying || pageNumber == currentPage) return
-        setShowNavigation(false)
-        const current = currentPage
-        // console.log(pageNumber, current)
-        // if (pageNumber >= 0 && pageNumber <= 30){
-        if (pageNumber > current){
-            // console.log("foward")
-            setBottomPage(pageNumber)
-            setTopPage(current)
-        }else{
-            // console.log("reverse")
-            setBottomPage(current)
-            setTopPage(pageNumber)
-        }
-        // }
-        setAnimationPlaying(true)
-        setCurrentPage(pageNumber); 
-    }
-
-    function pageInputOnBlur(num){
-        const intValue = parseInt(num)
-        if(!Number.isNaN(intValue)){
-            setPageInput(intValue)
-        }
-        else
-            setPageInput(1)
-    }
-
-    function getPageDisplayText(pageNumber){
-        switch (pageNumber){
-            case 0:
-                return "封面"
-            case 34: 
-                return "封底"
-            case 1:
-            case 2:
-                return "目录"
-            case 33: 
-                return "后记"
-            default:
-                return pageNumber - 2
-        }
-    }
-
-    const isChristmasTime = isChristmas()
-
-    useGSAP(()=>{
-        if(isChristmasTime){
-            gsap.to(".spinning-snow-flake", {
-                yoyo: true,
-                fill: "#ecfffd",
-                duration: 20,
-                opacity: 0.5,
-                repeat: -1,
-                stagger: 5,
-            })
-            function rotateAnimation(target, direction){
-                gsap.to(target, {
-                    rotate: 360 * direction,
-                    duration: 30,
-                    repeat: -1,
-                    ease: "none"
-                })
-            }
-            rotateAnimation("#flake-1", -1)
-            rotateAnimation("#flake-2", gsap.utils.random([-1, 1]))
-            rotateAnimation("#flake-3", 1)
-        }
-    }, [])
-
-    return (
-        <div className='challenge-page'>
-            {isChristmasTime && 
-                <>
-                    <svg className="spinning-snow-flake" id='flake-1' version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="#000000"><path d="M296.067,251.121l-15.807-9.076v-18.197c0-1.977-1.038-3.81-2.734-4.826 c-1.697-1.018-3.802-1.068-5.546-0.135l-15.982,8.545l-15.981-8.545c-1.744-0.93-3.848-0.881-5.546,0.135 c-1.697,1.016-2.734,2.849-2.734,4.826v18.197l-15.807,9.076l0.006,0.023c-0.836,0.48-1.57,1.159-2.085,2.055 c-1.545,2.696-0.615,6.134,2.079,7.682l15.807,9.071v18.198c0,1.977,1.038,3.81,2.734,4.826c0.889,0.533,1.89,0.8,2.892,0.8 c0.911,0,1.823-0.221,2.653-0.664l15.981-8.544l15.983,8.544c0.83,0.444,1.743,0.664,2.653,0.664c1.003,0,2.003-0.268,2.892-0.8 c1.695-1.016,2.734-2.849,2.734-4.826v-18.199l15.782-9.057l0.003-0.001l0.023-0.013l-0.001-0.001 c0.838-0.48,1.564-1.18,2.079-2.078C299.692,256.106,298.762,252.668,296.067,251.121z M271.833,261.813 c-1.747,1.004-2.826,2.864-2.826,4.88v12.067l-10.356-5.538c-1.722-0.919-3.705-0.853-5.305,0.003l-0.001-0.003l-10.355,5.538 v-12.067c0-2.015-1.078-3.877-2.826-4.88l-10.132-5.814l10.132-5.816c1.747-1.003,2.826-2.864,2.826-4.879v-12.065l10.355,5.538 l0.001-0.003c1.6,0.853,3.583,0.918,5.305,0.003l10.356-5.538v12.065c0,2.014,1.078,3.877,2.826,4.879l10.132,5.816 L271.833,261.813z"></path> <path d="M476.543,374.705l-29.224-16.58l22.655-13.669c2.661-1.604,3.516-5.064,1.909-7.724 c-1.604-2.659-5.062-3.515-7.724-1.909l-28.065,16.934l-30.77-17.457l58.185-35.418c2.654-1.615,3.496-5.077,1.88-7.732 c-1.615-2.656-5.079-3.495-7.732-1.88l-63.535,38.675l-30.897-17.529l22.569-13.738c2.654-1.615,3.496-5.077,1.88-7.732 c-1.615-2.656-5.077-3.496-7.732-1.88l-27.918,16.996l-37.097-21.046l38.573-22.136c2.694-1.547,3.625-4.985,2.079-7.682 c-0.514-0.896-1.249-1.577-2.085-2.057l0.006-0.023l-38.475-22.084l37.202-21.106l27.92,16.999 c0.913,0.556,1.923,0.821,2.921,0.821c1.898,0,3.751-0.963,4.811-2.702c1.615-2.653,0.774-6.115-1.88-7.732l-22.57-13.741 l30.893-17.528l63.54,38.674c0.915,0.556,1.923,0.821,2.921,0.821c1.899,0,3.752-0.963,4.811-2.702 c1.615-2.654,0.774-6.116-1.88-7.732l-58.19-35.417l30.897-17.529l27.925,16.996c0.914,0.556,1.923,0.821,2.921,0.821 c1.899,0,3.752-0.963,4.811-2.702c1.615-2.654,0.774-6.116-1.88-7.732l-22.574-13.739l28.921-16.408 c2.702-1.534,3.651-4.967,2.117-7.671c-1.534-2.702-4.969-3.648-7.671-2.117l-28.843,16.364v-26.33 c0-3.107-2.519-5.626-5.626-5.626s-5.626,2.519-5.626,5.626v32.718l-30.845,17.499V99.837c0-3.107-2.519-5.626-5.626-5.626 s-5.626,2.519-5.626,5.626v74.41l-30.846,17.5v-26.334c0-3.107-2.519-5.626-5.626-5.626s-5.626,2.519-5.626,5.626v32.718 l-37.721,21.399v-45.224c0-1.977-1.038-3.81-2.734-4.826c-1.697-1.016-3.802-1.068-5.546-0.135l-39.073,20.89v-41.442l28.562-15.9 c2.716-1.512,3.691-4.937,2.179-7.652c-1.513-2.716-4.94-3.693-7.652-2.179l-23.089,12.852v-35.526l64.993-36.176 c2.716-1.51,3.691-4.936,2.179-7.652c-1.51-2.716-4.939-3.692-7.652-2.179l-59.519,33.13V51.987l28.562-15.899 c2.716-1.512,3.691-4.937,2.179-7.652c-1.513-2.716-4.94-3.693-7.652-2.179L261.625,39.11V5.626c0-3.107-2.519-5.626-5.626-5.626 s-5.626,2.519-5.626,5.626v33.483l-23.088-12.852c-2.711-1.51-6.139-0.536-7.652,2.179c-1.512,2.714-0.536,6.14,2.179,7.652 l28.56,15.899v35.523l-59.519-33.13c-2.716-1.51-6.141-0.536-7.652,2.179c-1.512,2.714-0.536,6.141,2.179,7.652l64.99,36.176 v35.523l-23.088-12.852c-2.711-1.51-6.139-0.536-7.652,2.179c-1.512,2.714-0.536,6.14,2.179,7.652l28.56,15.899v41.443 l-39.072-20.89c-1.744-0.93-3.85-0.881-5.546,0.135c-1.695,1.018-2.733,2.849-2.733,4.826v45.224l-37.721-21.4v-32.716 c0-3.107-2.519-5.626-5.626-5.626s-5.626,2.519-5.626,5.626v26.332l-30.847-17.499V99.837c0-3.107-2.519-5.626-5.626-5.626 s-5.626,2.519-5.626,5.626v68.023L81.1,150.36v-32.715c0-3.107-2.519-5.626-5.626-5.626s-5.626,2.519-5.626,5.626v26.331 l-28.839-16.361c-2.699-1.532-6.136-0.585-7.671,2.117c-1.534,2.703-0.585,6.136,2.117,7.671l28.919,16.406l-22.573,13.741 c-2.654,1.615-3.496,5.077-1.88,7.732c1.06,1.742,2.912,2.702,4.811,2.702c0.998,0,2.008-0.265,2.921-0.821l27.923-16.998 l30.9,17.529l-58.19,35.418c-2.654,1.615-3.496,5.077-1.88,7.732c1.059,1.74,2.912,2.702,4.811,2.702 c0.998,0,2.005-0.265,2.921-0.821l63.54-38.675l30.895,17.528l-22.572,13.742c-2.654,1.617-3.496,5.079-1.88,7.732 c1.06,1.742,2.912,2.702,4.811,2.702c0.998,0,2.007-0.265,2.921-0.821l27.922-17l37.202,21.106l-38.478,22.084l0.013,0.021 c-0.839,0.479-1.575,1.16-2.092,2.058c-1.545,2.696-0.615,6.134,2.079,7.682l38.577,22.138l-37.099,21.047l-27.924-16.999 c-2.651-1.615-6.115-0.774-7.732,1.88c-1.615,2.654-0.774,6.116,1.88,7.732l22.573,13.741l-30.896,17.527L54.339,289.27 c-2.651-1.614-6.115-0.773-7.732,1.88c-1.615,2.654-0.774,6.116,1.88,7.732l58.187,35.42l-30.898,17.529l-27.922-16.996 c-2.651-1.615-6.115-0.774-7.732,1.88c-1.615,2.654-0.774,6.116,1.88,7.732l22.572,13.739l-29.121,16.52 c-2.702,1.534-3.651,4.967-2.117,7.671c1.036,1.825,2.939,2.851,4.899,2.851c0.941,0,1.895-0.236,2.772-0.734l29.044-16.478v26.336 c0,3.107,2.519,5.626,5.626,5.626s5.626-2.519,5.626-5.626v-32.72l30.845-17.499v68.026c0,3.107,2.519,5.626,5.626,5.626 s5.626-2.519,5.626-5.626v-74.41l30.843-17.498v26.334c0,3.107,2.519,5.626,5.626,5.626c3.107,0,5.626-2.519,5.626-5.626v-32.718 l37.523-21.286v45.111c0,1.977,1.038,3.81,2.733,4.825c0.889,0.534,1.89,0.801,2.893,0.801c0.911,0,1.823-0.221,2.652-0.664 l39.073-20.887v41.676l-28.56,15.896c-2.716,1.512-3.691,4.937-2.179,7.652c1.029,1.849,2.944,2.891,4.921,2.891 c0.925,0,1.865-0.23,2.732-0.711l23.088-12.852v35.523l-64.99,36.181c-2.716,1.512-3.691,4.937-2.179,7.652 c1.029,1.849,2.944,2.891,4.921,2.891c0.926,0,1.865-0.23,2.732-0.711l59.519-33.134v35.523l-28.56,15.899 c-2.716,1.512-3.691,4.937-2.179,7.652c1.029,1.849,2.944,2.891,4.921,2.891c0.926,0,1.865-0.23,2.732-0.711l23.088-12.852v33.253 c0,3.107,2.519,5.626,5.626,5.626c3.107,0,5.626-2.519,5.626-5.626v-33.253l23.089,12.852c0.865,0.483,1.804,0.711,2.732,0.711 c1.975,0,3.891-1.043,4.921-2.891c1.512-2.714,0.536-6.14-2.179-7.652l-28.562-15.9v-35.522l59.519,33.134 c0.865,0.483,1.804,0.711,2.732,0.711c1.975,0,3.891-1.043,4.921-2.891c1.512-2.714,0.536-6.14-2.179-7.652l-64.993-36.181v-35.523 l23.089,12.852c0.866,0.483,1.804,0.711,2.732,0.711c1.975,0,3.892-1.043,4.921-2.891c1.512-2.716,0.536-6.141-2.179-7.652 l-28.562-15.897v-41.676l39.074,20.887c0.829,0.443,1.742,0.664,2.652,0.664c1.003,0,2.003-0.268,2.892-0.801 c1.695-1.015,2.734-2.848,2.734-4.825v-45.113l37.519,21.285v32.721c0,3.107,2.519,5.626,5.626,5.626s5.626-2.519,5.626-5.626 v-26.336l30.846,17.499v74.412c0,3.107,2.519,5.626,5.626,5.626s5.626-2.519,5.626-5.626v-68.028l30.708,17.423v32.799 c0,3.107,2.519,5.626,5.626,5.626s5.626-2.519,5.626-5.626v-26.416l29.183,16.556c0.876,0.498,1.83,0.734,2.772,0.734 c1.958,0,3.863-1.025,4.899-2.851C480.193,379.673,479.245,376.239,476.543,374.705z M300.549,278.294 c-1.747,1.004-2.826,2.864-2.826,4.88v45.131l-39.074-20.887c-1.718-0.919-3.701-0.853-5.302,0.003l-0.001-0.003l-39.073,20.887 v-45.131c0-2.015-1.078-3.877-2.826-4.88L172.6,256l38.847-22.296c1.747-1.004,2.826-2.866,2.826-4.88v-45.131l39.072,20.89 l0.001-0.004c1.6,0.854,3.583,0.92,5.305,0.004l39.073-20.89v45.131c0,2.014,1.078,3.877,2.826,4.879l38.847,22.296 L300.549,278.294z"></path></svg>
-                    <svg className="spinning-snow-flake" id='flake-2' version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="#000000"><path d="M296.067,251.121l-15.807-9.076v-18.197c0-1.977-1.038-3.81-2.734-4.826 c-1.697-1.018-3.802-1.068-5.546-0.135l-15.982,8.545l-15.981-8.545c-1.744-0.93-3.848-0.881-5.546,0.135 c-1.697,1.016-2.734,2.849-2.734,4.826v18.197l-15.807,9.076l0.006,0.023c-0.836,0.48-1.57,1.159-2.085,2.055 c-1.545,2.696-0.615,6.134,2.079,7.682l15.807,9.071v18.198c0,1.977,1.038,3.81,2.734,4.826c0.889,0.533,1.89,0.8,2.892,0.8 c0.911,0,1.823-0.221,2.653-0.664l15.981-8.544l15.983,8.544c0.83,0.444,1.743,0.664,2.653,0.664c1.003,0,2.003-0.268,2.892-0.8 c1.695-1.016,2.734-2.849,2.734-4.826v-18.199l15.782-9.057l0.003-0.001l0.023-0.013l-0.001-0.001 c0.838-0.48,1.564-1.18,2.079-2.078C299.692,256.106,298.762,252.668,296.067,251.121z M271.833,261.813 c-1.747,1.004-2.826,2.864-2.826,4.88v12.067l-10.356-5.538c-1.722-0.919-3.705-0.853-5.305,0.003l-0.001-0.003l-10.355,5.538 v-12.067c0-2.015-1.078-3.877-2.826-4.88l-10.132-5.814l10.132-5.816c1.747-1.003,2.826-2.864,2.826-4.879v-12.065l10.355,5.538 l0.001-0.003c1.6,0.853,3.583,0.918,5.305,0.003l10.356-5.538v12.065c0,2.014,1.078,3.877,2.826,4.879l10.132,5.816 L271.833,261.813z"></path> <path d="M476.543,374.705l-29.224-16.58l22.655-13.669c2.661-1.604,3.516-5.064,1.909-7.724 c-1.604-2.659-5.062-3.515-7.724-1.909l-28.065,16.934l-30.77-17.457l58.185-35.418c2.654-1.615,3.496-5.077,1.88-7.732 c-1.615-2.656-5.079-3.495-7.732-1.88l-63.535,38.675l-30.897-17.529l22.569-13.738c2.654-1.615,3.496-5.077,1.88-7.732 c-1.615-2.656-5.077-3.496-7.732-1.88l-27.918,16.996l-37.097-21.046l38.573-22.136c2.694-1.547,3.625-4.985,2.079-7.682 c-0.514-0.896-1.249-1.577-2.085-2.057l0.006-0.023l-38.475-22.084l37.202-21.106l27.92,16.999 c0.913,0.556,1.923,0.821,2.921,0.821c1.898,0,3.751-0.963,4.811-2.702c1.615-2.653,0.774-6.115-1.88-7.732l-22.57-13.741 l30.893-17.528l63.54,38.674c0.915,0.556,1.923,0.821,2.921,0.821c1.899,0,3.752-0.963,4.811-2.702 c1.615-2.654,0.774-6.116-1.88-7.732l-58.19-35.417l30.897-17.529l27.925,16.996c0.914,0.556,1.923,0.821,2.921,0.821 c1.899,0,3.752-0.963,4.811-2.702c1.615-2.654,0.774-6.116-1.88-7.732l-22.574-13.739l28.921-16.408 c2.702-1.534,3.651-4.967,2.117-7.671c-1.534-2.702-4.969-3.648-7.671-2.117l-28.843,16.364v-26.33 c0-3.107-2.519-5.626-5.626-5.626s-5.626,2.519-5.626,5.626v32.718l-30.845,17.499V99.837c0-3.107-2.519-5.626-5.626-5.626 s-5.626,2.519-5.626,5.626v74.41l-30.846,17.5v-26.334c0-3.107-2.519-5.626-5.626-5.626s-5.626,2.519-5.626,5.626v32.718 l-37.721,21.399v-45.224c0-1.977-1.038-3.81-2.734-4.826c-1.697-1.016-3.802-1.068-5.546-0.135l-39.073,20.89v-41.442l28.562-15.9 c2.716-1.512,3.691-4.937,2.179-7.652c-1.513-2.716-4.94-3.693-7.652-2.179l-23.089,12.852v-35.526l64.993-36.176 c2.716-1.51,3.691-4.936,2.179-7.652c-1.51-2.716-4.939-3.692-7.652-2.179l-59.519,33.13V51.987l28.562-15.899 c2.716-1.512,3.691-4.937,2.179-7.652c-1.513-2.716-4.94-3.693-7.652-2.179L261.625,39.11V5.626c0-3.107-2.519-5.626-5.626-5.626 s-5.626,2.519-5.626,5.626v33.483l-23.088-12.852c-2.711-1.51-6.139-0.536-7.652,2.179c-1.512,2.714-0.536,6.14,2.179,7.652 l28.56,15.899v35.523l-59.519-33.13c-2.716-1.51-6.141-0.536-7.652,2.179c-1.512,2.714-0.536,6.141,2.179,7.652l64.99,36.176 v35.523l-23.088-12.852c-2.711-1.51-6.139-0.536-7.652,2.179c-1.512,2.714-0.536,6.14,2.179,7.652l28.56,15.899v41.443 l-39.072-20.89c-1.744-0.93-3.85-0.881-5.546,0.135c-1.695,1.018-2.733,2.849-2.733,4.826v45.224l-37.721-21.4v-32.716 c0-3.107-2.519-5.626-5.626-5.626s-5.626,2.519-5.626,5.626v26.332l-30.847-17.499V99.837c0-3.107-2.519-5.626-5.626-5.626 s-5.626,2.519-5.626,5.626v68.023L81.1,150.36v-32.715c0-3.107-2.519-5.626-5.626-5.626s-5.626,2.519-5.626,5.626v26.331 l-28.839-16.361c-2.699-1.532-6.136-0.585-7.671,2.117c-1.534,2.703-0.585,6.136,2.117,7.671l28.919,16.406l-22.573,13.741 c-2.654,1.615-3.496,5.077-1.88,7.732c1.06,1.742,2.912,2.702,4.811,2.702c0.998,0,2.008-0.265,2.921-0.821l27.923-16.998 l30.9,17.529l-58.19,35.418c-2.654,1.615-3.496,5.077-1.88,7.732c1.059,1.74,2.912,2.702,4.811,2.702 c0.998,0,2.005-0.265,2.921-0.821l63.54-38.675l30.895,17.528l-22.572,13.742c-2.654,1.617-3.496,5.079-1.88,7.732 c1.06,1.742,2.912,2.702,4.811,2.702c0.998,0,2.007-0.265,2.921-0.821l27.922-17l37.202,21.106l-38.478,22.084l0.013,0.021 c-0.839,0.479-1.575,1.16-2.092,2.058c-1.545,2.696-0.615,6.134,2.079,7.682l38.577,22.138l-37.099,21.047l-27.924-16.999 c-2.651-1.615-6.115-0.774-7.732,1.88c-1.615,2.654-0.774,6.116,1.88,7.732l22.573,13.741l-30.896,17.527L54.339,289.27 c-2.651-1.614-6.115-0.773-7.732,1.88c-1.615,2.654-0.774,6.116,1.88,7.732l58.187,35.42l-30.898,17.529l-27.922-16.996 c-2.651-1.615-6.115-0.774-7.732,1.88c-1.615,2.654-0.774,6.116,1.88,7.732l22.572,13.739l-29.121,16.52 c-2.702,1.534-3.651,4.967-2.117,7.671c1.036,1.825,2.939,2.851,4.899,2.851c0.941,0,1.895-0.236,2.772-0.734l29.044-16.478v26.336 c0,3.107,2.519,5.626,5.626,5.626s5.626-2.519,5.626-5.626v-32.72l30.845-17.499v68.026c0,3.107,2.519,5.626,5.626,5.626 s5.626-2.519,5.626-5.626v-74.41l30.843-17.498v26.334c0,3.107,2.519,5.626,5.626,5.626c3.107,0,5.626-2.519,5.626-5.626v-32.718 l37.523-21.286v45.111c0,1.977,1.038,3.81,2.733,4.825c0.889,0.534,1.89,0.801,2.893,0.801c0.911,0,1.823-0.221,2.652-0.664 l39.073-20.887v41.676l-28.56,15.896c-2.716,1.512-3.691,4.937-2.179,7.652c1.029,1.849,2.944,2.891,4.921,2.891 c0.925,0,1.865-0.23,2.732-0.711l23.088-12.852v35.523l-64.99,36.181c-2.716,1.512-3.691,4.937-2.179,7.652 c1.029,1.849,2.944,2.891,4.921,2.891c0.926,0,1.865-0.23,2.732-0.711l59.519-33.134v35.523l-28.56,15.899 c-2.716,1.512-3.691,4.937-2.179,7.652c1.029,1.849,2.944,2.891,4.921,2.891c0.926,0,1.865-0.23,2.732-0.711l23.088-12.852v33.253 c0,3.107,2.519,5.626,5.626,5.626c3.107,0,5.626-2.519,5.626-5.626v-33.253l23.089,12.852c0.865,0.483,1.804,0.711,2.732,0.711 c1.975,0,3.891-1.043,4.921-2.891c1.512-2.714,0.536-6.14-2.179-7.652l-28.562-15.9v-35.522l59.519,33.134 c0.865,0.483,1.804,0.711,2.732,0.711c1.975,0,3.891-1.043,4.921-2.891c1.512-2.714,0.536-6.14-2.179-7.652l-64.993-36.181v-35.523 l23.089,12.852c0.866,0.483,1.804,0.711,2.732,0.711c1.975,0,3.892-1.043,4.921-2.891c1.512-2.716,0.536-6.141-2.179-7.652 l-28.562-15.897v-41.676l39.074,20.887c0.829,0.443,1.742,0.664,2.652,0.664c1.003,0,2.003-0.268,2.892-0.801 c1.695-1.015,2.734-2.848,2.734-4.825v-45.113l37.519,21.285v32.721c0,3.107,2.519,5.626,5.626,5.626s5.626-2.519,5.626-5.626 v-26.336l30.846,17.499v74.412c0,3.107,2.519,5.626,5.626,5.626s5.626-2.519,5.626-5.626v-68.028l30.708,17.423v32.799 c0,3.107,2.519,5.626,5.626,5.626s5.626-2.519,5.626-5.626v-26.416l29.183,16.556c0.876,0.498,1.83,0.734,2.772,0.734 c1.958,0,3.863-1.025,4.899-2.851C480.193,379.673,479.245,376.239,476.543,374.705z M300.549,278.294 c-1.747,1.004-2.826,2.864-2.826,4.88v45.131l-39.074-20.887c-1.718-0.919-3.701-0.853-5.302,0.003l-0.001-0.003l-39.073,20.887 v-45.131c0-2.015-1.078-3.877-2.826-4.88L172.6,256l38.847-22.296c1.747-1.004,2.826-2.866,2.826-4.88v-45.131l39.072,20.89 l0.001-0.004c1.6,0.854,3.583,0.92,5.305,0.004l39.073-20.89v45.131c0,2.014,1.078,3.877,2.826,4.879l38.847,22.296 L300.549,278.294z"></path></svg>
-                    <svg className= "spinning-snow-flake" id='flake-3' version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="#000000">
-                        <g>
-                            <g>
-                                <g>
-                                    <path  d="M256,219.429c-5.047,0-9.143-4.087-9.143-9.143V9.143C246.857,4.087,250.953,0,256,0 c5.047,0,9.143,4.087,9.143,9.143v201.143C265.143,215.342,261.047,219.429,256,219.429"></path>
-                                    <path  d="M256,54.857c-2.441,0-4.773-0.969-6.491-2.706l-18.286-18.432 c-3.557-3.575-3.529-9.371,0.046-12.928c3.593-3.538,9.371-3.538,12.937,0.055L256,32.731l11.794-11.886 c3.557-3.593,9.344-3.602,12.937-0.055c3.575,3.557,3.602,9.353,0.046,12.928l-18.286,18.432 C260.773,53.888,258.441,54.857,256,54.857"></path>
-                                    <path  d="M256,192c-2.441,0-4.773-0.969-6.491-2.706l-18.286-18.432c-3.557-3.575-3.529-9.371,0.046-12.928 c3.593-3.547,9.371-3.529,12.937,0.055L256,169.874l11.794-11.886c3.557-3.593,9.344-3.611,12.937-0.055 c3.575,3.557,3.602,9.353,0.046,12.928l-18.286,18.432C260.773,191.031,258.441,192,256,192"></path>
-                                    <path  d="M256,109.714c-2.331,0-4.672-0.896-6.455-2.67l-36.571-36.453 c-3.575-3.566-3.584-9.353-0.018-12.928c3.557-3.593,9.344-3.584,12.928-0.018L256,87.662l30.117-30.016 c3.584-3.566,9.362-3.566,12.928,0.018c3.566,3.575,3.557,9.362-0.018,12.928l-36.571,36.453 C260.672,108.818,258.331,109.714,256,109.714"></path>
-                                    <path  d="M274.286,137.143h-36.571c-5.047,0-9.143-4.087-9.143-9.143c0-5.056,4.096-9.143,9.143-9.143 h36.571c5.047,0,9.143,4.087,9.143,9.143C283.429,133.056,279.333,137.143,274.286,137.143"></path>
-                                    <path  d="M256,512c-5.047,0-9.143-4.087-9.143-9.143V301.714c0-5.056,4.096-9.143,9.143-9.143 c5.047,0,9.143,4.087,9.143,9.143v201.143C265.143,507.913,261.047,512,256,512"></path>
-                                    <path  d="M274.286,493.857c-2.35,0-4.699-0.905-6.491-2.706L256,479.265l-11.794,11.886 c-3.566,3.593-9.344,3.602-12.937,0.055c-3.575-3.557-3.602-9.344-0.046-12.928l18.286-18.432c3.438-3.465,9.545-3.465,12.983,0 l18.286,18.432c3.557,3.584,3.529,9.371-0.046,12.928C278.939,492.97,276.617,493.857,274.286,493.857"></path>
-                                    <path  d="M274.286,356.714c-2.35,0-4.699-0.905-6.491-2.706L256,342.122l-11.794,11.886 c-3.566,3.593-9.344,3.611-12.937,0.055c-3.575-3.557-3.602-9.344-0.046-12.928l18.286-18.432c3.438-3.465,9.545-3.465,12.983,0 l18.286,18.432c3.557,3.584,3.529,9.371-0.046,12.928C278.939,355.827,276.617,356.714,274.286,356.714"></path>
-                                    <path  d="M292.571,457.027c-2.331,0-4.672-0.896-6.455-2.67L256,424.341l-30.117,30.016 c-3.584,3.566-9.362,3.566-12.928-0.018c-3.566-3.584-3.557-9.362,0.018-12.928l36.571-36.453c3.575-3.557,9.335-3.557,12.91,0 l36.571,36.453c3.575,3.566,3.584,9.344,0.018,12.928C297.262,456.131,294.912,457.027,292.571,457.027"></path>
-                                    <path  d="M274.286,393.143h-36.571c-5.047,0-9.143-4.087-9.143-9.143c0-5.056,4.096-9.143,9.143-9.143 h36.571c5.047,0,9.143,4.087,9.143,9.143C283.429,389.056,279.333,393.143,274.286,393.143"></path>
-                                    <path  d="M502.857,265.143H301.714c-5.047,0-9.143-4.087-9.143-9.143c0-5.056,4.096-9.143,9.143-9.143 h201.143c5.047,0,9.143,4.087,9.143,9.143C512,261.056,507.904,265.143,502.857,265.143"></path>
-                                    <path  d="M484.714,283.429c-2.331,0-4.654-0.887-6.446-2.651l-18.423-18.286 c-1.728-1.719-2.706-4.05-2.706-6.491c0-2.441,0.978-4.773,2.706-6.491l18.423-18.286c3.593-3.557,9.381-3.529,12.937,0.055 c3.557,3.584,3.529,9.371-0.046,12.928L479.265,256l11.895,11.794c3.575,3.557,3.602,9.353,0.046,12.928 C489.413,282.523,487.064,283.429,484.714,283.429"></path>
-                                    <path  d="M347.571,283.429c-2.331,0-4.654-0.887-6.446-2.651l-18.423-18.286 c-1.728-1.719-2.706-4.05-2.706-6.491c0-2.441,0.978-4.773,2.706-6.491l18.423-18.286c3.593-3.557,9.381-3.529,12.937,0.055 s3.529,9.371-0.046,12.928L342.122,256l11.895,11.794c3.575,3.557,3.602,9.353,0.046,12.928 C352.271,282.523,349.921,283.429,347.571,283.429"></path>
-                                    <path  d="M447.888,301.714c-2.341,0-4.69-0.896-6.473-2.688l-36.462-36.571 c-3.557-3.575-3.557-9.335,0-12.91l36.462-36.571c3.566-3.584,9.344-3.584,12.928-0.018c3.575,3.566,3.584,9.344,0.018,12.928 L424.336,256l30.025,30.117c3.566,3.584,3.557,9.362-0.018,12.928C452.56,300.818,450.22,301.714,447.888,301.714"></path>
-                                    <path  d="M384,283.429c-5.047,0-9.143-4.087-9.143-9.143v-36.571c0-5.056,4.096-9.143,9.143-9.143 c5.047,0,9.143,4.087,9.143,9.143v36.571C393.143,279.342,389.047,283.429,384,283.429"></path>
-                                    <path  d="M210.286,265.143H9.143C4.096,265.143,0,261.056,0,256c0-5.056,4.096-9.143,9.143-9.143h201.143 c5.047,0,9.143,4.087,9.143,9.143C219.429,261.056,215.333,265.143,210.286,265.143"></path>
-                                    <path  d="M27.286,283.429c-2.35,0-4.699-0.905-6.491-2.706c-3.557-3.575-3.529-9.371,0.046-12.928 L32.735,256L20.84,244.206c-3.575-3.557-3.602-9.344-0.046-12.928c3.557-3.602,9.344-3.621,12.937-0.055l18.423,18.286 c1.728,1.719,2.706,4.05,2.706,6.491c0,2.441-0.978,4.773-2.706,6.491l-18.423,18.286 C31.94,282.542,29.608,283.429,27.286,283.429"></path>
-                                    <path  d="M164.429,283.429c-2.35,0-4.699-0.905-6.491-2.706c-3.557-3.575-3.529-9.371,0.046-12.928 L169.878,256l-11.895-11.794c-3.575-3.557-3.602-9.344-0.046-12.928c3.557-3.602,9.344-3.621,12.937-0.055l18.423,18.286 c1.728,1.719,2.706,4.05,2.706,6.491c0,2.441-0.978,4.773-2.706,6.491l-18.423,18.286 C169.083,282.542,166.751,283.429,164.429,283.429"></path>
-                                    <path  d="M64.112,301.714c-2.331,0-4.672-0.896-6.455-2.67c-3.575-3.566-3.584-9.344-0.018-12.928 L87.664,256l-30.025-30.117c-3.566-3.584-3.557-9.362,0.018-12.928c3.575-3.566,9.362-3.566,12.928,0.018l36.462,36.571 c3.557,3.575,3.557,9.335,0,12.91l-36.462,36.571C68.802,300.818,66.452,301.714,64.112,301.714"></path>
-                                    <path  d="M128,283.429c-5.047,0-9.143-4.087-9.143-9.143v-36.571c0-5.056,4.096-9.143,9.143-9.143 c5.047,0,9.143,4.087,9.143,9.143v36.571C137.143,279.342,133.047,283.429,128,283.429"></path>
-                                    <path  d="M288.326,232.821c-2.341,0-4.681-0.896-6.464-2.679c-3.575-3.575-3.575-9.353,0-12.928 L423.247,75.82c3.575-3.566,9.362-3.566,12.928,0c3.575,3.575,3.575,9.362,0,12.928L294.789,230.142 C293.007,231.925,290.666,232.821,288.326,232.821"></path>
-                                    <path  d="M429.714,118.857h-27.429c-5.047,0-9.143-4.087-9.143-9.143V82.286 c0-5.056,4.096-9.143,9.143-9.143s9.143,4.087,9.143,9.143v18.286h18.286c5.047,0,9.143,4.087,9.143,9.143 C438.857,114.77,434.761,118.857,429.714,118.857"></path>
-                                    <path  d="M338.286,210.286h-27.429c-5.047,0-9.143-4.087-9.143-9.143v-27.429 c0-5.056,4.096-9.143,9.143-9.143s9.143,4.087,9.143,9.143V192h18.286c5.047,0,9.143,4.087,9.143,9.143 S343.333,210.286,338.286,210.286"></path>
-                                    <path  d="M420.571,155.322h-0.009l-54.665-0.082c-5.047-0.009-9.125-4.087-9.134-9.125l-0.082-54.665 c-0.009-5.056,4.078-9.152,9.134-9.161h0.009c5.047,0,9.134,4.078,9.143,9.125l0.073,45.55l45.541,0.073 c5.056,0.009,9.143,4.105,9.134,9.161C429.705,151.244,425.618,155.322,420.571,155.322"></path>
-                                    <path  d="M356.571,182.857c-2.341,0-4.681-0.896-6.464-2.679l-18.286-18.286 c-3.575-3.575-3.575-9.353,0-12.928c3.575-3.575,9.353-3.575,12.928,0l18.286,18.286c3.575,3.575,3.575,9.353,0,12.928 C361.253,181.961,358.912,182.857,356.571,182.857"></path>
-                                    <path  d="M82.286,438.857c-2.341,0-4.681-0.896-6.464-2.679c-3.575-3.575-3.575-9.353,0-12.928 l141.385-141.394c3.575-3.566,9.362-3.566,12.928,0c3.575,3.575,3.575,9.362,0,12.928L88.75,436.178 C86.967,437.961,84.626,438.857,82.286,438.857"></path>
-                                    <path  d="M109.714,438.857c-5.047,0-9.143-4.087-9.143-9.143v-18.286H82.286 c-5.047,0-9.143-4.087-9.143-9.143c0-5.056,4.096-9.143,9.143-9.143h27.429c5.047,0,9.143,4.087,9.143,9.143v27.429 C118.857,434.77,114.761,438.857,109.714,438.857"></path>
-                                    <path  d="M201.143,347.429c-5.047,0-9.143-4.087-9.143-9.143V320h-18.286c-5.047,0-9.143-4.087-9.143-9.143 c0-5.056,4.096-9.143,9.143-9.143h27.429c5.047,0,9.143,4.087,9.143,9.143v27.429C210.286,343.342,206.19,347.429,201.143,347.429 "></path>
-                                    <path  d="M146.174,429.714c-5.047,0-9.134-4.078-9.143-9.125l-0.064-45.55l-45.55-0.073 c-5.056-0.009-9.143-4.105-9.134-9.161c0.009-5.047,4.096-9.125,9.143-9.125h0.018l54.665,0.082c5.038,0,9.115,4.087,9.125,9.125 l0.082,54.665c0.009,5.056-4.078,9.152-9.134,9.161H146.174z"></path>
-                                    <path  d="M173.714,365.714c-2.341,0-4.681-0.896-6.464-2.679l-18.286-18.286 c-3.575-3.575-3.575-9.353,0-12.928c3.575-3.575,9.353-3.575,12.928,0l18.286,18.286c3.575,3.575,3.575,9.353,0,12.928 C178.395,364.818,176.055,365.714,173.714,365.714"></path>
-                                    <path  d="M429.714,438.857c-2.341,0-4.681-0.896-6.464-2.679L281.865,294.784 c-3.575-3.566-3.575-9.353,0-12.928c3.566-3.566,9.353-3.566,12.928,0L436.178,423.25c3.575,3.575,3.575,9.353,0,12.928 C434.395,437.961,432.055,438.857,429.714,438.857"></path>
-                                    <path  d="M402.286,438.857c-5.047,0-9.143-4.087-9.143-9.143v-27.429c0-5.056,4.096-9.143,9.143-9.143 h27.429c5.047,0,9.143,4.087,9.143,9.143c0,5.056-4.096,9.143-9.143,9.143h-18.286v18.286 C411.429,434.77,407.333,438.857,402.286,438.857"></path>
-                                    <path  d="M310.857,347.429c-5.047,0-9.143-4.087-9.143-9.143v-27.429c0-5.056,4.096-9.143,9.143-9.143 h27.429c5.047,0,9.143,4.087,9.143,9.143c0,5.056-4.096,9.143-9.143,9.143H320v18.286 C320,343.342,315.904,347.429,310.857,347.429"></path>
-                                    <path  d="M365.826,429.714h-0.009c-5.056-0.009-9.143-4.105-9.134-9.161l0.082-54.665 c0.009-5.038,4.087-9.125,9.125-9.125l54.665-0.082h0.018c5.047,0,9.134,4.078,9.143,9.125c0.009,5.056-4.078,9.152-9.134,9.161 l-45.55,0.073l-0.064,45.55C374.96,425.637,370.873,429.714,365.826,429.714"></path>
-                                    <path  d="M338.286,365.714c-2.341,0-4.681-0.896-6.464-2.679c-3.575-3.575-3.575-9.353,0-12.928 l18.286-18.286c3.575-3.575,9.353-3.575,12.928,0c3.575,3.575,3.575,9.353,0,12.928l-18.286,18.286 C342.967,364.818,340.626,365.714,338.286,365.714"></path>
-                                    <path  d="M223.675,232.821c-2.341,0-4.681-0.896-6.464-2.679L75.825,88.748 c-3.575-3.566-3.575-9.353,0-12.928c3.566-3.566,9.353-3.566,12.928,0l141.385,141.394c3.575,3.575,3.575,9.353,0,12.928 C228.356,231.925,226.015,232.821,223.675,232.821"></path>
-                                    <path  d="M109.714,118.857H82.286c-5.047,0-9.143-4.087-9.143-9.143c0-5.056,4.096-9.143,9.143-9.143h18.286 V82.286c0-5.056,4.096-9.143,9.143-9.143c5.047,0,9.143,4.087,9.143,9.143v27.429C118.857,114.77,114.761,118.857,109.714,118.857 "></path>
-                                    <path  d="M201.143,210.286h-27.429c-5.047,0-9.143-4.087-9.143-9.143s4.096-9.143,9.143-9.143H192v-18.286 c0-5.056,4.096-9.143,9.143-9.143s9.143,4.087,9.143,9.143v27.429C210.286,206.199,206.19,210.286,201.143,210.286"></path>
-                                    <path  d="M91.429,155.322c-5.047,0-9.134-4.078-9.143-9.125c-0.009-5.056,4.078-9.152,9.134-9.161 l45.541-0.073l0.073-45.55c0.009-5.047,4.096-9.125,9.143-9.125h0.009c5.056,0.009,9.143,4.105,9.134,9.161l-0.082,54.665 c-0.009,5.038-4.087,9.115-9.134,9.125l-54.665,0.082H91.429z"></path>
-                                    <path  d="M155.429,182.857c-2.341,0-4.681-0.896-6.464-2.679c-3.575-3.575-3.575-9.353,0-12.928 l18.286-18.286c3.575-3.575,9.353-3.575,12.928,0c3.575,3.575,3.575,9.353,0,12.928l-18.286,18.286 C160.11,181.961,157.769,182.857,155.429,182.857"></path>
-                                </g>
-                                <path d="M301.714,256c0,25.243-20.471,45.714-45.714,45.714c-25.243,0-45.714-20.471-45.714-45.714 c0-25.243,20.471-45.714,45.714-45.714C281.243,210.286,301.714,230.757,301.714,256"></path>
-                            </g>
-                        </g>
-                        </svg>
-
-                </>
-            }
-            {loading?
-            <>
-                <Spinner/>
-            </>:
-            <div className='notebook-pages'>
-                <div className='animation-page' ref={setRefs}>
-                    <div className='animation-page-inner'>
-                        <div className='front'>
-                            <NotebookPages 
-                                title={recommendations[topPage].category} 
-                                list={recommendations[topPage].items}
-                                setSelectedWork={selectWork}
-                                pageNum={topPage}
-                                works={works}
-                                navigateToPage={navigateToPage}
-                                completedWork = {completedWork}
-                                setCompletedWork = {setCompletedWork}
-                            />
-                        </div>
-                        <div className='back'>
-                            <NotebookPages 
-                                title={""} 
-                                list={[]}
-                            />
-                        </div>
-                    </div>
-                </div>
-                <div className='content-page'>
-                    <NotebookPages 
-                        ref={contentPageRef} 
-                        title={recommendations[bottomPage].category} 
-                        list={recommendations[bottomPage].items}
-                        setSelectedWork={selectWork}
-                        className="front"
-                        pageNum={bottomPage}
-                        works={works}
-                        navigateToPage={navigateToPage}
-                        completedWork = {completedWork}
-                        setCompletedWork = {setCompletedWork}
-                    />
-                    <div className='back back-cover'>
-                        <div className='circle-clip'>
-                            <img 
-                                className='notebook-cover-image back-image'
-                                src='assets/nemophila-insignis-baby-blue-eyes_01.webp'></img>
-                        </div>
-                        <div className='back-cover-text'>
-                            <p><span>粉蝶花冷知识</span><br/><br/>
-                                <span>粉蝶花之所以得名，是因为其蓝色花瓣与粉蝶相似，且学名源自希腊语，意为「热爱小森林」。</span>
-                            </p>
-                        </div>
-
-                        <div className='nameplate-container'>
-                            <div className='nameplate-top flex'>
-                                <span>AP-98</span>
-                                <span>がくしゅうノート</span>
-                            </div>
-                            <div className='nameplate-bottom flex'>
-                                <span></span>
-                                <span>サ ン ジ ノ ー ト</span>
-                                <img src='assets/barcode.png'></img>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <div className='front-cover'>
-                    <div className='front notebook-cover'>
-                        <div>
-                            <p>豊かな想像力を育 む</p>
-                            <h1 className='notebook-title'>
-                                ア・テンポノート
-                            </h1>
-                        </div>
-                        <div className='cloud-container flex flex-col'>
-                            <div className="cloud">
-                                <svg clipPathUnits={"objectBoundingBox"} width="1" height="1" viewBox="0 0 1 1" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <defs>
-                                        <clipPath id="clip-path" clipPathUnits="objectBoundingBox">
-                                            <path
-                                            d="M.4086.1026C.3.1026.2095.1843.1906.2921.0951.3078.0214.4015.0207.5154V.5174c0 .1258.0887.2276.1981.2276.021 0 .041-.0036.0599-.0104.0289.0842.1047.1443.1938.1443.0713 0 .1339-.0381.171-.0962.0242.0156.0524.0248.0826.0248C.818.8075.8924.7238.8924.6204.8924.6136.8921.6071.8913.6007c.057-.0301.0962-.0918.0962-.1631C.9875.3406.9152.2613.8244.2553.8012.1919.7485.1479.6865.1479.6477.1479.612.1655.5853.1943.5451.139.4813.1034.4093.1034Z"
-                                            fill="black"
-                                            />
-                                        </clipPath>
-                                    </defs>
-                                </svg>
-                                <img className='notebook-cover-image front-image' src="/assets/notebook-cover-image.webp" alt="ansk" />
-                            </div>
-                            <p id='anosaki-text'>あのさき </p>
-                        </div>
-                        <div className='nameplate-container'>
-                            <div className='nameplate-top flex'>
-                                <span>15行</span>
-                                <span class="date">更新于2025, 10月</span>
-                                <span>がくしゅうノート</span>
-                            </div>
-                            <div className='nameplate-bottom flex'>
-                                <span>ねん</span>
-                                <span>くみ なまえ</span>
-                                <span>爱祥吧吧群</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div className='back'>  
-                        <NotebookPages 
-                            title={""} 
-                            list={[]}
-                            className={"back-page"}
+              </div>
+            </div>
+          </div>
+          <div className="front-cover">
+            <div className="front notebook-cover">
+              <div>
+                <p>豊かな想像力を育 む</p>
+                <h1 className="notebook-title">ア・テンポノート</h1>
+              </div>
+              <div className="cloud-container flex flex-col">
+                <div className="cloud">
+                  <svg
+                    clipPathUnits={"objectBoundingBox"}
+                    width="1"
+                    height="1"
+                    viewBox="0 0 1 1"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <defs>
+                      <clipPath id="clip-path" clipPathUnits="objectBoundingBox">
+                        <path
+                          d="M.4086.1026C.3.1026.2095.1843.1906.2921.0951.3078.0214.4015.0207.5154V.5174c0 .1258.0887.2276.1981.2276.021 0 .041-.0036.0599-.0104.0289.0842.1047.1443.1938.1443.0713 0 .1339-.0381.171-.0962.0242.0156.0524.0248.0826.0248C.818.8075.8924.7238.8924.6204.8924.6136.8921.6071.8913.6007c.057-.0301.0962-.0918.0962-.1631C.9875.3406.9152.2613.8244.2553.8012.1919.7485.1479.6865.1479.6477.1479.612.1655.5853.1943.5451.139.4813.1034.4093.1034Z"
+                          fill="black"
                         />
-                    </div>
+                      </clipPath>
+                    </defs>
+                  </svg>
+                  <img
+                    className="notebook-cover-image front-image"
+                    src="/assets/notebook-cover-image.webp"
+                    alt="ansk"
+                  />
                 </div>
+                <p id="anosaki-text">あのさき </p>
+              </div>
+              <div className="nameplate-container">
+                <div className="nameplate-top flex">
+                  <span>15行</span>
+                  <span class="date">2025</span>
+                  <span>がくしゅうノート</span>
+                </div>
+                <div className="nameplate-bottom flex">
+                  <span>ねん</span>
+                  <span>くみ なまえ</span>
+                  <span>爱祥吧吧群</span>
+                </div>
+              </div>
             </div>
-            }
-            <div className={`challenge-page-nav ${animationPlaying?"inactive":""}`}>
-                <div 
-                    className={`direction-buttons ${currentPage == 0 ? "disabled":""}`}
-                    onClick={()=>navigateToPage(currentPage-1)}>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M169.4 297.4C156.9 309.9 156.9 330.2 169.4 342.7L361.4 534.7C373.9 547.2 394.2 547.2 406.7 534.7C419.2 522.2 419.2 501.9 406.7 489.4L237.3 320L406.6 150.6C419.1 138.1 419.1 117.8 406.6 105.3C394.1 92.8 373.8 92.8 361.3 105.3L169.3 297.3z"/></svg>
-                </div>
-                <button 
-                    onClick={()=>setShowNavigation(true)}>
-                        {getPageDisplayText(currentPage)}
-                        {/* {currentPage==0?"封面":currentPage==34?"封底": currentPage + " / 33" } */}
-                    </button>
-                <div 
-                    className= {`direction-buttons ${currentPage == recommendations.length-1? "disabled":""}`}
-                    onClick={()=>navigateToPage(currentPage+1)}>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M471.1 297.4C483.6 309.9 483.6 330.2 471.1 342.7L279.1 534.7C266.6 547.2 246.3 547.2 233.8 534.7C221.3 522.2 221.3 501.9 233.8 489.4L403.2 320L233.9 150.6C221.4 138.1 221.4 117.8 233.9 105.3C246.4 92.8 266.7 92.8 279.2 105.3L471.2 297.3z"/></svg>
-                </div>
+            <div className="back">
+              <NotebookPages title={""} list={[]} className={"back-page"} />
             </div>
-
-            <div className='sticky-note-popup'>
-                <div className='popup-backdrop' onClick={unselectWork}>
-                </div>
-                <div className="sticky-note" style={{"--pastel":`${PASTEL_COLORS[currentPage%PASTEL_COLORS.length]}`}}>
-                    <div className='tape'></div>
-                    <div className='tape'></div>
-                    <div onClick={unselectWork} className='close-button icons'>✗</div>
-                    {selectedWork&&<>
-                    <h3>《{selectedWork}》</h3>
-                    <p>作者:&nbsp;
-                        {
-                            authorUrl?
-                            <ConfirmationModal 
-                            url={authorUrl}
-                            >
-                                <span className='link'>{works[selectedWork].author}</span><ExternalLink className=""/>
-                            </ConfirmationModal> 
-                            :
-                            works[selectedWork].author
-                        }
-                    </p>
-                    <div>
-                        <h4>链接: </h4>
-                        {works[selectedWork].lofter && 
-                            <ConfirmationModal url={works[selectedWork].lofter} className={"link"}>
-                                <div className='flex note-link'>
-                                    <img className="icons" src='/assets/lofter-icon.webp'></img>
-                                    <p> Lofter </p>
-                                </div>
-                            </ConfirmationModal>
-                        }
-                        {works[selectedWork].lofter_collection && 
-                            <ConfirmationModal url={works[selectedWork].lofter_collection} className={"link"}>
-                                <div className='flex note-link'>
-                                    <img className="icons" src='/assets/lofter-icon.webp'></img>
-                                    <p> Lofter </p>
-                                </div>
-                            </ConfirmationModal>
-                        }
-                        {works[selectedWork].bilibili &&
-                            <ConfirmationModal url={works[selectedWork].bilibili} className={"link"}>
-                                <div className='flex note-link'>
-                                    <img className="icons" src='/assets/bilibili-icon.webp'></img>
-                                    <p> Bilibili </p>
-                                </div>
-                            </ConfirmationModal>
-                        }
-                        {works[selectedWork].lanp &&
-                            <div className='flex '>
-                                <div className='lanp'>🅿️</div>
-                                <p>神秘数字: {works[selectedWork].lanp}</p>
-                            </div>
-                        }
-                        {works[selectedWork].nga &&
-                            <ConfirmationModal url={works[selectedWork].nga} className={"link"}>
-                                <div className='flex note-link'>
-                                    <img className="icons" src='/assets/nga-icon.webp'></img>
-                                    <p> NGA </p>
-                                </div>
-                            </ConfirmationModal>
-                        }
-                    </div>
-                    {works[selectedWork].spoiler && 
-                    <div>
-                        ⚠️注意: {works[selectedWork].spoiler}⚠️  
-                    </div>}
-                    {works[selectedWork].note && 
-                    <div>
-                        注释: {works[selectedWork].note}
-                    </div>}
-                    {works[selectedWork].error &&
-                    <div>
-                        {works[selectedWork].error == "not found" ? 
-                            "❌错误: 未能找到的作品。这个作品有可能被删除了，也可能是我没找到。":
-                            works[selectedWork].error
-                            }
-                        <br/>
-                        如果您能提供信息，<a href="https://space.bilibili.com/3632302752008619">请私信我</a>
-                    </div>
-                    }
-                    </>}    
-                    <div className='sticky-note-bottom-right-corner'></div>
-                </div>
-            </div>
-            <div className='navigation-popup-container'>
-                <div className='popup-backdrop' onClick={()=>setShowNavigation(false)}></div>
-                    <div className='navigation-popup flex flex-col'>
-                        <div className='page-selectors flex'>
-                            {Array.from({ length: 35 }).map((_, index)=>(
-                                <div className={'page-selector' + (index == currentPage ? ' active':'')} key={index} onClick={()=>navigateToPage(index)}>
-                                    {getPageDisplayText(index)}
-                                </div>
-                            ))}
-                        </div>
-                        <div className='flex pop-up-buttons-container'>
-                            <div>
-                                <div className='flex page-input-container'>到
-                                    <input 
-                                        type='number' 
-                                        min={1} max={30} 
-                                        onChange={(e)=>setPageInput(e.target.value)}
-                                        onBlur={(e)=>pageInputOnBlur(e.target.value)}
-                                        value={pageInput}
-                                        ></input>
-                                    <button 
-                                        className='pop-up-buttons'
-                                        onClick={()=>navigateToPage(pageInput + 2)}>页</button>
-                                </div>
-                                <div>到
-                                    <select 
-                                        name="page-number" 
-                                        id="page-number" 
-                                        className='page-select'
-                                        onChange={(e)=>navigateToPage(parseInt(e.target.value))}
-                                        >
-                                        {Array.from({ length: 35 }).map((_, index)=>(
-                                            <option className='page-select-options' key={index} value={index}>
-                                            {getPageDisplayText(index)}
-                                        </option>
-                                        ))}
-                                    </select>
-                                    页
-                                </div>
-                            </div>
-                            <button 
-                                className='pop-up-buttons last-visted-button'
-                                onClick={()=>{navigateToPage(lastVisited)}}
-                                >上次阅览</button>
-                        </div>
-                    </div>
-            </div>
+          </div>
         </div>
-    )
+      )}
+      <div className={`challenge-page-nav ${animationPlaying ? "inactive" : ""}`}>
+        <div
+          className={`direction-buttons ${currentPage == 0 ? "disabled" : ""}`}
+          onClick={() => navigateToPage(currentPage - 1)}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+            <path d="M169.4 297.4C156.9 309.9 156.9 330.2 169.4 342.7L361.4 534.7C373.9 547.2 394.2 547.2 406.7 534.7C419.2 522.2 419.2 501.9 406.7 489.4L237.3 320L406.6 150.6C419.1 138.1 419.1 117.8 406.6 105.3C394.1 92.8 373.8 92.8 361.3 105.3L169.3 297.3z" />
+          </svg>
+        </div>
+        <button onClick={() => setShowNavigation(true)}>
+          {getPageDisplayText(currentPage)}
+          {/* {currentPage==0?"封面":currentPage==34?"封底": currentPage + " / 33" } */}
+        </button>
+        <div
+          className={`direction-buttons ${currentPage == recommendations.length - 1 ? "disabled" : ""}`}
+          onClick={() => navigateToPage(currentPage + 1)}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+            <path d="M471.1 297.4C483.6 309.9 483.6 330.2 471.1 342.7L279.1 534.7C266.6 547.2 246.3 547.2 233.8 534.7C221.3 522.2 221.3 501.9 233.8 489.4L403.2 320L233.9 150.6C221.4 138.1 221.4 117.8 233.9 105.3C246.4 92.8 266.7 92.8 279.2 105.3L471.2 297.3z" />
+          </svg>
+        </div>
+      </div>
+
+      <div className="sticky-note-popup">
+        <div className="popup-backdrop" onClick={unselectWork}></div>
+        <div
+          className="sticky-note"
+          style={{ "--pastel": `${PASTEL_COLORS[currentPage % PASTEL_COLORS.length]}` }}
+        >
+          <div className="tape"></div>
+          <div className="tape"></div>
+          <div onClick={unselectWork} className="close-button icons">
+            ✗
+          </div>
+          {selectedWork && (
+            <>
+              <h3>《{selectedWork}》</h3>
+              <p>
+                作者:&nbsp;
+                {authorUrl ? (
+                  <ConfirmationModal url={authorUrl}>
+                    <span className="link">{works[selectedWork].author}</span>
+                    <ExternalLink className="" />
+                  </ConfirmationModal>
+                ) : (
+                  works[selectedWork].author
+                )}
+              </p>
+              <div>
+                <h4>链接: </h4>
+                {works[selectedWork].lofter && (
+                  <ConfirmationModal url={works[selectedWork].lofter} className={"link"}>
+                    <div className="flex note-link">
+                      <img className="icons" src="/assets/lofter-icon.webp"></img>
+                      <p> Lofter </p>
+                    </div>
+                  </ConfirmationModal>
+                )}
+                {works[selectedWork].lofter_collection && (
+                  <ConfirmationModal url={works[selectedWork].lofter_collection} className={"link"}>
+                    <div className="flex note-link">
+                      <img className="icons" src="/assets/lofter-icon.webp"></img>
+                      <p> Lofter </p>
+                    </div>
+                  </ConfirmationModal>
+                )}
+                {works[selectedWork].bilibili && (
+                  <ConfirmationModal url={works[selectedWork].bilibili} className={"link"}>
+                    <div className="flex note-link">
+                      <img className="icons" src="/assets/bilibili-icon.webp"></img>
+                      <p> Bilibili </p>
+                    </div>
+                  </ConfirmationModal>
+                )}
+                {works[selectedWork].lanp && (
+                  <div className="flex ">
+                    <div className="lanp">🅿️</div>
+                    <p>神秘数字: {works[selectedWork].lanp}</p>
+                  </div>
+                )}
+                {works[selectedWork].nga && (
+                  <ConfirmationModal url={works[selectedWork].nga} className={"link"}>
+                    <div className="flex note-link">
+                      <img className="icons" src="/assets/nga-icon.webp"></img>
+                      <p> NGA </p>
+                    </div>
+                  </ConfirmationModal>
+                )}
+              </div>
+              {works[selectedWork].spoiler && <div>⚠️注意: {works[selectedWork].spoiler}⚠️</div>}
+              {works[selectedWork].note && <div>注释: {works[selectedWork].note}</div>}
+              {works[selectedWork].error && (
+                <div>
+                  {works[selectedWork].error == "not found"
+                    ? "❌错误: 未能找到的作品。这个作品有可能被删除了，也可能是我没找到。"
+                    : works[selectedWork].error}
+                  <br />
+                  如果您能提供信息，
+                  <a href="https://space.bilibili.com/3632302752008619">请私信我</a>
+                </div>
+              )}
+            </>
+          )}
+          <div className="sticky-note-bottom-right-corner"></div>
+        </div>
+      </div>
+      <div className="navigation-popup-container">
+        <div className="popup-backdrop" onClick={() => setShowNavigation(false)}></div>
+        <div className="navigation-popup flex flex-col">
+          <div className="page-selectors flex">
+            {Array.from({ length: 35 }).map((_, index) => (
+              <div
+                className={"page-selector" + (index == currentPage ? " active" : "")}
+                key={index}
+                onClick={() => navigateToPage(index)}
+              >
+                {getPageDisplayText(index)}
+              </div>
+            ))}
+          </div>
+          <div className="flex pop-up-buttons-container">
+            <div>
+              <div className="flex page-input-container">
+                到
+                <input
+                  type="number"
+                  min={1}
+                  max={30}
+                  onChange={(e) => setPageInput(e.target.value)}
+                  onBlur={(e) => pageInputOnBlur(e.target.value)}
+                  value={pageInput}
+                ></input>
+                <button className="pop-up-buttons" onClick={() => navigateToPage(pageInput + 2)}>
+                  页
+                </button>
+              </div>
+              <div>
+                到
+                <select
+                  name="page-number"
+                  id="page-number"
+                  className="page-select"
+                  onChange={(e) => navigateToPage(parseInt(e.target.value))}
+                >
+                  {Array.from({ length: 35 }).map((_, index) => (
+                    <option className="page-select-options" key={index} value={index}>
+                      {getPageDisplayText(index)}
+                    </option>
+                  ))}
+                </select>
+                页
+              </div>
+            </div>
+            <button
+              className="pop-up-buttons last-visted-button"
+              onClick={() => {
+                navigateToPage(lastVisited);
+              }}
+            >
+              上次阅览
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
-export default ChallengePage
+export default ChallengePage;

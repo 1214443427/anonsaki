@@ -1,77 +1,88 @@
-[  
+[
+  {
+    "name": "爱爱祥祥天地人间完全粉蓝大冲击",
+    "details": {
+      "tag": "爱祥粉蓝大冲击",
+      "cover": "/assets/relays/爱爱祥祥天地人间完全粉蓝大冲击封面.webp",
+      "cover_author": "冰镇西瓜",
+      "cover_link": "https://heibai77818.lofter.com/post/782aaea5_34f408d4f",
+      "date": "2026, 9月, 8日",
+      "poster": ""
+    }
+  },
   {
     "name": "祈爱呈祥",
     "details": {
-        "tag": "#祈爱呈祥",
-        "cover": "/assets/relays/祈爱呈祥封面.jpg",
-        "cover_author": "阿霜",
-        "cover_link": "https://ashuang1145.lofter.com/post/7ef2e50c_34dfbf347",
-        "link": "https://www.lofter.com/tag/%E7%A5%88%E7%88%B1%E5%91%88%E7%A5%A5",
-        "date": "2026, 5月, 20日",
-        "poster": "/assets/relays/圣诞祥农草莓蛋糕海报.webp"
+      "tag": "#祈爱呈祥",
+      "cover": "/assets/relays/祈爱呈祥封面.jpg",
+      "cover_author": "阿霜",
+      "cover_link": "https://ashuang1145.lofter.com/post/7ef2e50c_34dfbf347",
+      "link": "https://www.lofter.com/tag/%E7%A5%88%E7%88%B1%E5%91%88%E7%A5%A5",
+      "date": "2026, 5月, 20日",
+      "poster": "/assets/relays/圣诞祥农草莓蛋糕海报.webp"
     }
   },
   {
     "name": "爱的十四行诗",
     "details": {
-        "tag": "#爱的14行诗",
-        "cover": "/assets/relays/爱的14行诗封面.webp",
-        "cover_author": "Hecate.fn",
-        "cover_link": "https://frostnova57503.lofter.com/post/317c01b7_34d448c4f",
-        "link": "https://www.lofter.com/tag/%E7%88%B1%E7%9A%8414%E8%A1%8C%E8%AF%97",
-        "date": "2026, 2月, 14日",
-        "poster": "/assets/relays/圣诞祥农草莓蛋糕海报.webp"
+      "tag": "#爱的14行诗",
+      "cover": "/assets/relays/爱的14行诗封面.webp",
+      "cover_author": "Hecate.fn",
+      "cover_link": "https://frostnova57503.lofter.com/post/317c01b7_34d448c4f",
+      "link": "https://www.lofter.com/tag/%E7%88%B1%E7%9A%8414%E8%A1%8C%E8%AF%97",
+      "date": "2026, 2月, 14日",
+      "poster": "/assets/relays/圣诞祥农草莓蛋糕海报.webp"
     }
   },
   {
     "name": "爱的交祥曲",
     "details": {
-        "tag": "#爱的交祥曲",
-        "cover": "/assets/relays/爱的交祥曲封面.webp",
-        "cover_author": "吴家球球",
-        "cover_link": "https://wujiaqiuqiu.lofter.com/post/1f68849e_2bf8eee77",
-        "link": "https://www.lofter.com/tag/%E7%88%B1%E7%9A%84%E4%BA%A4%E7%A5%A5%E6%9B%B2",
-        "date": "2025, 9月, 8日",
-        "poster": "/assets/relays/爱的交祥曲海报.webp"
+      "tag": "#爱的交祥曲",
+      "cover": "/assets/relays/爱的交祥曲封面.webp",
+      "cover_author": "吴家球球",
+      "cover_link": "https://wujiaqiuqiu.lofter.com/post/1f68849e_2bf8eee77",
+      "link": "https://www.lofter.com/tag/%E7%88%B1%E7%9A%84%E4%BA%A4%E7%A5%A5%E6%9B%B2",
+      "date": "2025, 9月, 8日",
+      "poster": "/assets/relays/爱的交祥曲海报.webp"
     },
-  "total_count": 62
+    "total_count": 62
   },
   {
     "name": "AAA TGW财团发布会",
     "details": {
-        "tag": "#AAA TGW财团发布会",
-        "cover": "/assets/relays/AAA TGW财团发布会封面.webp",
-        "cover_author": "鱼子酱猫猫Caviar",
-        "cover_link": "https://caviar51817.lofter.com/post/8166c146_2be905ad4",
-        "link": "https://www.lofter.com/tag/AAA%C2%A0TGW%E8%B4%A2%E5%9B%A2%E5%8F%91%E5%B8%83%E4%BC%9A",
-        "date": "2025, 5月, 20日",
-        "poster": "/assets/relays/AAA TGW财团发布会海报.webp"
+      "tag": "#AAA TGW财团发布会",
+      "cover": "/assets/relays/AAA TGW财团发布会封面.webp",
+      "cover_author": "鱼子酱猫猫Caviar",
+      "cover_link": "https://caviar51817.lofter.com/post/8166c146_2be905ad4",
+      "link": "https://www.lofter.com/tag/AAA%C2%A0TGW%E8%B4%A2%E5%9B%A2%E5%8F%91%E5%B8%83%E4%BC%9A",
+      "date": "2025, 5月, 20日",
+      "poster": "/assets/relays/AAA TGW财团发布会海报.webp"
     },
-  "total_count": 38
+    "total_count": 38
   },
   {
     "name": "千恋万祥",
     "details": {
-        "tag": "#千恋万祥",
-        "cover": "/assets/relays/千恋万祥封面2-1.webp",
-        "cover_author": "小草",
-        "cover_link": "https://chihayagrass.lofter.com/post/788e4bea_2bde2a1ac",
-        "link": "https://www.lofter.com/tag/%E5%8D%83%E6%81%8B%E4%B8%87%E7%A5%A5",
-        "date": "2025, 2月, 14日",
-        "poster": "/assets/relays/千恋万祥海报.webp"
+      "tag": "#千恋万祥",
+      "cover": "/assets/relays/千恋万祥封面2-1.webp",
+      "cover_author": "小草",
+      "cover_link": "https://chihayagrass.lofter.com/post/788e4bea_2bde2a1ac",
+      "link": "https://www.lofter.com/tag/%E5%8D%83%E6%81%8B%E4%B8%87%E7%A5%A5",
+      "date": "2025, 2月, 14日",
+      "poster": "/assets/relays/千恋万祥海报.webp"
     },
-  "total_count": 35
+    "total_count": 35
   },
   {
     "name": "圣诞祥农草莓蛋糕",
     "details": {
-        "tag": "#祥农蛋糕",
-        "cover": "/assets/relays/圣诞祥农草莓蛋糕封面_1.webp",
-        "cover_author": "羽间琉火",
-        "cover_link": "https://ye91138514.lofter.com/",
-        "link": "https://www.lofter.com/tag/%E7%A5%A5%E5%86%9C%E8%9B%8B%E7%B3%95",
-        "date": "2024, 12月, 25日",
-        "poster": "/assets/relays/圣诞祥农草莓蛋糕海报.webp"
+      "tag": "#祥农蛋糕",
+      "cover": "/assets/relays/圣诞祥农草莓蛋糕封面_1.webp",
+      "cover_author": "羽间琉火",
+      "cover_link": "https://ye91138514.lofter.com/",
+      "link": "https://www.lofter.com/tag/%E7%A5%A5%E5%86%9C%E8%9B%8B%E7%B3%95",
+      "date": "2024, 12月, 25日",
+      "poster": "/assets/relays/圣诞祥农草莓蛋糕海报.webp"
     }
   }
 ]
